@@ -31,8 +31,9 @@ Required entries in `config.php`:
   'port' => 6379,
 ],
 ```
-____________________________________
-Constraints
+---
+
+## Constraints
 
 -- Redis must not be exposed outside SERVERS VLAN
 
@@ -45,8 +46,10 @@ Constraints
 -- Nextcloud Admin → Overview shows file locking enabled
 
 -- No Redis-related warnings present
-____________________
-🛑 Stopping Point
+
+---
+
+## 🛑 Stopping Point
 
 Redis integration is complete and validated.
 
