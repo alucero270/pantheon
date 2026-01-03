@@ -1,12 +1,99 @@
-# Media Architecture
+# Media Architecture & Data Flow (Authoritative)
 
-## Roles
+## Purpose
 
-- Atlas: storage
-- Prometheus: services
-- Clients: consumption
+This document defines where media lives, how it is accessed,
+and how compute services interact with stored data.
 
-## Access Rules
+These decisions are intentional and form part of the homelab’s
+zero-trust design.
 
-- USER devices access media via SMB on Atlas
-- Services access media via Prometheus
+---
+
+## System Roles
+
+### Atlas (NAS — SERVERS VLAN)
+
+Role:
+System of record for all persistent media and user data.
+
+Responsibilities:
+- Store all media and user data
+- Serve data to clients and services
+- Maintain parity and integrity
+
+Data stored on Atlas:
+- Movies
+- TV Shows
+- Music
+- Photos
+- Family documents
+- Backups
+- Application metadata (where appropriate)
+
+Atlas is stateful and data-critical.
+
+---
+
+### Prometheus (Compute — SERVERS VLAN)
+
+Role:
+Compute and service host only.
+
+Responsibilities:
+- Run containers and services
+- Consume media from Atlas
+- Perform transcoding, indexing, AI tasks
+
+Prometheus does NOT:
+- Permanently store media
+- Act as a backup target
+- Provide file storage to users
+
+Prometheus is stateless and rebuildable.
+
+---
+
+## Media Flow Model
+
+[ Atlas (Storage) ]
+        │
+        │  NFS (preferred) / SMB
+        │
+[ Prometheus (Services) ]
+        │
+        │  HTTPS / Streaming
+        │
+[ USER Devices ]
+
+---
+
+## Key Rules
+
+- USER devices access media only via Atlas SMB
+- Services access media only via Prometheus
+- USER devices never access Prometheus directly
+- Prometheus never becomes the sole holder of data
+
+---
+
+## Security Implications
+
+- Atlas is protected behind SERVERS VLAN firewall rules
+- Prometheus can be rebuilt without data loss
+- A compromised service does not compromise storage
+- Zero-trust boundaries are preserved
+
+---
+
+🔒 Decision (Locked)
+
+All media lives on Atlas.
+Prometheus consumes media but never owns it.
+
+---
+
+🛑 Stopping Point
+
+Media architecture is finalized.
+Service deployment may proceed.
