@@ -30,3 +30,25 @@ Required entries in `config.php`:
   'host' => 'Redis-Nextcloud',
   'port' => 6379,
 ],
+```
+____________________________________
+Constraints
+
+Redis must not be exposed outside SERVERS VLAN
+
+Redis data is disposable
+
+Redis loss must not corrupt data
+
+Validation
+
+Nextcloud Admin → Overview shows file locking enabled
+
+No Redis-related warnings present
+
+🛑 Stopping Point
+
+Redis integration is complete and validated.
+
+
+---
