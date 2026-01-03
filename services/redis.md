@@ -34,18 +34,18 @@ Required entries in `config.php`:
 ____________________________________
 Constraints
 
-Redis must not be exposed outside SERVERS VLAN
+-- Redis must not be exposed outside SERVERS VLAN
 
-Redis data is disposable
+-- Redis data is disposable
 
-Redis loss must not corrupt data
+-- Redis loss must not corrupt data
 
-Validation
+-- Validation
 
-Nextcloud Admin → Overview shows file locking enabled
+-- Nextcloud Admin → Overview shows file locking enabled
 
-No Redis-related warnings present
-
+-- No Redis-related warnings present
+____________________
 🛑 Stopping Point
 
 Redis integration is complete and validated.
