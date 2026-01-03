@@ -45,12 +45,19 @@ See: `architecture/vlan-design.md`
 
 ## 📂 Repository Structure
 homelab-infrastructure/
+
   ├── architecture/ # High-level design decisions
+  
   ├── systems/ # Per-host build guides
+  
   ├── services/ # Application/service documentation
+  
   ├── procedures/ # Rebuild, restore, DR steps
+  
   ├── decisions/ # Architecture Decision Records (ADRs)
+  
   ├── CHANGELOG.md
+  
   └── README.md
 
 ---
