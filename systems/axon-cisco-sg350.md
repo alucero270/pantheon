@@ -1,92 +1,50 @@
-# Axon — Cisco SG350 Core Switch
+# Axon — Core Switch (Cisco SG350)
 
-## Role
+Axon is the Layer-2 core switch for the homelab.
 
-Axon is the Layer-2 enforcement point for VLAN segmentation.
+It is responsible for VLAN segmentation, port assignment,
+and trunking traffic to the firewall.
 
-Responsibilities:
-- VLAN tagging
-- Port-to-VLAN assignment
-- Trunking to Cerberus
-- No routing or policy logic
+Axon does not perform routing or policy enforcement.
 
----
+## Design Intent
 
-## Design Constraints
+- Enforce VLAN separation at Layer 2
+- Centralize all switching logic
+- Delegate routing and policy to Cerberus
+- Avoid smart switching or implicit trust
+- Keep port behavior explicit and documented
 
-- Axon does not route traffic
-- All routing decisions occur on Cerberus
-- VLAN assignments must match documented intent
-- Trunk configuration must remain stable
+## Platform Overview
 
----
+- Hardware: Cisco SG350
+- Role: Core access and distribution switch
+- Management: Web UI
+- Management VLAN: MGMT (99)
+
+Axon is managed only from the MGMT VLAN.
 
 ## VLAN Presence
 
 Axon carries the following VLANs:
 
-- 10 — EXPOSED
-- 20 — USER
-- 30 — IOT
-- 40 — GUEST
-- 50 — UNTRUSTED
-- 60 — SERVERS
-- 99 — MGMT
+- VLAN 10 — EXPOSED
+- VLAN 20 — USER
+- VLAN 30 — IOT
+- VLAN 40 — GUEST
+- VLAN 50 — UNTRUSTED
+- VLAN 60 — SERVERS
+- VLAN 99 — MGMT
 
----
+All VLAN definitions originate from Cerberus.
+Axon enforces tagging only.
 
-## Port Grouping Strategy
+## Trunk Configuration
 
-### USER VLAN (20)
+The trunk uplink to Cerberus carries all VLANs.
 
-- GE1 → Atlas (temporary)
-- GE2 → Atlas (temporary)
-- GE6 → AP uplink (temporary)
-- GE12
-- GE13
-- GE14
-
----
-
-### IOT VLAN (30)
-
-- GE3
-- GE4
-- GE15
-- GE16
-
----
-
-### GUEST VLAN (40)
-
-- GE5
-- GE17
-
----
-
-### UNTRUSTED VLAN (50)
-
-- GE6 (future reassignment planned)
-- GE18
-
----
-
-### SERVERS VLAN (60)
-
-- GE7 → Atlas (final)
-- GE19 → Prometheus
-
----
-
-### MGMT VLAN (99)
-
-- GE2 → Switch management / admin access
-
----
-
-### Trunk Ports
-
-- GE24 → Cerberus (`em0`)
+Trunk Port:
+- GE24 → Cerberus (em0)
 
 Tagged VLANs:
 - 10, 20, 30, 40, 50, 60, 99
@@ -94,25 +52,82 @@ Tagged VLANs:
 Native VLAN:
 - VLAN 1 (unused)
 
----
+No access traffic should rely on the native VLAN.
+
+## Access Port Strategy
+
+Ports are explicitly assigned to a single VLAN.
+
+No port may carry multiple VLANs unless explicitly documented
+as a trunk (e.g., access points).
+
+Port assignments are intentional and documented
+to prevent drift.
+
+## Documented Port Assignments
+
+USER VLAN (20):
+- GE12
+- GE13
+- GE14
+
+IOT VLAN (30):
+- GE3
+- GE4
+- GE15
+- GE16
+
+GUEST VLAN (40):
+- GE5
+- GE17
+
+UNTRUSTED VLAN (50):
+- GE18
+
+SERVERS VLAN (60):
+- GE7  → Atlas (final)
+- GE19 → Prometheus
+
+MGMT VLAN (99):
+- GE2  → Switch management access
+
+Assignments may evolve but must remain documented.
 
 ## Access Point Considerations
 
-- APs may trunk USER and GUEST VLANs
-- AP management must not leak into USER traffic
-- Temporary AP recovery placed APs on USER VLAN only
+Access points may require trunk ports.
 
----
+AP ports may carry:
+- USER VLAN
+- GUEST VLAN
 
-## Known Issues & Recovery Notes
+AP management traffic must not bleed into USER traffic.
 
-- Misassigned AP ports can break Wi-Fi
-- VLAN 20 reassignment restored AP connectivity
-- This was intentional and temporary
+Temporary recovery scenarios may place APs on USER VLAN
+only; this must be documented when done.
 
----
+## Explicit Non-Responsibilities
+
+Axon must never:
+
+- Route traffic between VLANs
+- Enforce firewall policy
+- Act as a security decision point
+- Provide WAN connectivity
+
+All policy enforcement occurs on Cerberus.
+
+## Validation Checklist
+
+- Trunk port to Cerberus is up
+- All VLANs are tagged correctly
+- Access ports map to intended VLANs
+- Switch management reachable only from MGMT VLAN
+- No unexpected inter-VLAN communication occurs
 
 🛑 Stopping Point
 
-Axon configuration is stable.
-Port changes must be documented to avoid drift.
+Axon is configured as a stable Layer-2 switch.
+
+Any port or VLAN changes must be documented
+to avoid configuration drift.
