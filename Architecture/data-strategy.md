@@ -1,125 +1,156 @@
 # Data Strategy — Authoritative Design
 
-This document defines where data lives, what is backed up,
-what is disposable, and how data moves between systems.
+This document defines where data lives, how it is classified,
+what is authoritative, and what is disposable.
 
-This is an authoritative declaration.
+This is an architectural document.
+It defines truth, not procedure.
+SECTION 2 — Core Principles
+markdown
+Copy code
+## Core Principles
 
----
-
+- Data must have a single authoritative home
+- Compute must be disposable
+- Loss of compute must not imply loss of data
+- Data location determines backup and recovery strategy
+- No service may be the sole holder of important data
+SECTION 3 — Data Classification Model
+markdown
+Copy code
 ## Data Classification Model
 
-### 1. Authoritative (Persistent) Data
+All data in the homelab is classified into one of three categories:
 
-Must survive any failure or rebuild.
+1. Authoritative (Persistent)
+2. Runtime / Configuration State
+3. Disposable / Ephemeral
 
-Examples:
+Each category has different durability and recovery requirements.
+SECTION 4 — Authoritative (Persistent) Data
+markdown
+Copy code
+## 1. Authoritative (Persistent) Data
+
+Authoritative data must survive:
+
+- Service restarts
+- Compute node rebuilds
+- Container redeployments
+- Planned migrations
+
+Examples include:
+
 - Family documents
 - Media libraries
 - Photos
 - Backups
-- Application data (Nextcloud, Jellyfin config)
-- Raw and processed 3D scans
-
-Location:
-➡ Atlas (NAS)
-
-Protection:
-- Parity
-- Snapshots (future)
-- Backup (future offsite)
-
----
-
-### 2. Runtime / Config State
-
-Important but rebuildable if backed up.
-
-Examples:
-- Container configurations
+- Nextcloud user data
 - Application databases
+- 3D scan source data and finalized outputs
+
+Authoritative data is never stored exclusively on compute nodes.
+SECTION 5 — Runtime / Configuration State
+markdown
+Copy code
+## 2. Runtime / Configuration State
+
+Runtime and configuration data is important, but rebuildable
+if preserved correctly.
+
+Examples include:
+
+- Container configuration
+- Application appdata
+- Databases backing services
 - Service metadata
 
-Location:
-- Stored on Atlas
-- Mounted into containers or VMs running on Prometheus or Atlas
+This data:
 
-Rule:
-No service may store its only copy of configuration on a compute node.
+- Is stored on Atlas
+- Is mounted into containers or VMs
+- May be regenerated, but should not be casually discarded
+SECTION 6 — Disposable / Ephemeral Data
+markdown
+Copy code
+## 3. Disposable / Ephemeral Data
 
----
+Disposable data may be lost without consequence.
 
-### 3. Disposable / Ephemeral Data
+Examples include:
 
-Safe to lose.
-
-Examples:
 - AI model caches
-- Embeddings
+- Temporary inference artifacts
 - Transcoding buffers
-- Scratch datasets
-- VM temporary disks
+- Scratch space
+- Temporary VM disks
+- Intermediate 3D scan processing files
 
-Location:
-- Local disks on Prometheus
-- NVMe scratch storage
+This data:
 
-Rule:
-Disposable data is never backed up.
-
----
-
+- Is never backed up
+- Is expected to be regenerated
+- Typically lives on Prometheus local storage
+SECTION 7 — Storage Authority Declaration
+markdown
+Copy code
 ## Storage Authority Declaration
 
-### Atlas (Authoritative Storage)
+Atlas is the single authoritative storage system.
 
-Atlas is the single source of truth for all persistent data.
+Atlas is responsible for:
 
-Atlas stores:
-- Media
-- Documents
-- Backups
-- Application data
-- 3D scan data
+- All persistent data
+- All service data directories
+- All backups
+- All shared datasets
 
-Atlas does not store:
-- VM OS disks
-- AI model caches
+Atlas is not responsible for:
+
+- VM operating system disks
+- AI caches
 - Compute scratch space
+- Temporary processing outputs
+SECTION 8 — Compute Relationship (Prometheus)
+kotlin
+Copy code
+## Relationship to Compute (Prometheus)
 
-Atlas failures must never result in silent data loss.
+Prometheus is a compute-only system.
 
----
+Prometheus:
 
-### Prometheus (Compute)
-
-Prometheus is a disposable compute node.
-
-Prometheus may:
-- Process data
-- Cache data
-- Generate outputs
+- Consumes data from Atlas
+- Processes data
+- Generates outputs
 
 Prometheus must never be the only location of important data.
 
----
+If Prometheus is lost or rebuilt:
+- No authoritative data is lost
+- Services can be redeployed
+- Data remains intact on Atlas
+SECTION 9 — Data Access Protocol Strategy
+markdown
+Copy code
+## Data Access Protocol Strategy
 
-## Protocol Strategy (Architectural)
+Different consumers require different access models.
 
 ### SMB — Human Access
 
 Used by:
-- Nomad
-- Ares
+- User workstations
+- Laptops
 - Family devices
 
 Characteristics:
-- User-based authentication
-- Familiar UX
-- Mapped drives
-
----
-
+- User authentication
+- Familiar workflows
+- Interactive file access
+SECTION 10 — NFS — Compute Access
+markdown
+Copy code
 ### NFS — Compute Access
 
 Used by:
@@ -129,12 +160,26 @@ Used by:
 
 Characteristics:
 - High throughput
-- POSIX permissions
 - Stable mounts
+- POSIX permissions
+- Low overhead
 
----
+NFS is the preferred protocol for service and compute workloads.
+SECTION 11 — Explicit Constraints
+pgsql
+Copy code
+## Explicit Constraints
 
+- No service may store its only copy of data on Prometheus
+- No container may rely on container-layer storage for persistence
+- Backup scope is determined by data classification
+- Data placement must be documented before service deployment
+SECTION 12 — Stopping Point
+pgsql
+Copy code
 🛑 Stopping Point
 
-Data authority and classification are finalized.
-All systems and services must conform to this model.
+This data strategy is authoritative.
+
+All systems, services, and procedures must conform
+to this model unless an explicit architectural change is made.
