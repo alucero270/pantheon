@@ -54,4 +54,4 @@ It also allows compute systems to remain disposable.
 ---
 
 **Date:** 2026-01-XX  
-**Author:** Aurora
+**Author:** Alex
