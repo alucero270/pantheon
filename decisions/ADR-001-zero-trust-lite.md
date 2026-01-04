@@ -1,25 +1,57 @@
-ADR 0001: Zero-Trust Lite Network Model
+# ADR-001: Zero-Trust Lite Network Model
 
-Status: Accepted
+## Status
+Accepted
 
-Context
+## Context
+The homelab contains multiple classes of devices with different trust levels,
+including user devices, servers, IoT devices, and management infrastructure.
 
-The network model for the homelab needs to ensure that no implicit trust exists between VLANs. This is essential to limit lateral movement in case of a compromise, ensuring that devices in one VLAN cannot access the resources of another VLAN without explicit permission.
+Allowing implicit trust or unrestricted lateral movement between these devices
+would increase blast radius in the event of compromise.
 
-Decision
+Constraints:
+- Single firewall (Cerberus) responsible for enforcement
+- VLAN-based segmentation
+- Home environment (not enterprise-scale zero trust)
 
-The homelab will use a Zero-Trust Lite model, which involves:
+## Decision
+Adopt a **Zero-Trust Lite** network model where:
 
-Explicit access permissions between VLANs
+- No VLAN is trusted by default
+- Inter-VLAN communication is explicitly allowed only when required
+- Firewall policy enforcement occurs centrally on Cerberus
+- Management access is restricted to a dedicated MGMT VLAN
 
-No direct communication between VLANs unless configured
+## Rationale
+This approach balances security and operational complexity.
 
-Every connection and communication path must be explicitly defined
+It provides:
+- Strong segmentation
+- Reduced lateral movement
+- Clear trust boundaries
 
-Consequences
+Without requiring:
+- Per-device identity enforcement
+- Complex service meshes
+- Enterprise identity infrastructure
 
-Increased rule complexity in the firewall configuration
+## Consequences
+- Firewall rules must be explicitly defined and maintained
+- Misconfiguration can cause service outages
+- Security posture is significantly improved
+- Troubleshooting requires awareness of VLAN boundaries
 
-Stronger security posture and separation of concerns
+## Alternatives Considered
+- Flat network (rejected due to excessive trust and blast radius)
+- Full zero-trust with identity enforcement (rejected due to complexity and scope)
 
-The need for careful firewall management to avoid misconfigurations
+## Related Documents
+- architecture/network-overview.md
+- systems/cerberus.md
+- systems/axon.md
+
+---
+
+**Date:** 2026-01-XX  
+**Author:** Alex
