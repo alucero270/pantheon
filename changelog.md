@@ -17,6 +17,28 @@ This file tracks documentation evolution, not runtime changes.
 - Entries describe documentation scope, not implementation detail
 - New architectural decisions are logged when documented
 
+##[2026-01] Added remaining HDD drives
+### Summary
+
+Added missing HDD to Atlas.
+
+### Architecture
+-  1 x 4tb is used as the parity drive.
+-  1x 4tb added for storage. 
+
+### Systems
+- Atlas
+
+### Services
+- <changes>
+
+### Procedures
+- <changes>
+
+### Repository
+- <changes>
+
+
 ## [2026-01] Documentation Normalization & Structuring
 
 ### Summary
