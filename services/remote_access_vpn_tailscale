@@ -1,0 +1,196 @@
+# Remote Access VPN — Tailscale (Current State)
+
+## Status
+🟢 **Operational / Stable**
+
+---
+
+## 1. Purpose
+
+This document describes the **current, stable remote-access VPN configuration** for the homelab, using **:contentReference[oaicite:0]{index=0}** via the **`os-tailscale` plugin** on **:contentReference[oaicite:1]{index=1} (Cerberus)**.
+
+This configuration is designed to:
+- Provide reliable remote access for family devices
+- Function correctly behind Starlink CGNAT
+- Preserve VLAN isolation
+- Avoid DNS or routing side effects
+- Serve as a clean baseline before further hardening (jump host)
+
+---
+
+## 2. Scope
+
+### In Scope
+- Remote access for phones and laptops
+- Access to USER and SERVERS VLAN services
+- Split-tunnel routing
+- GUI-managed Tailscale integration
+
+### Out of Scope
+- Site-to-site VPN
+- Anonymous or privacy-focused tunneling
+- Media geo-unblocking
+- Remote administrative access to MGMT VLAN
+- Jump host / bastion model (documented separately)
+
+---
+
+## 3. Network Context
+
+### Firewall
+- **Name:** Cerberus
+- **Platform:** OPNsense
+- **WAN:** Starlink (IPv4 CGNAT)
+
+### VLANs
+
+| VLAN | Name | Subnet |
+|-----:|------|--------|
+| 20 | USER | 192.168.20.0/24 |
+| 30 | IOT | 192.168.30.0/24 |
+| 40 | GUEST | 192.168.40.0/24 |
+| 50 | UNTRUSTED | 192.168.50.0/24 |
+| 60 | SERVERS | 192.168.60.0/24 |
+| 99 | MGMT | 192.168.99.0/24 |
+
+**Notes**
+- Inter-VLAN routing is explicitly controlled
+- MGMT is intentionally isolated and not remotely accessible
+
+---
+
+## 4. Tailscale Architecture
+
+### Design Model
+- Overlay VPN (WireGuard-based)
+- No inbound firewall rules
+- No NAT traversal configuration required
+- Cerberus acts as a **subnet router** for selected VLANs
+
+### Overlay Addressing
+- Tailnet IPv4 range: `100.64.0.0/10`
+- Cerberus receives a Tailscale IP in this range
+- Clients communicate using overlay IPs
+
+---
+
+## 5. Tailscale Configuration (Cerberus)
+
+### Plugin
+- Plugin: `os-tailscale`
+- Installed via OPNsense firmware plugins
+- Managed entirely through the OPNsense UI
+
+### Interface
+- Interface name: `TAILSCALE`
+- Backing device: `tailscale0`
+- IPv4 / IPv6 assignment: None (handled by Tailscale)
+
+### Settings
+| Setting | Value |
+|------|------|
+| Enable Tailscale | Enabled |
+| Accept DNS | Disabled |
+| Accept Routes | Disabled |
+| Advertise Routes | Enabled (see below) |
+| Hostname | `cerberus` |
+
+---
+
+## 6. Advertised Routes
+
+Cerberus advertises the following internal subnets to the Tailnet:
+192.168.20.0/24 (USER)
+192.168.60.0/24 (SERVERS)
+
+### Approval
+- Routes are **explicitly approved** in the Tailscale admin portal
+- No other subnets are advertised
+
+### Explicitly Not Advertised
+192.168.99.0/24 (MGMT)
+
+
+This prevents remote access to the management network.
+
+---
+
+## 7. Firewall Policy (Effective)
+
+### TAILSCALE Interface Rules (High-Level)
+
+- Allow DNS queries to Cerberus
+- Allow access to specific services in USER and SERVERS VLANs
+- No blanket “allow all” rules
+- Default deny at end of ruleset
+
+### MGMT VLAN
+- No advertised route
+- No firewall pass rules from TAILSCALE
+- Access remains local-only by design
+
+---
+
+## 8. Routing & Traffic Behavior
+
+### From Remote Tailscale Clients
+
+| Destination | Behavior |
+|------------|----------|
+| Cerberus (Tailscale IP) | Reachable |
+| USER VLAN | Reachable |
+| SERVERS VLAN | Reachable |
+| MGMT VLAN | ❌ Not reachable |
+| Internet | Split tunnel (client local ISP) |
+
+This behavior is verified and intentional.
+
+---
+
+## 9. DNS Behavior
+
+- Tailscale DNS override is **disabled**
+- Clients continue using local DNS for internet access
+- Internal services resolve via Cerberus DNS as expected
+- No MagicDNS dependency
+
+---
+
+## 10. Security Properties
+
+- No inbound WAN exposure
+- No management plane exposure over VPN
+- Explicit routing only
+- Explicit firewall policy
+- CGNAT-safe by design
+- Easy rollback (disable plugin)
+
+---
+
+## 11. Known Limitations
+
+- Cerberus Web UI is not intended for routine remote access
+- Remote administrative access will be handled via a **jump host** in a future phase
+- Geo-restricted media access is not addressed in this design
+
+---
+
+## 12. Related / Next Documents
+
+Planned follow-ups:
+- `procedures/management-access-jump-host.md`
+- `decisions/adr-jump-host-model.md`
+- (Optional) `procedures/media-egress-airvpn.md`
+
+---
+
+## 13. Current State Verdict
+
+✅ Stable  
+✅ Secure  
+✅ CGNAT-safe  
+✅ VLAN-preserving  
+✅ Family-friendly  
+✅ Production-appropriate  
+
+This document represents the **approved baseline** before further hardening.
