@@ -48,6 +48,21 @@ Infrastructure Systems
 
 ---
 
+### IP Addressing
+
+Network devices use DHCP reservations managed by Cerberus (OPNsense).
+
+- VLAN: SERVERS (60)
+-- Atlas: 192.168.60.102
+- Assignment: DHCP reservation (MAC-bound)
+- Rationale:
+  - Centralized control
+  - Prevents conflicts
+  - Survives OS reinstall
+  - Enterprise-aligned
+
+Static IPs are not configured at the OS level.
+
 🛑 Stopping Point
 
 This document defines topology, not configuration.

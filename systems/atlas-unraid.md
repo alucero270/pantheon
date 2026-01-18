@@ -90,6 +90,21 @@ Parity changes require downtime and must be planned.
 
 ## Network Configuration
 
+### Atlas IP Addressing
+
+Atlas uses a DHCP reservation managed by Cerberus (OPNsense).
+
+- VLAN: SERVERS (60)
+- IP: 192.168.60.102
+- Assignment: DHCP reservation (MAC-bound)
+- Rationale:
+  - Centralized control
+  - Prevents conflicts
+  - Survives OS reinstall
+  - Enterprise-aligned
+
+Static IPs are not configured at the OS level.
+
 ### VLAN Placement (Final)
 
 | Interface | VLAN         | Purpose                    |
