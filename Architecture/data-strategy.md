@@ -5,9 +5,9 @@ what is authoritative, and what is disposable.
 
 This is an architectural document.
 It defines truth, not procedure.
-SECTION 2 — Core Principles
-markdown
-Copy code
+
+---
+
 ## Core Principles
 
 - Data must have a single authoritative home
@@ -15,9 +15,9 @@ Copy code
 - Loss of compute must not imply loss of data
 - Data location determines backup and recovery strategy
 - No service may be the sole holder of important data
-SECTION 3 — Data Classification Model
-markdown
-Copy code
+
+---
+
 ## Data Classification Model
 
 All data in the homelab is classified into one of three categories:
@@ -27,9 +27,9 @@ All data in the homelab is classified into one of three categories:
 3. Disposable / Ephemeral
 
 Each category has different durability and recovery requirements.
-SECTION 4 — Authoritative (Persistent) Data
-markdown
-Copy code
+
+---
+
 ## 1. Authoritative (Persistent) Data
 
 Authoritative data must survive:
@@ -45,14 +45,34 @@ Examples include:
 - Media libraries
 - Photos
 - Backups
-- Nextcloud user data
+- User data accessed via Nextcloud (stored externally on Atlas)
 - Application databases
 - 3D scan source data and finalized outputs
 
 Authoritative data is never stored exclusively on compute nodes.
-SECTION 5 — Runtime / Configuration State
-markdown
-Copy code
+
+### Nextcloud Data Clarification
+
+Nextcloud does not own authoritative data.
+
+All Nextcloud user-visible files are backed by
+external storage mounted from Atlas shares.
+
+Nextcloud acts as:
+- An access layer
+- A synchronization layer
+- A collaboration interface
+
+Nextcloud does not act as:
+- A storage authority
+- A backup system
+- The sole holder of any data
+
+Deletion or reinstallation of Nextcloud must never
+result in data loss.
+
+---
+
 ## 2. Runtime / Configuration State
 
 Runtime and configuration data is important, but rebuildable
@@ -70,9 +90,9 @@ This data:
 - Is stored on Atlas
 - Is mounted into containers or VMs
 - May be regenerated, but should not be casually discarded
-SECTION 6 — Disposable / Ephemeral Data
-markdown
-Copy code
+
+---
+
 ## 3. Disposable / Ephemeral Data
 
 Disposable data may be lost without consequence.
@@ -91,10 +111,20 @@ This data:
 - Is never backed up
 - Is expected to be regenerated
 - Typically lives on Prometheus local storage
-SECTION 7 — Storage Authority Declaration
-markdown
-Copy code
-## Storage Authority Declaration
+
+### Transitional Processing Data
+
+Some data may be temporarily authoritative during processing
+(e.g. intermediate 3D scan files).
+
+Such data:
+- May exist briefly on Prometheus
+- Must be promoted to Atlas before being considered authoritative
+- Must not be relied upon long-term on compute nodes
+
+---
+
+## 4. Storage Authority Declaration
 
 Atlas is the single authoritative storage system.
 
@@ -111,10 +141,33 @@ Atlas is not responsible for:
 - AI caches
 - Compute scratch space
 - Temporary processing outputs
-SECTION 8 — Compute Relationship (Prometheus)
-kotlin
-Copy code
-## Relationship to Compute (Prometheus)
+
+---
+
+## 5. Media Data Separation
+
+Media data is classified by purpose:
+
+### Media for Streaming (Jellyfin)
+- Stored on Atlas
+- Managed directly by the filesystem
+- Not indexed or modified by Nextcloud
+- Accessed read-only by Jellyfin
+
+### Media for Sync / Sharing
+- Stored on Atlas
+- Exposed to Nextcloud via external storage
+- Intended for human collaboration
+
+This separation prevents:
+- Metadata conflicts
+- Unintended file moves
+- Performance degradation
+- Media rescans or corruption
+
+---
+
+## 6. Relationship to Compute (Prometheus)
 
 Prometheus is a compute-only system.
 
@@ -130,10 +183,8 @@ If Prometheus is lost or rebuilt:
 - No authoritative data is lost
 - Services can be redeployed
 - Data remains intact on Atlas
-SECTION 9 — Data Access Protocol Strategy
-markdown
-Copy code
-## Data Access Protocol Strategy
+
+## 7. Data Access Protocol Strategy
 
 Different consumers require different access models.
 
@@ -148,9 +199,9 @@ Characteristics:
 - User authentication
 - Familiar workflows
 - Interactive file access
-SECTION 10 — NFS — Compute Access
-markdown
-Copy code
+
+---
+
 ### NFS — Compute Access
 
 Used by:
@@ -165,19 +216,19 @@ Characteristics:
 - Low overhead
 
 NFS is the preferred protocol for service and compute workloads.
-SECTION 11 — Explicit Constraints
-pgsql
-Copy code
-## Explicit Constraints
+
+---
+
+## 8. Explicit Constraints
 
 - No service may store its only copy of data on Prometheus
 - No container may rely on container-layer storage for persistence
 - Backup scope is determined by data classification
 - Data placement must be documented before service deployment
-SECTION 12 — Stopping Point
-pgsql
-Copy code
-🛑 Stopping Point
+
+---
+
+## 🛑 Stopping Point
 
 This data strategy is authoritative.
 

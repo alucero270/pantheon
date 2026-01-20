@@ -49,13 +49,14 @@ These shares already exist on Atlas:
 | Share | Purpose |
 | :---: | :---: |
 | documents | Personal files |
-| media | Family media (non-Jellyfin-managed) |
+| media | Media intended for sync / sharing (not Jellyfin-managed) |
 | photos | Camera uploads |
 | scans | 3D scan data |
 | backups | Client backups |
 | nextcloud-data | Nextcloud-native uploads only |
 
-⚠️ Media consumed by Jellyfin **must remain outside Nextcloud control**.
+⚠️ Media consumed by Jellyfin must remain outside Nextcloud control.
+⚠️ Jellyfin media directories must never be mounted into Nextcloud.
 
 ---
 
@@ -94,6 +95,8 @@ Where:
 UID 99 = nobody
 GID 100 = users
 
+⚠️ Do not apply recursively to shares requiring custom ACLs without review.
+
 ---
 
 ## Nextcloud Configuration
@@ -131,6 +134,8 @@ This directory is used only for:
 - User caches
 - Metadata
 
+🔒 Rule (Locked)
+The /data directory must never be repointed to Atlas shares or external paths.
 Primary files live on Atlas shares via external mounts.
 
 ---
@@ -143,7 +148,8 @@ __Advantages__
 - Easy migration to Prometheus
 - Backup-friendly
 - No data duplication
-- Explicitly Not Supported
+
+__Explicitly Not Supported__
 - Moving shares into /data
 - Symlinks into /data
 - Letting Nextcloud manage Jellyfin media
