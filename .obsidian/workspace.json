@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "services/nextcloud.md",
+                "file": "services/ai.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "nextcloud"
+              "title": "ai"
             }
           },
           {
@@ -27,16 +27,15 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "services/ai.md",
+                "file": "services/comfyui.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "ai"
+              "title": "comfyui"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -196,32 +195,34 @@
       "workspaces:Manage workspace layouts": false
     }
   },
-  "active": "4cd693b0b0f7de10",
+  "active": "d6baed55ef2260d5",
   "lastOpenFiles": [
-    "templates/sytems.md",
-    "templates/services.md",
+    "services/openwebui.md",
+    "services/ollama.md",
     "templates/procedures.md",
-    "templates/policy.md",
+    "templates/services.md",
+    "services/redis.md",
+    "services/nextcloud.md",
+    "services/media-architecture.md",
+    "services/comfyui.md",
+    "Architecture/media-architecture.md",
+    "templates/github-issues.md",
+    "services/ai.md",
+    "procedures/prometheus-ai-stack-initialization.md",
+    "decisions/ADR-006-comfyui-storage-constraints.md",
+    "systems/prometheus.md",
+    "procedures/nextcloud-external-storage.md",
+    "procedures/nextcloud-migration.md",
+    "templates/sytems.md",
     "templates/notes.md",
-    "templates/architecture.md",
     "templates/adr.md",
+    "templates/architecture.md",
+    "templates/policy.md",
     "templates",
     "procedures/atlas-share-audit.md",
     "decisions/ADR-005-atlas-share-storage-model.md",
     "decisions/ADR-004-nextcloud-migration.md",
     "procedures/prometheus-nfs-mounts.md",
-    "services/nextcloud.md",
-    "procedures/prometheus-nvidia-runtime.md",
-    "services/ai.md",
-    "procedures/nextcloud-deployment.md",
-    "procedures/nextcloud-external-storage.md",
-    "procedures/prometheus-initialization.md",
-    "systems/prometheus-ubuntu.md",
-    "Architecture/data-strategy.md",
-    "decisions/ADR-003-disposable-compute-prometheus.md",
-    "decisions/ADR-006-Prometheus-Container-Runtime-and-NVIDIA-GPU-Enablemented.md",
-    "Architecture/compute-architecture.md",
-    "decisions/ADR-0040nextcloud-migration.md",
-    "TODO.md"
+    "procedures/prometheus-nvidia-runtime.md"
   ]
 }
