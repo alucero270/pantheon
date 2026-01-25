@@ -1,9 +1,11 @@
 ---
 type: system
-hostname: {{title}}
+hostname:
+  "{ title }":
 role:
 status: active
-last_updated: {{date:YYYY-MM-DD}}
+last_updated:
+  "{ date:YYYY-MM-DD }":
 ---
 
 # {{System Name}}

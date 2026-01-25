@@ -3,7 +3,6 @@ type: procedure
 risk_level: low|medium|high
 last_tested: {{date:YYYY-MM-DD}}
 ---
-
 # {{Procedure Name}}
 
 ## Purpose
