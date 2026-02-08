@@ -8,42 +8,17 @@
         "type": "tabs",
         "children": [
           {
-<<<<<<< Updated upstream
-=======
-            "id": "d6baed55ef2260d5",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "TODO.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "TODO"
-            }
-          },
-          {
->>>>>>> Stashed changes
             "id": "4cd693b0b0f7de10",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-<<<<<<< Updated upstream
                 "file": "CONTRIBUTING.MD",
-=======
-                "file": "services/ai.md",
->>>>>>> Stashed changes
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-<<<<<<< Updated upstream
               "title": "CONTRIBUTING"
-=======
-              "title": "ai"
->>>>>>> Stashed changes
             }
           }
         ]
@@ -207,59 +182,31 @@
   },
   "active": "4cd693b0b0f7de10",
   "lastOpenFiles": [
-<<<<<<< Updated upstream
-    "services/ollama.md",
+    "templates/sytems.md",
+    "templates/services.md",
+    "templates/procedures.md",
+    "templates/policy.md",
     "templates/notes_ai_tuning.md",
-    "services/comfyui.md",
-    "services/openwebui.md",
-    "services/ai.md",
-    "procedures/prometheus-nfs-mounts.md",
-    "templates/sytems.md",
-    "templates/services.md",
-    "templates/procedures.md",
-    "templates/policy.md",
     "templates/notes.md",
     "templates/github-issues.md",
-    "templates/architecture.md",
-    "templates/adr.md",
-    "templates",
-=======
-    "templates/github-issues.md",
-    "systems/prometheus-ubuntu.md",
-    "templates/sytems.md",
-    "templates/services.md",
-    "templates/procedures.md",
-    "templates/policy.md",
-    "templates/notes.md",
     "templates/architecture.md",
     "templates/adr.md",
     "templates",
     "services/openwebui.md",
     "services/ollama.md",
     "services/comfyui.md",
->>>>>>> Stashed changes
     "procedures/prometheus-ai-stack-initialization.md",
     "procedures/atlas-share-audit.md",
     "decisions/ADR-006-comfyui-storage-constraints.md",
     "decisions/ADR-005-atlas-share-storage-model.md",
     "decisions/ADR-004-nextcloud-migration.md",
-<<<<<<< Updated upstream
-    "procedures/prometheus-nvidia-runtime.md",
-    "TODO.md",
-=======
-    "procedures/rebuild-network.md",
     "procedures/prometheus-nvidia-runtime.md",
     "procedures/prometheus-nfs-mounts.md",
->>>>>>> Stashed changes
     "procedures/prometheus-initialization.md",
     "decisions/ADR-006-Prometheus-Container-Runtime-and-NVIDIA-GPU-Enablemented.md",
     "decisions/ADR-0040nextcloud-migration.md",
     "Architecture/compute-architecture.md",
-<<<<<<< Updated upstream
-    "systems/prometheus-ubuntu.md"
-=======
-    "services/media-architecture.md",
-    "services/ai.md"
->>>>>>> Stashed changes
+    "services/ai.md",
+    "TODO.md"
   ]
 }
