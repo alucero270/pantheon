@@ -110,9 +110,10 @@ AI services may support:
 
 These integrations must respect data authority rules.
 
-🛑 Stopping Point
+### Deployed AI Services
 
-AI services are defined as compute-only, ephemeral workloads
-running on Prometheus.
+The following AI services are currently deployed on Prometheus:
 
-All persistent data remains authoritative on Atlas.
+- [[services/comfyui]] — node-based image and media generation
+- [[services/ollama]] — local LLM runtime and inference API
+- [[services/openwebui]] — human-facing UI for LLM interaction

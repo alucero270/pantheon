@@ -1,0 +1,265 @@
+{
+  "main": {
+    "id": "902dbffef22318ab",
+    "type": "split",
+    "children": [
+      {
+        "id": "0902c0dc84beb03f",
+        "type": "tabs",
+        "children": [
+          {
+<<<<<<< Updated upstream
+=======
+            "id": "d6baed55ef2260d5",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "TODO.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "TODO"
+            }
+          },
+          {
+>>>>>>> Stashed changes
+            "id": "4cd693b0b0f7de10",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+<<<<<<< Updated upstream
+                "file": "CONTRIBUTING.MD",
+=======
+                "file": "services/ai.md",
+>>>>>>> Stashed changes
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+<<<<<<< Updated upstream
+              "title": "CONTRIBUTING"
+=======
+              "title": "ai"
+>>>>>>> Stashed changes
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "6ef7145f9dd3b81a",
+    "type": "split",
+    "children": [
+      {
+        "id": "fa15a971ad3eb067",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "5d16bd4ed11732a4",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "ac7f443878cc7aa2",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "33cde67d4969e0f0",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "866e2d6b3ac9979f",
+    "type": "split",
+    "children": [
+      {
+        "id": "2acb3313bef76423",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f7b1b9b49a67407e",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "6af38768bb2a5bf2",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "0235cf1006ae8cb1",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "1704a1203ebe9af5",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "b46ef4fd4f099d40",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "4cd693b0b0f7de10",
+  "lastOpenFiles": [
+<<<<<<< Updated upstream
+    "services/ollama.md",
+    "templates/notes_ai_tuning.md",
+    "services/comfyui.md",
+    "services/openwebui.md",
+    "services/ai.md",
+    "procedures/prometheus-nfs-mounts.md",
+    "templates/sytems.md",
+    "templates/services.md",
+    "templates/procedures.md",
+    "templates/policy.md",
+    "templates/notes.md",
+    "templates/github-issues.md",
+    "templates/architecture.md",
+    "templates/adr.md",
+    "templates",
+=======
+    "templates/github-issues.md",
+    "systems/prometheus-ubuntu.md",
+    "templates/sytems.md",
+    "templates/services.md",
+    "templates/procedures.md",
+    "templates/policy.md",
+    "templates/notes.md",
+    "templates/architecture.md",
+    "templates/adr.md",
+    "templates",
+    "services/openwebui.md",
+    "services/ollama.md",
+    "services/comfyui.md",
+>>>>>>> Stashed changes
+    "procedures/prometheus-ai-stack-initialization.md",
+    "procedures/atlas-share-audit.md",
+    "decisions/ADR-006-comfyui-storage-constraints.md",
+    "decisions/ADR-005-atlas-share-storage-model.md",
+    "decisions/ADR-004-nextcloud-migration.md",
+<<<<<<< Updated upstream
+    "procedures/prometheus-nvidia-runtime.md",
+    "TODO.md",
+=======
+    "procedures/rebuild-network.md",
+    "procedures/prometheus-nvidia-runtime.md",
+    "procedures/prometheus-nfs-mounts.md",
+>>>>>>> Stashed changes
+    "procedures/prometheus-initialization.md",
+    "decisions/ADR-006-Prometheus-Container-Runtime-and-NVIDIA-GPU-Enablemented.md",
+    "decisions/ADR-0040nextcloud-migration.md",
+    "Architecture/compute-architecture.md",
+<<<<<<< Updated upstream
+    "systems/prometheus-ubuntu.md"
+=======
+    "services/media-architecture.md",
+    "services/ai.md"
+>>>>>>> Stashed changes
+  ]
+}
