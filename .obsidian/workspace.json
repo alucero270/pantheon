@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "decisions/ADR-007-centralized-ingress-on-prometheus.md",
+                "file": "templates/github-issues.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "ADR-007-centralized-ingress-on-prometheus"
+              "title": "github-issues"
             }
           }
         ],
@@ -195,8 +195,13 @@
       "bases:Create new base": false
     }
   },
-  "active": "aa5045a90e3a6e1b",
+  "active": "5d16bd4ed11732a4",
   "lastOpenFiles": [
+    "Architecture/network-Ingress-Flow.md",
+    "services/reverse-proxy.md",
+    "services/reverse_proxy_validation.md",
+    "procedures/prometheus_ollama_model_management_procedure.md",
+    "decisions/ADR-007-centralized-ingress-on-prometheus.md",
     "decisions/Untitled.md",
     "services/next-cloud-reverse-proxy.md",
     "procedures/prometheus-reverse-proxy.md",
@@ -210,19 +215,14 @@
     "templates/adr.md",
     "services/redis.md",
     "systems/prometheus-ubuntu.md",
-    "services/reverse-proxy.md",
     "templates/services.md",
-    "services/reverse_proxy_validation.md",
     "Architecture/dns-plan.md",
-    "Architecture/network-Ingress-Flow.md",
-    "decisions/ADR-007-centralized-ingress-on-prometheus.md",
     "templates/github-issues.md",
     "CONTRIBUTING.MD",
     "templates/sytems.md",
     "templates/procedures.md",
     "templates/policy.md",
     "templates/notes_ai_tuning.md",
-    "templates/notes.md",
     "templates"
   ]
 }
