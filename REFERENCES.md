@@ -4,60 +4,44 @@
 
 - [[README]] - root project overview.
 - [[AGENTS]] - agent operating guide and routing table.
-- [[procedures/branch-validation]] - branch validation queue.
+- [[TODO]] - branch validation queue.
 
-## Architecture
+## Pantheon-Wide Architecture
 
-- [[architecture/overview]]
-- [[architecture/network-architecture]]
-- [[architecture/vlan-design]]
-- [[architecture/security-model]]
-- [[architecture/data-strategy]]
-- [[architecture/dns-plan]]
-- [[architecture/network-Ingress-Flow]]
-- [[architecture/media-architecture]]
-- [[architecture/second-brain-chatgpt-obsidian]]
+- [[README]]
+- [[systems/network/architecture/security-model]]
+- [[systems/atlas/architecture/data-strategy]]
+
+## System Architecture
+
+- [[systems/network/architecture/README|Network Architecture]]
+- [[systems/atlas/architecture/README|Atlas Architecture]]
+- [[systems/prometheus/architecture/README|Prometheus Architecture]]
 
 ## Systems
 
-- [[systems/cerberus-opensense]]
-- [[systems/axon-cisco-sg350]]
-- [[systems/atlas-unraid]]
-- [[systems/prometheus-ubuntu]]
-- [[systems/access-points]]
-- [[systems/prometheus-services-inventory]]
+- [[systems/network]]
+- [[systems/atlas]]
+- [[systems/prometheus]]
+
+## Network Devices
+
+- [[systems/network/devices/cerberus]]
+- [[systems/network/devices/axon]]
+- [[systems/network/devices/access-points]]
 
 ## Services
 
-Root `services/` is transitional during migration. System-owned service docs should move under `systems/<system>/services/` during Pass 2 after validation.
-
-- [[services/ai]]
-- [[services/comfyui]]
-- [[services/databases]]
-- [[services/media-architecture]]
-- [[services/next-cloud-reverse-proxy]]
-- [[services/nextcloud]]
-- [[services/ollama]]
-- [[services/openwebui]]
-- [[services/redis]]
-- [[services/reverse-proxy]]
-- [[services/reverse_proxy_validation]]
-- [[services/tailscale_remote_access_architecture]]
+- [[systems/network/services/README|Network Services]]
+- [[systems/atlas/services/README|Atlas Services]]
+- [[systems/prometheus/services/README|Prometheus Services]]
 
 ## Procedures
 
-- [[procedures/atlas-recovery]]
-- [[procedures/atlas-share-audit]]
-- [[procedures/chatgpt-obsidian-mcp-setup]]
-- [[procedures/network-rebuild]]
-- [[procedures/nextcloud-deployment]]
-- [[procedures/nextcloud-ext-storage-validation]]
-- [[procedures/nextcloud-external-storage]]
-- [[procedures/nextcloud-migration]]
-- [[procedures/prometheus-ai-stack-initialization]]
-- [[procedures/prometheus-reverse-proxy]]
-- [[procedures/prometheus_ollama_model_management_procedure]]
-- [[procedures/rebuild-network]]
+- [[TODO]]
+- [[systems/network/procedures/README|Network Procedures]]
+- [[systems/atlas/procedures/README|Atlas Procedures]]
+- [[systems/prometheus/procedures/README|Prometheus Procedures]]
 
 ## Decisions
 
@@ -68,11 +52,15 @@ Root `services/` is transitional during migration. System-owned service docs sho
 - [[decisions/ADR-005-atlas-share-storage-model]]
 - [[decisions/ADR-006-comfyui-storage-constraints]]
 - [[decisions/ADR-007-centralized-ingress-on-prometheus]]
-- `decisions/ADR-008 — AI Runtime Network Segmentation.md` - Needs validation before link normalization.
-- `decisions/ADR-009 — Docker DNS Resolution Strategy.md` - Needs validation before link normalization.
+- `decisions/ADR-008 - AI Runtime Network Segmentation.md` - Needs validation; candidate file exists on `codex/deferred-local-changes`.
+- `decisions/ADR-009 - Docker DNS Resolution Strategy.md` - Needs validation; candidate file exists on `codex/deferred-local-changes`.
 
 ## Templates And Tooling
 
 - [[templates/README]]
-- `.obsidian/templates.json`
 - `.github/ISSUE_TEMPLATE/custom.md`
+
+## Needs Validation
+
+- Second brain candidate docs on `codex/deferred-local-changes`.
+- Prometheus service inventory candidate on `codex/deferred-local-changes`.

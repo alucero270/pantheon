@@ -20,7 +20,7 @@ ADRs capture locked or important design decisions, the context for those decisio
 
 ## Templates
 
-- Shared ADR template: [[templates/adr-template]]
+- Shared ADR template: [[templates/adr]]
 
 ## Rules
 
@@ -31,4 +31,4 @@ ADRs capture locked or important design decisions, the context for those decisio
 ## Needs Validation
 
 - ADR filenames with spaces and dash punctuation should be reviewed for kebab-case normalization during Pass 2.
-- Existing links that reference `ADR-comfyui-storage-constraints` or unqualified ADR filenames need validation before rewrite.
+- ADR-008 and ADR-009 candidate files exist on `codex/deferred-local-changes` and require validation before adoption.

@@ -11,14 +11,14 @@ last_updated: 2026-02-02
 Capture tuning decisions and troubleshooting outcomes for the local AI stack on [[systems/prometheus]].
 
 This file is **notes**, not an authoritative procedure.
-For the rebuild steps, see [[procedures/prometheus-ai-stack-bringup]].
+For the rebuild steps, see [[systems/prometheus/procedures/ai-stack-initialization]].
 
 ---
 
 ## Current stack (high level)
-- Runtime: [[services/ollama]]
-- UI: [[services/openwebui]]
-- Image gen: [[services/comfyui]]
+- Runtime: [[systems/prometheus/services/ollama]]
+- UI: [[systems/prometheus/services/openwebui]]
+- Image gen: [[systems/prometheus/services/comfyui]]
 - Access pattern: localhost-only + SSH tunnels
 
 ---

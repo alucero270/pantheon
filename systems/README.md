@@ -2,37 +2,28 @@
 
 ## Purpose
 
-This folder contains documentation for Pantheon infrastructure systems: hosts, firewall/router, switch, NAS, compute node, access points, and related devices.
+This folder contains Pantheon system-domain documentation.
 
-System docs should keep ownership, responsibilities, non-responsibilities, network placement, data ownership, service ownership, and automation classification explicit.
+System domains own their local architecture, devices, services, and procedures. Pantheon-wide constraints remain in [[systems/README]] and locked decisions remain in [[decisions/README]].
 
 ## Current Systems
 
-- [[systems/cerberus-opensense]] - Cerberus, OPNsense firewall and router.
-- [[systems/axon-cisco-sg350]] - Axon, Cisco SG350 core switch.
-- [[systems/atlas-unraid]] - Atlas, Unraid NAS and authoritative storage.
-- [[systems/prometheus-ubuntu]] - Prometheus, Ubuntu compute and virtualization node.
-- [[systems/access-points]] - Access point documentation.
-- [[systems/prometheus-services-inventory]] - Prometheus service inventory.
+- [[systems/network]] - Network domain: firewall, switch, access points, VLANs, DNS, DHCP, ingress, and remote access.
+- [[systems/atlas]] - Storage/data domain: Unraid NAS, authoritative storage, and data-adjacent services.
+- [[systems/prometheus]] - Compute/runtime domain: Ubuntu compute, containers, AI workloads, ingress runtime, and disposable service execution.
 
-## Target System Folders
+## System Components
 
-Pass 2 should create or validate:
-
-- `systems/cerberus/`
-- `systems/axon/`
-- `systems/atlas/`
-- `systems/prometheus/`
-
-Each system folder should include `README.md`, `REFERENCES.md`, `services/`, and `procedures/` indexes before service documents are moved.
+- [[systems/network/devices/cerberus]]
+- [[systems/network/devices/axon]]
+- [[systems/network/devices/access-points]]
 
 ## Templates
 
-- Folder-local template: [[systems/sytems-template]]
+- Shared system template: [[templates/sytems]]
 - Shared fallback templates: [[templates/README]]
 
 ## Needs Validation
 
-- Current template filename is `sytems-template.md`; target spelling is `systems-template.md`.
-- `axon` is the correct spelling; do not use `axion`.
-- Current system docs are flat files and should not be moved until Pass 2.
+- Current shared template filename is `sytems.md`; target spelling should be reviewed before any rename.
+- Prometheus service inventory candidate exists on `codex/deferred-local-changes`.

@@ -17,6 +17,46 @@ This file tracks documentation evolution, not runtime changes.
 - Entries describe documentation scope, not implementation detail
 - New architectural decisions are logged when documented
 
+## [2026-05] System-Domain Documentation Restructure
+
+### Summary
+
+Reallocated Pantheon documentation into system-owned domains after validating `TODO.md` against current repository structure and open GitHub issues.
+
+Future work that remains open is tracked in GitHub issues or the branch validation queue. `TODO.md` now preserves the branch validation queue instead of duplicating issue-tracked backlog items.
+
+### Architecture
+
+- Moved network architecture under `systems/network/architecture/`
+- Moved Atlas storage and media architecture under `systems/atlas/architecture/`
+- Added placeholder Prometheus architecture index under `systems/prometheus/architecture/`
+- Removed redundant root architecture indexes after all architecture docs were allocated
+
+### Systems
+
+- Established `systems/network` as the domain for Cerberus, Axon, access points, VLANs, DNS, DHCP, ingress, and remote access
+- Kept `systems/atlas` as the data and storage system
+- Kept `systems/prometheus` as the compute, runtime, and AI system
+
+### Services
+
+- Moved Atlas services under `systems/atlas/services/`
+- Moved Prometheus services under `systems/prometheus/services/`
+- Removed redundant root service indexes after service docs were allocated
+
+### Procedures
+
+- Moved network procedures under `systems/network/procedures/`
+- Moved Atlas procedures under `systems/atlas/procedures/`
+- Moved Prometheus procedures under `systems/prometheus/procedures/`
+- Copied the branch validation queue into `TODO.md`
+- Removed redundant root procedure indexes after procedure docs were allocated
+
+### Repository
+
+- Updated README, REFERENCES, AGENTS, template references, and ADR references for the system-domain structure
+- Preserved unresolved branch work as `Needs validation`
+
 ##[2026-01] Added remaining HDD drives
 ### Summary
 
@@ -51,7 +91,7 @@ All content was sourced from existing notes and build records.
 
 ### Architecture
 
-- Created architecture/data-strategy.md
+- Created [[systems/atlas/architecture/data-strategy]]
 - Created architecture/media-architecture.md
 - Formalized zero-trust, data authority, and storage boundaries
 

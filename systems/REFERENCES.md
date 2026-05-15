@@ -3,37 +3,31 @@
 ## Read First
 
 - [[systems/README]]
-- [[architecture/vlan-design]]
-- [[architecture/security-model]]
-- [[architecture/data-strategy]]
+- [[systems/README]]
+- [[systems/network/architecture/security-model]]
+- [[systems/atlas/architecture/data-strategy]]
 - [[decisions/README]]
 
-## System Documents
+## Systems
 
-- [[systems/cerberus-opensense]]
-- [[systems/axon-cisco-sg350]]
-- [[systems/atlas-unraid]]
-- [[systems/prometheus-ubuntu]]
-- [[systems/access-points]]
-- [[systems/prometheus-services-inventory]]
+- [[systems/network]]
+- [[systems/atlas]]
+- [[systems/prometheus]]
 
-## Service Documents To Review For System Ownership
+## Network Devices
 
-- [[services/nextcloud]]
-- [[services/databases]]
-- [[services/redis]]
-- [[services/openwebui]]
-- [[services/ollama]]
-- [[services/comfyui]]
-- [[services/reverse-proxy]]
-- [[services/media-architecture]]
-- [[services/ai]]
+- [[systems/network/devices/cerberus]]
+- [[systems/network/devices/axon]]
+- [[systems/network/devices/access-points]]
+
+## Services
+
+- [[systems/atlas/services/README|Atlas Services]]
+- [[systems/prometheus/services/README|Prometheus Services]]
+- [[systems/network/services/README|Network Services]]
 
 ## Procedures
 
-- [[procedures/network-rebuild]]
-- [[procedures/rebuild-network]]
-- [[procedures/atlas-recovery]]
-- [[procedures/atlas-share-audit]]
-- [[procedures/prometheus-ai-stack-initialization]]
-- [[procedures/prometheus-reverse-proxy]]
+- [[systems/network/procedures/README|Network Procedures]]
+- [[systems/atlas/procedures/README|Atlas Procedures]]
+- [[systems/prometheus/procedures/README|Prometheus Procedures]]

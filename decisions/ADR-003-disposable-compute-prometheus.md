@@ -45,9 +45,9 @@ This model:
 - Hyperconverged model (rejected due to tight coupling)
 
 ## Related Documents
-- architecture/data-strategy.md
-- services/ai.md
-- services/3d-scanning.md
+- [[systems/atlas/architecture/data-strategy]]
+- [[systems/prometheus/services/ai-runtime]]
+- [[systems/prometheus/services/3d-scanning]]
 - systems/prometheus.md
 
 ---

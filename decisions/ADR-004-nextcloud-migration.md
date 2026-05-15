@@ -45,9 +45,9 @@ This approach:
 - SQLite-based deployment (rejected due to scale and locking issues)
 
 ## Related Documents
-- services/nextcloud.md
-- procedures/nextcloud-migration.md
-- architecture/data-strategy.md
+- [[systems/atlas/services/nextcloud]]
+- [[systems/atlas/procedures/nextcloud-migration]]
+- [[systems/atlas/architecture/data-strategy]]
 
 ---
 

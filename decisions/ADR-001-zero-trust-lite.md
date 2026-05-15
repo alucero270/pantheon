@@ -47,9 +47,9 @@ Without requiring:
 - Full zero-trust with identity enforcement (rejected due to complexity and scope)
 
 ## Related Documents
-- architecture/network-overview.md
-- systems/cerberus.md
-- systems/axon.md
+- [[systems/network/architecture/network-architecture]]
+- [[systems/network/devices/cerberus]]
+- [[systems/network/devices/axon]]
 
 ---
 

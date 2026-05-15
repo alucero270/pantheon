@@ -47,8 +47,8 @@ It also allows compute systems to remain disposable.
 - Per-service storage ownership (rejected due to migration difficulty)
 
 ## Related Documents
-- architecture/data-strategy.md
-- architecture/media-architecture.md
+- [[systems/atlas/architecture/data-strategy]]
+- [[systems/atlas/architecture/media-architecture]]
 - systems/atlas.md
 
 ---
