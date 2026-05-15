@@ -1,96 +1,96 @@
-# Homelab Infrastructure & Services
+# Pantheon
 
-This repository documents the design, configuration, and operational procedures for a self-hosted homelab environment built around strong network segmentation, centralized storage, and dedicated compute.
+Pantheon documents a self-hosted homelab infrastructure and services repository focused on reproducibility, security, clarity, operational recovery, and future automation.
 
-The goal of this project is **reproducibility**, **security**, and **clarity** — not experimentation for its own sake.
+The repository describes a segmented home network built around centralized storage, dedicated compute, explicit security boundaries, rebuild procedures, and architecture decisions. The goal is not experimentation for its own sake. The goal is documented, rebuildable, secure infrastructure.
 
----
+## Core Principles
 
-## 🎯 Design Principles
+- Network security, storage, and compute are separated.
+- VLAN boundaries are explicit and enforced by Cerberus.
+- Atlas is the authoritative storage system.
+- Prometheus is disposable compute.
+- Infrastructure management is restricted to management paths.
+- Changes that alter architecture require a decision record.
+- Future automation must follow documented system ownership boundaries.
 
-- **Separation of concerns**
-  - Network security, storage, and compute are isolated
-- **Zero-trust inspired**
-  - Explicit access only, no implicit trust between VLANs
-- **Reproducible builds**
-  - Every system can be rebuilt from documentation alone
-- **Centralized data, distributed compute**
-  - Storage is authoritative; compute is disposable
+## Core Systems
 
----
+| System | Role | Evidence |
+|---|---|---|
+| Cerberus | OPNsense firewall, router, DNS, DHCP, inter-VLAN enforcement | [[systems/cerberus-opensense]] |
+| Axon | Cisco SG350 Layer-2 core switch | [[systems/axon-cisco-sg350]] |
+| Atlas | Unraid NAS and authoritative storage system | [[systems/atlas-unraid]] |
+| Prometheus | Ubuntu compute, virtualization, containers, AI workloads | [[systems/prometheus-ubuntu]] |
+| Access points | Wireless VLAN access | [[systems/access-points]] |
+| Ares | Daily workstation | Existing root README; Needs validation |
+| Nomad | Mobile client | Existing root README; Needs validation |
 
-## 🧠 Core Systems
+## Documentation Map
 
-| Name | Role | OS |
-|-----|-----|----|
-| Cerberus | Firewall / Router | OPNsense |
-| Axon | Core Switch | Cisco SG350 |
-| Atlas | NAS / Storage | Unraid |
-| Prometheus | Compute / AI / VMs | Ubuntu Server |
-| Ares | Daily Workstation | Windows |
-| Nomad | Mobile Client | Windows |
+| Area | Purpose |
+|---|---|
+| [[architecture/README|Architecture]] | Cross-system architecture, security, VLANs, data ownership, ingress, DNS, and remote access design. |
+| [[decisions/README|Decisions]] | Architecture Decision Records and locked constraints. |
+| [[procedures/README|Procedures]] | Cross-system SOPs, runbooks, validation checklists, recovery guides, and branch validation. |
+| [[systems/README|Systems]] | Infrastructure hosts, network devices, storage systems, compute nodes, and access devices. |
+| `services/` | Transitional service documentation. System-owned service docs should move under owning systems in Pass 2. |
+| [[templates/README|Templates]] | Shared and folder-local documentation templates. |
+| `second-brain/` | Obsidian and ChatGPT-connected second brain support files. |
 
----
+## Current Status
 
-## 🌐 Network Overview
+Repository evidence currently documents:
 
-- VLAN-segmented network
-- Dedicated MGMT, USER, SERVERS, IOT, GUEST, UNTRUSTED networks
-- No lateral movement by default
-- Management access restricted to MGMT VLAN
+- Network v1.0 as stable.
+- Atlas as authoritative storage.
+- Nextcloud as operational.
+- Prometheus as disposable compute and AI/runtime host.
+- Prometheus initialization as in progress.
+- Nextcloud as user-facing service with authoritative data on Atlas.
+- Reverse proxy and Tailscale-domain documentation from recent merged PRs.
+- VPN / external access as deferred in the existing root README.
+- Future automation as not yet implemented.
 
-See: `architecture/vlan-design.md`
+Items requiring validation are tracked in [[procedures/branch-validation]] and in the Pass 1 migration notes from this work.
 
----
+## Automation Position
 
-## 📂 Repository Structure
-homelab-infrastructure/
+Pantheon is preparing for future Ansible and Terraform/OpenTofu automation. Automation is documentation/scaffold-only until explicitly approved.
 
-  ├── architecture/ # High-level design decisions
-  
-  ├── systems/ # Per-host build guides
-  
-  ├── services/ # Application/service documentation
-  
-  ├── procedures/ # Rebuild, restore, DR steps
-  
-  ├── decisions/ # Architecture Decision Records (ADRs)
-  
-  ├── CHANGELOG.md
-  
-  └── README.md
+Initial safe automation target:
 
----
+- [[systems/prometheus-ubuntu|Prometheus]]
 
-## 🧱 Documentation Rules
+Protected areas:
 
-- All documentation is written in **Markdown**
-- Changes must be:
-  - Intentional
-  - Documented
-  - Committable
-- If a change alters architecture, an **ADR is required**
+- Cerberus firewall behavior
+- Axon switch configuration
+- Atlas authoritative storage configuration
+- Secrets and live infrastructure state
 
----
+## Second Brain Workflow
 
-## 🧭 Current Status
+Pantheon also acts as the starting Obsidian vault for a ChatGPT-connected second brain workflow.
 
-- Network v1.0: **Stable**
-- Atlas (NAS): **Operational**
-- Nextcloud: **Operational**
-- Prometheus: **Initialization in progress**
-- VPN / External access: **Deferred**
+- Architecture: [[architecture/second-brain-chatgpt-obsidian]]
+- Setup procedure: [[procedures/chatgpt-obsidian-mcp-setup]]
+- Local registry example: `second-brain/vaults.example.json`
+- ChatGPT operating prompt: `second-brain/system-prompt.md`
+- Capture templates: `templates/second-brain-capture.md`, `templates/second-brain-synthesis.md`, `templates/second-brain-source.md`
 
----
+The workflow starts with Pantheon as the authoritative infrastructure vault and attaches other vaults through an allowlisted MCP vault registry.
 
-## 📌 Non-Goals
+## Operating Notes
 
-- No automatic configuration management (yet)
-- No “magic” undocumented tweaks
-- No production exposure to the internet
+- Use repository evidence only.
+- Use `TBD`, `Unknown`, or `Needs validation` where evidence is missing.
+- Use Obsidian wiki links for internal documentation references.
+- Do not merge or delete branches during documentation normalization.
+- Do not modify live infrastructure from this repository.
 
----
+See [[AGENTS]] for the agent operating guide.
 
-## 📜 License
+## License
 
 Internal / personal use. Documentation may be reused with attribution.
