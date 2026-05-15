@@ -1,6 +1,3 @@
 # Local editor and Obsidian vault state
 .idea/
 .obsidian/
-
-# Local JSON scratch/config exports
-*.json
