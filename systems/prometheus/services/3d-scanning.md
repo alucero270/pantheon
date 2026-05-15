@@ -155,3 +155,22 @@ compute-heavy, data-consumptive workloads.
 
 All authoritative scan data resides on Atlas.
 All processing occurs on Prometheus.
+
+## Automation Readiness
+
+| Field | Value |
+|---|---|
+| Owning domain | Prometheus |
+| Host/system/device owner | Prometheus |
+| Runtime type | Compute workflow / service candidate; Needs validation |
+| Source of truth | Service documentation |
+| Config path | Needs validation |
+| Data path | Processing on Prometheus; authoritative data relationship with Atlas needs validation |
+| Secret requirements | Do not commit secrets |
+| Network ports | Needs validation |
+| Dependencies | Atlas scan data, Prometheus compute resources |
+| Backup requirement | Authoritative scan data remains on Atlas; workflow backup needs validation |
+| Validation command | Needs validation |
+| Recovery procedure | Needs validation |
+| Automation classification | Needs validation |
+| Preferred automation tool | Ansible candidate after workflow validation |

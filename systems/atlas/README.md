@@ -49,7 +49,31 @@ Atlas owns authoritative storage. Runtime compute and disposable caches belong e
 
 ## Automation Classification
 
-Do not automate yet
+Do not automate storage yet
+
+## Automation Readiness
+
+| Field | Value |
+|---|---|
+| Owning domain | Atlas |
+| Host/system/device owner | Atlas |
+| Runtime type | Unraid NAS, authoritative storage, data-adjacent services |
+| Source of truth | Atlas storage documentation and validated exports; live configuration export needs validation |
+| Config path | Needs validation |
+| Data path | Authoritative storage; specific paths are service/share-specific |
+| Secret requirements | Do not commit secrets; final model is [[automation/policies/secrets-policy|Needs decision]] |
+| Network ports | Needs validation from service docs |
+| Dependencies | Backup strategy, restore procedure, share/export validation |
+| Backup requirement | Required before any storage automation |
+| Validation command | Needs validation |
+| Recovery procedure | [[systems/atlas/procedures/README]] |
+| Automation classification | Do not automate storage yet |
+| Preferred automation tool | Manual only for storage; read-only validation candidate after backup/restore model is proven |
+
+## Automation Index
+
+- [[systems/atlas/automation/README]]
+- [[systems/atlas/automation/guardrails]]
 
 ## What Good Looks Like
 

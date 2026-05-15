@@ -12,6 +12,16 @@ System domains own their local architecture, devices, services, and procedures. 
 - [[systems/atlas]] - Storage/data domain: Unraid NAS, authoritative storage, and data-adjacent services.
 - [[systems/prometheus]] - Compute/runtime domain: Ubuntu compute, containers, AI workloads, ingress runtime, and disposable service execution.
 
+## Automation
+
+Domain-owned automation belongs under each owning system:
+
+- [[systems/network/automation/README|Network Automation]]
+- [[systems/atlas/automation/README|Atlas Automation]]
+- [[systems/prometheus/automation/README|Prometheus Automation]]
+
+Shared automation policy and reusable assets live in [[automation/README]].
+
 ## System Components
 
 - [[systems/network/devices/cerberus]]

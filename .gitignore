@@ -1,3 +1,7 @@
 # Local editor and Obsidian vault state
 .idea/
 .obsidian/
+
+# Local .NET build outputs
+bin/
+obj/

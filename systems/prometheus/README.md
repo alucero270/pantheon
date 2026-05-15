@@ -49,7 +49,31 @@ Prometheus owns runtime and disposable compute state only. Authoritative data li
 
 ## Automation Classification
 
-Needs validation
+Automation ready / Ansible candidate
+
+## Automation Readiness
+
+| Field | Value |
+|---|---|
+| Owning domain | Prometheus |
+| Host/system/device owner | Prometheus |
+| Runtime type | Ubuntu compute, containers, AI workloads, ingress runtime |
+| Source of truth | Documentation and Git-managed configuration; service-specific details need validation |
+| Config path | Needs validation |
+| Data path | Runtime/disposable local paths only; authoritative data lives on [[systems/atlas]] |
+| Secret requirements | Do not commit secrets; final model is [[automation/policies/secrets-policy|Needs decision]] |
+| Network ports | Needs validation from service docs |
+| Dependencies | Atlas storage mounts where documented; Cerberus network policy; service-specific dependencies |
+| Backup requirement | Rebuildable host; Git-backed configuration and service-specific recovery docs required |
+| Validation command | Needs validation |
+| Recovery procedure | [[systems/prometheus/procedures/README]] |
+| Automation classification | Automation ready / Ansible candidate |
+| Preferred automation tool | Ansible |
+
+## Automation Index
+
+- [[systems/prometheus/automation/README]]
+- [[systems/prometheus/automation/ansible/README]]
 
 ## What Good Looks Like
 

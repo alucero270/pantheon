@@ -34,7 +34,7 @@ ComfyUI state and outputs are stored on Prometheus local disks and may be rebuil
 
 ### Host Paths
 - **ComfyUI runtime/state (NVMe):**
-  - `/mnt/local/nvme/ai/services/comfy-mnt`  
+  - `/mnt/local/nvme/ai/services/comfy-mnt`
   Mounted into container as `/comfy/mnt`.
 
 - **Shared models (NVMe, read-only):**
@@ -102,3 +102,22 @@ docker logs --tail=50 comfy
 - First boot may take significant time due to PyTorch + CUDA wheel downloads.
 - Keep the service bound to localhost unless explicitly designing a hardened LAN exposure model.
 
+
+## Automation Readiness
+
+| Field | Value |
+|---|---|
+| Owning domain | Prometheus |
+| Host/system/device owner | Prometheus |
+| Runtime type | GPU/Docker workload; Needs validation |
+| Source of truth | [[decisions/ADR-006-comfyui-storage-constraints]] and [[systems/prometheus/procedures/ai-stack-initialization]] |
+| Config path | Needs validation |
+| Data path | Prometheus local disposable storage per ADR constraints; exact paths need validation |
+| Secret requirements | Do not commit secrets |
+| Network ports | Needs validation |
+| Dependencies | GPU runtime, Docker, local storage constraints |
+| Backup requirement | No authoritative data; generated output handling needs validation |
+| Validation command | Needs validation |
+| Recovery procedure | [[systems/prometheus/procedures/ai-stack-initialization]] |
+| Automation classification | Needs validation |
+| Preferred automation tool | Ansible candidate after GPU/runtime validation |

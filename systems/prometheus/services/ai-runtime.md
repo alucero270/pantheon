@@ -117,3 +117,21 @@ The following AI services are currently deployed on Prometheus:
 - [[systems/prometheus/services/comfyui]] — node-based image and media generation
 - [[systems/prometheus/services/ollama]] — local LLM runtime and inference API
 - [[systems/prometheus/services/openwebui]] — human-facing UI for LLM interaction
+## Automation Readiness
+
+| Field | Value |
+|---|---|
+| Owning domain | Prometheus |
+| Host/system/device owner | Prometheus |
+| Runtime type | AI runtime service group |
+| Source of truth | [[systems/prometheus/procedures/ai-stack-initialization]] and service docs |
+| Config path | Needs validation |
+| Data path | Prometheus local disposable storage; exact paths need validation |
+| Secret requirements | Do not commit secrets or model-provider tokens |
+| Network ports | Needs validation from individual service docs |
+| Dependencies | GPU/runtime details, Docker, local storage, service dependencies |
+| Backup requirement | No authoritative data; config and rebuild steps need validation |
+| Validation command | Needs validation |
+| Recovery procedure | [[systems/prometheus/procedures/ai-stack-initialization]] |
+| Automation classification | Needs validation |
+| Preferred automation tool | Ansible candidate after GPU/runtime validation |

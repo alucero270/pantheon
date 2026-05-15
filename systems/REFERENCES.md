@@ -14,6 +14,13 @@
 - [[systems/atlas]]
 - [[systems/prometheus]]
 
+## Automation
+
+- [[automation/README]]
+- [[systems/network/automation/README]]
+- [[systems/atlas/automation/README]]
+- [[systems/prometheus/automation/README]]
+
 ## Network Devices
 
 - [[systems/network/devices/cerberus]]

@@ -5,6 +5,8 @@
 - [[README]] - root project overview.
 - [[AGENTS]] - agent operating guide and routing table.
 - [[TODO]] - branch validation queue.
+- [[automation/README]] - automation control plane, shared assets, and policies.
+- [[automation/pantheonctl/README]] - C# validation and generation scaffold.
 
 ## Pantheon-Wide Architecture
 
@@ -58,6 +60,8 @@
 ## Templates And Tooling
 
 - [[templates/README]]
+- [[automation/shared/README]]
+- [[automation/policies/README]]
 - `.github/ISSUE_TEMPLATE/custom.md`
 
 ## Needs Validation

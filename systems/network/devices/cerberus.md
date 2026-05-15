@@ -46,6 +46,25 @@ Cerberus owns network configuration state. It does not own application or user d
 
 Do not automate yet
 
+## Automation Readiness
+
+| Field | Value |
+|---|---|
+| Owning domain | Network |
+| Host/system/device owner | Cerberus |
+| Runtime type | OPNsense firewall/router, DNS, DHCP, WAN, inter-VLAN policy |
+| Source of truth | Device configuration and network docs; export needs validation |
+| Config path | Needs validation |
+| Data path | No user data; firewall/router configuration only |
+| Secret requirements | Do not commit secrets; final model is [[automation/policies/secrets-policy|Needs decision]] |
+| Network ports | Needs validation |
+| Dependencies | Management access, current config backup, rollback procedure |
+| Backup requirement | Current OPNsense config backup required before automation |
+| Validation command | Needs validation |
+| Recovery procedure | [[systems/network/procedures/README]] |
+| Automation classification | Do not automate yet |
+| Preferred automation tool | Manual only; Pulumi candidate later only for validated API-backed resources |
+
 ## What Good Looks Like
 
 Cerberus documents VLANs, DNS, DHCP, aliases, firewall rules, management boundaries, backup posture, and validation steps without weakening security constraints.

@@ -54,6 +54,30 @@ Network owns configuration state for Cerberus, Axon, access points, DNS, DHCP, f
 
 Do not automate yet
 
+## Automation Readiness
+
+| Field | Value |
+|---|---|
+| Owning domain | Network |
+| Host/system/device owner | Cerberus, Axon, access points, and network control-plane services |
+| Runtime type | Firewall/router, switching, wireless, DNS/DHCP, routing, ingress paths, remote access |
+| Source of truth | Network documentation and device configuration; live device exports need validation |
+| Config path | Needs validation |
+| Data path | No user data; device configuration only |
+| Secret requirements | Do not commit secrets; final model is [[automation/policies/secrets-policy|Needs decision]] |
+| Network ports | Needs validation |
+| Dependencies | Management access, device backups, rollback path, out-of-band access |
+| Backup requirement | Current config backup required before any automation |
+| Validation command | Needs validation |
+| Recovery procedure | [[systems/network/procedures/README]] |
+| Automation classification | Do not automate yet |
+| Preferred automation tool | Manual only; Pulumi candidate for future API-backed resources after validation |
+
+## Automation Index
+
+- [[systems/network/automation/README]]
+- [[systems/network/automation/guardrails]]
+
 ## What Good Looks Like
 
 Network documentation makes routing, VLANs, DNS, DHCP, firewall behavior, ingress, remote access, and management boundaries explicit without increasing lockout or exposure risk.

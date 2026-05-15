@@ -54,7 +54,16 @@ Items requiring validation are tracked in [[TODO]] and in the Pass 1 migration n
 
 ## Automation Position
 
-Pantheon is preparing for future Ansible and Terraform/OpenTofu automation. Automation is documentation/scaffold-only until explicitly approved.
+Pantheon is preparing for future documentation-driven automation. Automation is documentation/scaffold-only until explicitly approved.
+
+The automation model is:
+
+1. Markdown and wiki-linked documentation define intent.
+2. [[automation/pantheonctl/README|pantheonctl]] validates docs and generates safe inputs.
+3. Domain-owned automation lives under `systems/<domain>/automation/`.
+4. Ansible configures safe host targets, beginning with Prometheus.
+5. Pulumi C# is preferred for future API-backed infrastructure.
+6. Terraform/OpenTofu is optional and deferred unless clearly justified.
 
 Initial safe automation target:
 
@@ -65,6 +74,8 @@ Protected areas:
 - Network firewall, switch, DNS, DHCP, and remote access behavior
 - Atlas authoritative storage configuration
 - Secrets and live infrastructure state
+
+Automation policy starts at [[automation/README]].
 
 ## Second Brain Workflow
 
