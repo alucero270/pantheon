@@ -18,11 +18,9 @@ The repository describes a segmented home network built around centralized stora
 
 | System | Role | Evidence |
 |---|---|---|
-| Cerberus | OPNsense firewall, router, DNS, DHCP, inter-VLAN enforcement | [[systems/cerberus-opensense]] |
-| Axon | Cisco SG350 Layer-2 core switch | [[systems/axon-cisco-sg350]] |
-| Atlas | Unraid NAS and authoritative storage system | [[systems/atlas-unraid]] |
-| Prometheus | Ubuntu compute, virtualization, containers, AI workloads | [[systems/prometheus-ubuntu]] |
-| Access points | Wireless VLAN access | [[systems/access-points]] |
+| Network | Firewall, switching, access points, VLANs, DNS, DHCP, ingress, and remote access | [[systems/network]] |
+| Atlas | Unraid NAS and authoritative storage system | [[systems/atlas]] |
+| Prometheus | Ubuntu compute, virtualization, containers, AI workloads | [[systems/prometheus]] |
 | Ares | Daily workstation | Existing root README; Needs validation |
 | Nomad | Mobile client | Existing root README; Needs validation |
 
@@ -30,13 +28,13 @@ The repository describes a segmented home network built around centralized stora
 
 | Area | Purpose |
 |---|---|
-| [[architecture/README|Architecture]] | Cross-system architecture, security, VLANs, data ownership, ingress, DNS, and remote access design. |
+| [[systems/README|Systems]] | Pantheon-wide architecture, security, and data ownership constraints. |
 | [[decisions/README|Decisions]] | Architecture Decision Records and locked constraints. |
-| [[procedures/README|Procedures]] | Cross-system SOPs, runbooks, validation checklists, recovery guides, and branch validation. |
-| [[systems/README|Systems]] | Infrastructure hosts, network devices, storage systems, compute nodes, and access devices. |
-| `services/` | Transitional service documentation. System-owned service docs should move under owning systems in Pass 2. |
-| [[templates/README|Templates]] | Shared and folder-local documentation templates. |
-| `second-brain/` | Obsidian and ChatGPT-connected second brain support files. |
+| [[systems/README|System Procedures]] | Cross-system SOPs, runbooks, validation checklists, recovery guides, and branch validation. |
+| [[systems/README|Systems]] | Network, Atlas, Prometheus, and their local architecture, services, procedures, and devices. |
+| [[TODO]] | Branch validation queue and remaining local validation work. |
+| [[templates/README|Templates]] | Shared documentation templates. |
+| Second brain docs | Needs validation; candidate files exist on `codex/deferred-local-changes`. |
 
 ## Current Status
 
@@ -49,10 +47,10 @@ Repository evidence currently documents:
 - Prometheus initialization as in progress.
 - Nextcloud as user-facing service with authoritative data on Atlas.
 - Reverse proxy and Tailscale-domain documentation from recent merged PRs.
-- VPN / external access as deferred in the existing root README.
+- Remote access has mixed evidence: the original root README described VPN / external access as deferred, while [[systems/network/procedures/tailscale-remote-access]] documents a current Tailscale baseline. This needs validation before automation.
 - Future automation as not yet implemented.
 
-Items requiring validation are tracked in [[procedures/branch-validation]] and in the Pass 1 migration notes from this work.
+Items requiring validation are tracked in [[TODO]] and in the Pass 1 migration notes from this work.
 
 ## Automation Position
 
@@ -60,12 +58,11 @@ Pantheon is preparing for future Ansible and Terraform/OpenTofu automation. Auto
 
 Initial safe automation target:
 
-- [[systems/prometheus-ubuntu|Prometheus]]
+- [[systems/prometheus|Prometheus]]
 
 Protected areas:
 
-- Cerberus firewall behavior
-- Axon switch configuration
+- Network firewall, switch, DNS, DHCP, and remote access behavior
 - Atlas authoritative storage configuration
 - Secrets and live infrastructure state
 
@@ -73,11 +70,11 @@ Protected areas:
 
 Pantheon also acts as the starting Obsidian vault for a ChatGPT-connected second brain workflow.
 
-- Architecture: [[architecture/second-brain-chatgpt-obsidian]]
-- Setup procedure: [[procedures/chatgpt-obsidian-mcp-setup]]
-- Local registry example: `second-brain/vaults.example.json`
-- ChatGPT operating prompt: `second-brain/system-prompt.md`
-- Capture templates: `templates/second-brain-capture.md`, `templates/second-brain-synthesis.md`, `templates/second-brain-source.md`
+- Architecture: Needs validation
+- Setup procedure: Needs validation
+- Local registry example: Needs validation
+- ChatGPT operating prompt: Needs validation
+- Capture templates: Needs validation
 
 The workflow starts with Pantheon as the authoritative infrastructure vault and attaches other vaults through an allowlisted MCP vault registry.
 

@@ -1,0 +1,19 @@
+# Prometheus Service References
+
+## Read First
+
+- [[systems/prometheus]]
+- [[systems/atlas/architecture/data-strategy]]
+- [[systems/network/architecture/ingress-flow]]
+- [[decisions/ADR-003-disposable-compute-prometheus]]
+- [[decisions/ADR-006-comfyui-storage-constraints]]
+- [[decisions/ADR-007-centralized-ingress-on-prometheus]]
+
+## Services
+
+- [[systems/prometheus/services/ai-runtime]]
+- [[systems/prometheus/services/ollama]]
+- [[systems/prometheus/services/openwebui]]
+- [[systems/prometheus/services/comfyui]]
+- [[systems/prometheus/services/traefik]]
+- [[systems/prometheus/services/3d-scanning]]

@@ -3,10 +3,10 @@
 ## Read First
 
 - [[decisions/README]]
-- [[architecture/README]]
-- [[architecture/vlan-design]]
-- [[architecture/security-model]]
-- [[architecture/data-strategy]]
+- [[systems/README]]
+- [[systems/network/architecture/vlan-design]]
+- [[systems/network/architecture/security-model]]
+- [[systems/atlas/architecture/data-strategy]]
 
 ## Locked Constraint Sources
 
@@ -19,4 +19,4 @@
 
 ## Template
 
-- [[templates/adr-template]]
+- [[templates/adr]]

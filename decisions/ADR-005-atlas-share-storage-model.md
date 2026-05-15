@@ -86,6 +86,6 @@ Those remain cache-backed or compute-local by design.
 
 ### Related Documents
 
-- architecture/data-strategy.md
-- architecture/atlas.md
-- procedures/nextcloud-external-storage.md
+- [[systems/atlas/architecture/data-strategy]]
+- systems/atlas/README.md
+- [[systems/atlas/procedures/nextcloud-external-storage]]

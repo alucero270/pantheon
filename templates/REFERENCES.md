@@ -8,21 +8,18 @@
 
 ## Shared Templates
 
-- [[templates/adr-template]]
+- [[templates/adr]]
 - [[templates/github-issues]]
-- [[templates/notes-template]]
+- [[templates/notes]]
 - [[templates/notes_ai_tuning]]
-- [[templates/policy-template]]
-- [[templates/second-brain-capture]]
-- [[templates/second-brain-source]]
-- [[templates/second-brain-synthesis]]
+- [[templates/policy]]
+- [[templates/procedures]]
+- [[templates/services]]
+- [[templates/sytems]]
 
 ## Folder-Local Templates
 
-- [[architecture/architecture-template]]
-- [[procedures/procedures-template]]
-- [[services/services-template]]
-- [[systems/sytems-template]]
+- Folder-local templates - Needs validation
 
 ## External Template Area
 

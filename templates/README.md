@@ -8,21 +8,19 @@ Prefer folder-local templates when present. Use shared templates from this folde
 
 ## Shared Templates
 
-- [[templates/adr-template]]
+- [[templates/adr]]
 - [[templates/github-issues]]
-- [[templates/notes-template]]
+- [[templates/notes]]
 - [[templates/notes_ai_tuning]]
-- [[templates/policy-template]]
-- [[templates/second-brain-capture]]
-- [[templates/second-brain-source]]
-- [[templates/second-brain-synthesis]]
+- [[templates/policy]]
+- [[templates/procedures]]
+- [[templates/services]]
+- [[templates/sytems]]
 
 ## Folder-Local Templates
 
-- [[architecture/architecture-template]]
-- [[procedures/procedures-template]]
-- [[services/services-template]]
-- [[systems/sytems-template]]
+- No folder-local templates are currently present on this branch.
+- Candidate folder-local templates exist on `codex/deferred-local-changes` and require validation before adoption.
 
 ## Obsidian Template Configuration
 
@@ -34,6 +32,6 @@ Do not change `.obsidian/templates.json` without approval.
 
 ## Needs Validation
 
-- Deleted tracked template filenames currently appear replaced by `*-template.md` equivalents in the working tree.
+- Candidate `*-template.md` files exist on `codex/deferred-local-changes` and require validation before adoption.
 - `systems/sytems-template.md` is misspelled and should be reviewed before any rename.
-- `services/services-template.md` exists in transitional root `services/`; placement should be reviewed during Pass 2.
+- Root service templates should remain in [[templates/README|Templates]] unless a folder-local template is validated.

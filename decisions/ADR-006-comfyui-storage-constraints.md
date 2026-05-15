@@ -20,8 +20,8 @@ During initial deployment, multiple startup failures revealed **non-obvious cons
 These constraints are not generic Docker best practices and must be explicitly documented to ensure reproducibility.
 
 Related documents:
-- [[procedures/prometheus-ai-stack-bringup]]
-- [[architecture/data-strategy]]
+- [[systems/prometheus/procedures/ai-stack-initialization]]
+- [[systems/atlas/architecture/data-strategy]]
 - [[systems/prometheus]]
 
 ---
