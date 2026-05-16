@@ -1,0 +1,94 @@
+---
+name: prometheus-media
+
+networks:
+  media:
+    name: prometheus-media
+
+services:
+  gluetun:
+    image: ${GLUETUN_IMAGE:?set GLUETUN_IMAGE in .env}
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - TZ=${TZ}
+      - VPN_SERVICE_PROVIDER=${VPN_SERVICE_PROVIDER:?set VPN_SERVICE_PROVIDER in .env}
+      - VPN_TYPE=${VPN_TYPE:?set VPN_TYPE in .env}
+      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY:?set WIREGUARD_PRIVATE_KEY in .env}
+      - WIREGUARD_ADDRESSES=${WIREGUARD_ADDRESSES:?set WIREGUARD_ADDRESSES in .env}
+      - SERVER_COUNTRIES=${SERVER_COUNTRIES:?set SERVER_COUNTRIES in .env}
+    ports:
+      - "127.0.0.1:${QBITTORRENT_WEBUI_PORT:-8080}:8080"
+    volumes:
+      - ${MEDIA_CONFIG_ROOT:?set MEDIA_CONFIG_ROOT in .env}/gluetun:/gluetun
+    networks:
+      - media
+    restart: unless-stopped
+
+  qbittorrent:
+    image: ${QBITTORRENT_IMAGE:?set QBITTORRENT_IMAGE in .env}
+    container_name: qbittorrent
+    network_mode: service:gluetun
+    depends_on:
+      - gluetun
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - WEBUI_PORT=8080
+    volumes:
+      - ${MEDIA_CONFIG_ROOT:?set MEDIA_CONFIG_ROOT in .env}/qbittorrent:/config
+      - ${MEDIA_DOWNLOADS_PATH:?set MEDIA_DOWNLOADS_PATH in .env}:/downloads
+    restart: unless-stopped
+
+  prowlarr:
+    image: ${PROWLARR_IMAGE:?set PROWLARR_IMAGE in .env}
+    container_name: prowlarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    ports:
+      - "127.0.0.1:${PROWLARR_PORT:-9696}:9696"
+    volumes:
+      - ${MEDIA_CONFIG_ROOT:?set MEDIA_CONFIG_ROOT in .env}/prowlarr:/config
+    networks:
+      - media
+    restart: unless-stopped
+
+  radarr:
+    image: ${RADARR_IMAGE:?set RADARR_IMAGE in .env}
+    container_name: radarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    ports:
+      - "127.0.0.1:${RADARR_PORT:-7878}:7878"
+    volumes:
+      - ${MEDIA_CONFIG_ROOT:?set MEDIA_CONFIG_ROOT in .env}/radarr:/config
+      - ${MEDIA_DOWNLOADS_PATH:?set MEDIA_DOWNLOADS_PATH in .env}:/downloads
+      - ${MEDIA_STAGING_PATH:?set MEDIA_STAGING_PATH in .env}:/staging
+      - ${ATLAS_MEDIA_PATH:?set ATLAS_MEDIA_PATH in .env}:/media:ro
+    networks:
+      - media
+    restart: unless-stopped
+
+  sonarr:
+    image: ${SONARR_IMAGE:?set SONARR_IMAGE in .env}
+    container_name: sonarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    ports:
+      - "127.0.0.1:${SONARR_PORT:-8989}:8989"
+    volumes:
+      - ${MEDIA_CONFIG_ROOT:?set MEDIA_CONFIG_ROOT in .env}/sonarr:/config
+      - ${MEDIA_DOWNLOADS_PATH:?set MEDIA_DOWNLOADS_PATH in .env}:/downloads
+      - ${MEDIA_STAGING_PATH:?set MEDIA_STAGING_PATH in .env}:/staging
+      - ${ATLAS_MEDIA_PATH:?set ATLAS_MEDIA_PATH in .env}:/media:ro
+    networks:
+      - media
+    restart: unless-stopped

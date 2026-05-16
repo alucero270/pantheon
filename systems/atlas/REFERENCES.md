@@ -6,6 +6,7 @@
 - [[systems/atlas/services/README]]
 - [[systems/atlas/procedures/README]]
 - [[systems/atlas/architecture/data-strategy]]
+- [[architecture/storage-authority-map]]
 - [[decisions/ADR-002-atlas-as-storage]]
 - [[decisions/ADR-005-atlas-share-storage-model]]
 

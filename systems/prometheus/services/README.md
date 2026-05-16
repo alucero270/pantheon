@@ -24,6 +24,7 @@ Each service document should include:
 ## Service Index
 
 - [[systems/prometheus/services/ai-runtime]]
+- [[systems/prometheus/services/jellyfin]]
 - [[systems/prometheus/services/ollama]]
 - [[systems/prometheus/services/openwebui]]
 - [[systems/prometheus/services/comfyui]]

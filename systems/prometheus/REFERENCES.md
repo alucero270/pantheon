@@ -3,9 +3,11 @@
 ## Read First
 
 - [[systems/prometheus]]
+- [[systems/prometheus/inventory]]
 - [[systems/prometheus/services/README]]
 - [[systems/prometheus/procedures/README]]
 - [[systems/atlas/architecture/data-strategy]]
+- [[architecture/storage-authority-map]]
 - [[decisions/ADR-003-disposable-compute-prometheus]]
 
 ## Services

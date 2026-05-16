@@ -5,12 +5,15 @@
 - [[README]] - root project overview.
 - [[AGENTS]] - agent operating guide and routing table.
 - [[TODO]] - branch validation queue.
+- [[systems/prometheus/architecture/compose-registry|Compose Registry]] - Docker Compose stack registry (Prometheus).
 - [[automation/README]] - automation control plane, shared assets, and policies.
 - [[automation/pantheonctl/README]] - C# validation and generation scaffold.
 
 ## Pantheon-Wide Architecture
 
 - [[README]]
+- [[architecture/storage-authority-map]]
+- [[architecture/container-lifecycle-policy]]
 - [[systems/network/architecture/security-model]]
 - [[systems/atlas/architecture/data-strategy]]
 
@@ -25,6 +28,7 @@
 - [[systems/network]]
 - [[systems/atlas]]
 - [[systems/prometheus]]
+- [[systems/prometheus/inventory]]
 
 ## Network Devices
 

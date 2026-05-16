@@ -33,6 +33,7 @@ Prometheus owns runtime and disposable compute state only. Authoritative data li
 
 ## Service Ownership
 
+- [[systems/prometheus/inventory]]
 - [[systems/prometheus/services/ai-runtime]]
 - [[systems/prometheus/services/ollama]]
 - [[systems/prometheus/services/openwebui]]

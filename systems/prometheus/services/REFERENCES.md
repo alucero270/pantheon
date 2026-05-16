@@ -3,6 +3,7 @@
 ## Read First
 
 - [[systems/prometheus]]
+- [[systems/prometheus/inventory]]
 - [[systems/atlas/architecture/data-strategy]]
 - [[systems/network/architecture/ingress-flow]]
 - [[decisions/ADR-003-disposable-compute-prometheus]]
@@ -12,6 +13,7 @@
 ## Services
 
 - [[systems/prometheus/services/ai-runtime]]
+- [[systems/prometheus/services/jellyfin]]
 - [[systems/prometheus/services/ollama]]
 - [[systems/prometheus/services/openwebui]]
 - [[systems/prometheus/services/comfyui]]
