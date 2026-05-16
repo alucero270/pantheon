@@ -1,0 +1,9 @@
+all:
+  children:
+    prometheus_domain:
+      hosts:
+        prometheus:
+          ansible_host: 192.168.60.103
+          automation_classification: automation_ready
+          preferred_automation_tool: ansible
+          notes: "Prometheus is disposable compute and the first safe automation target. IP is documented in Prometheus reverse-proxy and network remote-access docs; validate before live use."

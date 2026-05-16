@@ -55,3 +55,22 @@ Redis integration is complete and validated.
 
 
 ---
+
+## Automation Readiness
+
+| Field | Value |
+|---|---|
+| Owning domain | Atlas |
+| Host/system/device owner | Atlas |
+| Runtime type | Cache/session service; Needs validation |
+| Source of truth | Service documentation |
+| Config path | Needs validation |
+| Data path | Needs validation |
+| Secret requirements | Do not commit secrets |
+| Network ports | Needs validation |
+| Dependencies | Nextcloud and Atlas service runtime |
+| Backup requirement | Needs validation |
+| Validation command | Needs validation |
+| Recovery procedure | [[systems/atlas/procedures/README]] |
+| Automation classification | Needs validation |
+| Preferred automation tool | Needs validation |

@@ -1,0 +1,16 @@
+---
+status: scaffold
+owning_domain: prometheus
+host_owner: prometheus
+runtime_type: ubuntu_compute
+source_of_truth: "Needs validation"
+config_path: "Needs validation"
+data_path: "Needs validation"
+secret_requirements: "Do not store secrets in this file."
+network_ports: "Needs validation"
+dependencies: "Atlas mounts and Docker runtime need validation before automation."
+backup_requirement: "Prometheus has no authoritative data; service configs still need backup validation."
+validation_command: "Needs validation"
+recovery_procedure: "[[systems/prometheus/procedures/README]]"
+automation_classification: "Automation ready / Ansible candidate"
+preferred_automation_tool: ansible

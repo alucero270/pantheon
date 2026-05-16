@@ -1,0 +1,8 @@
+---
+- name: Prometheus Docker scaffold
+  hosts: prometheus
+  gather_facts: false
+  tasks:
+    - name: Docker automation is not implemented yet
+      ansible.builtin.debug:
+        msg: "status: scaffold - Docker installation, networks, compose scaffolding, and service deployment need validation before implementation."

@@ -12,7 +12,7 @@ This deployment is designed to:
 - Avoid reinstall, reupload, or permission surgery
 - Scale without architectural changes
 
-This document defines the **service architecture and constraints**.  
+This document defines the **service architecture and constraints**.
 Step-by-step rebuild procedures live in [[systems/atlas/procedures/README|Atlas Procedures]].
 
 ---
@@ -44,7 +44,7 @@ Step-by-step rebuild procedures live in [[systems/atlas/procedures/README|Atlas 
 - Unraid plugin installs
 - Data inside container layers
 
-🔒 **Decision (Locked)**  
+🔒 **Decision (Locked)**
 Nextcloud must be fully portable between compute nodes.
 
 ---
@@ -186,9 +186,9 @@ These mounts:
 - Reference Atlas storage
 - Do not duplicate data
 - Preserve backup coverage
- 
+
  ---
- 
+
 ## Migration Strategy (Authoritative)
 This deployment supports lift-and-shift migration.
 
@@ -239,3 +239,22 @@ MGMT VLAN DNS
 
 Nextcloud is operational, migration-safe,
 and compliant with the homelab data strategy.
+
+## Automation Readiness
+
+| Field | Value |
+|---|---|
+| Owning domain | Atlas |
+| Host/system/device owner | Atlas |
+| Runtime type | Docker service / application service; Needs validation |
+| Source of truth | Service documentation and validated backup/restore model |
+| Config path | Needs validation |
+| Data path | Authoritative data on Atlas; exact paths need validation from service docs |
+| Secret requirements | Do not commit secrets; final model is [[automation/policies/secrets-policy|Needs decision]] |
+| Network ports | Needs validation |
+| Dependencies | MariaDB, Redis, Atlas storage, reverse proxy path |
+| Backup requirement | Required before automation |
+| Validation command | Needs validation |
+| Recovery procedure | [[systems/atlas/procedures/README]] |
+| Automation classification | Needs validation |
+| Preferred automation tool | Needs validation |

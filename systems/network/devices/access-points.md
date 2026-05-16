@@ -73,6 +73,25 @@ This design ensures:
 - IoT devices cannot laterally move
 - Firewall policies remain authoritative
 
+## Automation Readiness
+
+| Field | Value |
+|---|---|
+| Owning domain | Network |
+| Host/system/device owner | Access points |
+| Runtime type | Wireless Layer-2 edge |
+| Source of truth | Network docs; device model and configuration export need validation |
+| Config path | Needs validation |
+| Data path | No user data; wireless configuration only |
+| Secret requirements | Do not commit Wi-Fi secrets or admin credentials |
+| Network ports | Needs validation |
+| Dependencies | VLAN trunking, management access, config backup |
+| Backup requirement | Current AP configuration backup required before automation |
+| Validation command | Needs validation |
+| Recovery procedure | Needs validation |
+| Automation classification | Manual only |
+| Preferred automation tool | Manual only |
+
 ## Explicit Non-Responsibilities
 
 Access points must never:

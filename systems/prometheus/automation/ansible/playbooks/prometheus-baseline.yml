@@ -1,0 +1,8 @@
+---
+- name: Prometheus baseline scaffold
+  hosts: prometheus
+  gather_facts: false
+  tasks:
+    - name: Baseline automation is not implemented yet
+      ansible.builtin.debug:
+        msg: "status: scaffold - baseline packages, users, SSH, mounts, and directories need validation before implementation."

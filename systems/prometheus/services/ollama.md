@@ -108,3 +108,22 @@ docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" | grep -E "^ollam
 - **Services:** [[systems/prometheus/services/openwebui]], [[systems/prometheus/services/comfyui]]
 - **Architecture:** [[systems/atlas/architecture/data-strategy]]
 
+
+## Automation Readiness
+
+| Field | Value |
+|---|---|
+| Owning domain | Prometheus |
+| Host/system/device owner | Prometheus |
+| Runtime type | Docker/API runtime; Needs validation |
+| Source of truth | [[systems/prometheus/procedures/ai-stack-initialization]] |
+| Config path | Needs validation |
+| Data path | Prometheus local disposable model/cache storage; exact paths need validation |
+| Secret requirements | Do not commit secrets |
+| Network ports | Needs validation |
+| Dependencies | Docker, model storage, [[systems/prometheus/services/openwebui]] |
+| Backup requirement | Rebuildable; model/cache persistence needs validation |
+| Validation command | Needs validation |
+| Recovery procedure | [[systems/prometheus/procedures/ai-stack-initialization]] |
+| Automation classification | Needs validation |
+| Preferred automation tool | Ansible candidate after compose inventory |

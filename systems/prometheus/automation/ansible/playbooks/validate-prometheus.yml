@@ -1,0 +1,8 @@
+---
+- name: Prometheus validation scaffold
+  hosts: prometheus
+  gather_facts: false
+  tasks:
+    - name: Validation automation is not implemented yet
+      ansible.builtin.debug:
+        msg: "status: scaffold - read-only validation commands need to be defined before live use."

@@ -120,3 +120,22 @@ Auth method:
     - [[systems/prometheus/procedures/reverse-proxy-validation]]
 - ADRs:
     - decisions/ADR-007-centralized-ingress-on-prometheus.md (create)
+
+## Automation Readiness
+
+| Field | Value |
+|---|---|
+| Owning domain | Prometheus |
+| Host/system/device owner | Prometheus |
+| Runtime type | Docker reverse proxy / ingress runtime |
+| Source of truth | [[decisions/ADR-007-centralized-ingress-on-prometheus]] and [[systems/prometheus/procedures/reverse-proxy]] |
+| Config path | Needs validation |
+| Data path | Configuration should be Git-backed; exact paths need validation |
+| Secret requirements | Do not commit TLS secrets or credentials |
+| Network ports | 80/443 documented as ingress; validate before automation |
+| Dependencies | Cerberus DNS/firewall policy, Docker network, backend services |
+| Backup requirement | Git-backed configuration and recovery procedure required |
+| Validation command | [[systems/prometheus/procedures/reverse-proxy-validation]] |
+| Recovery procedure | [[systems/prometheus/procedures/reverse-proxy]] |
+| Automation classification | Ansible candidate after compose inventory |
+| Preferred automation tool | Ansible |

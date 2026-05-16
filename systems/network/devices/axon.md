@@ -42,6 +42,25 @@ Axon owns switch configuration state only. It owns no application or user data.
 
 Manual only
 
+## Automation Readiness
+
+| Field | Value |
+|---|---|
+| Owning domain | Network |
+| Host/system/device owner | Axon |
+| Runtime type | Cisco SG350 Layer-2 switch |
+| Source of truth | Switch configuration and network docs; export needs validation |
+| Config path | Needs validation |
+| Data path | No user data; switch configuration only |
+| Secret requirements | Do not commit secrets; final model is [[automation/policies/secrets-policy|Needs decision]] |
+| Network ports | Needs validation |
+| Dependencies | Management access, current config backup, restore path |
+| Backup requirement | Current switch config backup required before automation |
+| Validation command | Needs validation |
+| Recovery procedure | Needs validation |
+| Automation classification | Manual only |
+| Preferred automation tool | Manual only |
+
 ## What Good Looks Like
 
 Axon documents VLAN presence, trunk ports, access ports, management access, config backup, restore, and validation without creating lockout risk.

@@ -17,6 +17,34 @@ This file tracks documentation evolution, not runtime changes.
 - Entries describe documentation scope, not implementation detail
 - New architectural decisions are logged when documented
 
+## [2026-05] Automation Readiness Scaffold
+
+### Summary
+
+Added the Pass 3 automation readiness layer for Pantheon.
+
+Automation remains documentation/scaffold-only. No live infrastructure changes, Ansible runs, Pulumi updates, Terraform/OpenTofu applies, production state, credentials, or secrets were introduced.
+
+### Automation
+
+- Added root [[automation/README|Automation]] documentation for repo-wide tooling, shared assets, and policies.
+- Added [[automation/pantheonctl/README|pantheonctl]] as a minimal C# control-plane scaffold for future read-only validation and generation workflows.
+- Added shared Ansible, Pulumi, and Terraform/OpenTofu scaffold folders under `automation/shared/`.
+- Added automation policies for classification, secrets, and state handling.
+
+### Domains
+
+- Added guardrail-only Network automation under `systems/network/automation/`.
+- Added guardrail-only Atlas automation under `systems/atlas/automation/`.
+- Added Prometheus automation under `systems/prometheus/automation/` as the first safe Ansible candidate.
+
+### Readiness
+
+- Marked Prometheus as `Automation ready / Ansible candidate`.
+- Marked Network as `Do not automate yet`.
+- Marked Atlas storage as `Do not automate storage yet`.
+- Marked secrets and state decisions as `Needs decision`.
+
 ## [2026-05] System-Domain Documentation Restructure
 
 ### Summary
