@@ -60,7 +60,12 @@ Unknown containers/volumes must be investigated before deletion.
 | `ollama` | Disposable runtime | [[systems/prometheus/services/ollama]] | Model cache is rebuildable by current docs |
 | `openwebui` | Disposable runtime (may become persistent runtime later) | [[systems/prometheus/services/openwebui]] | Current docs treat state as disposable; revisit if it becomes production-facing |
 | Reverse proxy (Traefik) | Persistent runtime | [[systems/prometheus/services/traefik]], [[systems/prometheus/procedures/reverse-proxy]] | Config and cert handling are service-critical; Git/source of truth needs validation |
-| Media/VPN stack (`/opt/vpn`) | Unknown / Needs validation | [[systems/prometheus/inventory]], [[systems/prometheus/architecture/compose-registry]] | Do not delete or migrate until compose, volumes, secrets, and Atlas media paths are mapped |
+| Gluetun / VPN boundary | Persistent runtime config | [[systems/prometheus/services/gluetun]], [[systems/prometheus/inventory]] | Preserve VPN secrets boundary; qBittorrent depends on this network namespace |
+| qBittorrent | Persistent runtime config plus disposable local staging | [[systems/prometheus/services/qbittorrent]], [[systems/prometheus/inventory]] | `/opt/torrents/downloads` is Prometheus-local staging, not authoritative media |
+| Prowlarr | Persistent runtime config | [[systems/prometheus/services/prowlarr]], [[systems/prometheus/inventory]] | API keys and indexer settings require secrets handling |
+| Radarr | Persistent runtime config; Atlas authoritative library | [[systems/prometheus/services/radarr]], [[systems/prometheus/inventory]] | Writes final movie library to Atlas-backed `/movies`; requires `SKIP_CHOWN=true` |
+| Sonarr | Persistent runtime config; Atlas authoritative library | [[systems/prometheus/services/sonarr]], [[systems/prometheus/inventory]] | Writes final TV library to Atlas-backed `/tv`; requires `SKIP_CHOWN=true` |
+| Media/VPN stack (`/opt/vpn`) | Active documented / Needs recovery validation | [[systems/prometheus/inventory]], [[systems/prometheus/architecture/compose-registry]] | Do not delete or migrate until recovery, rollback, secrets, and exposure reduction are documented |
 | `anemoi` | Unknown / Experimental candidate | [[systems/prometheus/inventory]] | Investigate before deletion |
 | `gemma-192k` | Unknown / Experimental candidate | [[systems/prometheus/inventory]] | Investigate whether it is model/runtime residue before deletion |
 | Anonymous Docker volumes | Unknown / Cleanup candidate | [[systems/prometheus/inventory]] | Inspect volume ownership before pruning |

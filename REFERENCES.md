@@ -12,6 +12,7 @@
 ## Pantheon-Wide Architecture
 
 - [[README]]
+- [[architecture/media-architecture]]
 - [[architecture/storage-authority-map]]
 - [[architecture/container-lifecycle-policy]]
 - [[systems/network/architecture/security-model]]
@@ -71,4 +72,4 @@
 ## Needs Validation
 
 - Second brain candidate docs on `codex/deferred-local-changes`.
-- Prometheus service inventory candidate on `codex/deferred-local-changes`.
+- Prometheus service inventory was reconciled for the validated media stack on 2026-05-16; remaining non-media inventory items still need validation.

@@ -6,6 +6,7 @@
 - [[systems/atlas/architecture/data-strategy]]
 - [[systems/atlas/architecture/media-architecture]]
 - [[systems/atlas/architecture/media-data-flow]]
+- [[systems/atlas/architecture/storage-authority-map]]
 
 ## Related Systems
 

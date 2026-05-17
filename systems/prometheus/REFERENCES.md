@@ -8,6 +8,7 @@
 - [[systems/prometheus/procedures/README]]
 - [[systems/atlas/architecture/data-strategy]]
 - [[architecture/storage-authority-map]]
+- [[architecture/media-architecture]]
 - [[decisions/ADR-003-disposable-compute-prometheus]]
 
 ## Services

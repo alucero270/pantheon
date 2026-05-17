@@ -8,6 +8,7 @@ This folder contains architecture documents owned by Atlas and the storage/data 
 
 - [[systems/atlas/architecture/media-architecture]]
 - [[systems/atlas/architecture/media-data-flow]]
+- [[systems/atlas/architecture/storage-authority-map]]
 
 ## Boundary
 

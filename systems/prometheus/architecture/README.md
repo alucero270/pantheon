@@ -6,7 +6,8 @@ This folder is reserved for Prometheus-owned compute, runtime, local storage, GP
 
 ## Current Documents
 
-- Needs validation
+- [[systems/prometheus/architecture/compose-registry]]
+- [[systems/prometheus/architecture/storage-authority-map]]
 
 ## Boundary
 

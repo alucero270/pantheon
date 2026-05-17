@@ -36,10 +36,21 @@ Prometheus is disposable compute. Authoritative storage lives on [[systems/atlas
 | `/mnt/local/ssd/ai/outputs` | Parent for generated AI outputs | AI stack | Disposable / Needs validation | Needs validation | Promote important outputs to Atlas before treating them as authoritative |
 | `/mnt/local/ssd/ai/outputs/comfy` | ComfyUI generated outputs | [[systems/prometheus/services/comfyui]] | Disposable / Needs validation | Needs validation | Move important outputs to Atlas before cleanup |
 | `/opt/traefik` | Reverse proxy deployment/config root | [[systems/prometheus/services/traefik]] | Persistent runtime / Config | Back up config/dynamic/certs if self-signed is long-term | Keep until compose/config source of truth is validated |
-| `/opt/vpn` | Requested VPN/media egress stack root | Media/VPN stack candidate | Unknown / Needs validation | Needs validation | Document secrets boundary, compose source, and data paths before migration |
-| `/opt/arr` | Requested media automation stack root | Media automation candidates | Unknown / Needs validation | Needs validation | Align with media milestone before standardizing |
-| `/opt/torrents` | Requested torrent stack/data root | qBittorrent candidate | Unknown / Needs validation | Needs validation | Determine whether contents are temporary downloads or authoritative media |
+| `/opt/vpn` | Live VPN/media egress stack root | [[systems/prometheus/services/gluetun]] | Persistent runtime / Service config | Back up sanitized config only; secrets recovery needs validation | Live compose path is `/opt/vpn/docker-compose.yml`; do not commit VPN secrets |
+| `/opt/vpn/gluetun` | Gluetun runtime config | [[systems/prometheus/services/gluetun]] | Persistent runtime / Service config | Needs validation | Preserve secrets boundary |
+| `/opt/arr` | Media automation config parent | Prowlarr, Radarr, Sonarr | Persistent runtime / Service config | Needs validation | Config/database state for Arr services |
+| `/opt/arr/prowlarr` | Prowlarr config | [[systems/prometheus/services/prowlarr]] | Persistent runtime / Service config | Needs validation | API keys must stay outside Git |
+| `/opt/arr/radarr` | Radarr config | [[systems/prometheus/services/radarr]] | Persistent runtime / Service config | Needs validation | Atlas movie library is authoritative, not this config path |
+| `/opt/arr/sonarr` | Sonarr config | [[systems/prometheus/services/sonarr]] | Persistent runtime / Service config | Needs validation | Atlas TV library is authoritative, not this config path |
+| `/opt/torrents` | qBittorrent config and download staging parent | [[systems/prometheus/services/qbittorrent]] | Mixed persistent runtime and disposable staging | Config backup needs validation; downloads are disposable | Downloads must remain local staging unless an ADR changes authority |
+| `/opt/torrents/config` | qBittorrent config | [[systems/prometheus/services/qbittorrent]] | Persistent runtime / Service config | Needs validation | WebUI credentials must stay outside Git |
+| `/opt/torrents/downloads` | qBittorrent download staging | qBittorrent, Radarr, Sonarr | Disposable / Prometheus-local staging | No authoritative backup | Container path `/downloads`; categories `radarr` and `sonarr` |
 | `/opt/media-staging` | Requested media staging path | Media workflow candidate | Unknown / Needs validation | Needs validation | Staging must not become authoritative unless promoted to Atlas |
+| `/mnt/atlas/managed-media` | Active Atlas NFS mount | Media automation and future Jellyfin | Atlas authoritative mount | Atlas backup/storage policy applies | Export `192.168.60.102:/mnt/user/managed-media`; final media libraries live here |
+| `/mnt/atlas/managed-media/movies` | Final movie library | [[systems/prometheus/services/radarr]] | Authoritative on Atlas | Atlas backup/storage policy applies | Container path `/movies`; Radarr writes final movie library |
+| `/mnt/atlas/managed-media/tv` | Final TV library | [[systems/prometheus/services/sonarr]] | Authoritative on Atlas | Atlas backup/storage policy applies | Container path `/tv`; Sonarr writes final TV library |
+| `/mnt/atlas/shared-media` | Active Atlas NFS mount | Shared media workflows | Authoritative on Atlas | Atlas backup/storage policy applies | Export `192.168.60.102:/mnt/user/shared-media` |
+| `/mnt/atlas/downloads` | Non-active Atlas download path | None | Not active / Not authoritative | Not applicable | Not an active Atlas export; do not use for qBittorrent downloads |
 
 ## Migration Rules
 

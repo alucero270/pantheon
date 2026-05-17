@@ -26,7 +26,17 @@ Atlas is the authoritative storage system for Pantheon.
 | `/mnt/user/appdata/mariadb-nextcloud` | MariaDB data for Nextcloud | [[systems/atlas/services/mariadb]] | Authoritative service data | Required | Database backup/restore must be validated before migration |
 | `/mnt/user/appdata` | Atlas Docker application data parent | Atlas Docker services | Persistent runtime / Service-critical | Required per-service | Classify per-service; not all appdata has equal importance |
 | `/mnt/user/shared-media` | Authoritative media share named in ADR-005 | Media workflows | Authoritative | Required | Array-only; cache usage prohibited |
-| `/mnt/user/managed-media` | Authoritative media share named in ADR-005 | Managed media workflows | Authoritative | Required | Array-only; Prometheus may consume but not own |
+| `/mnt/user/managed-media` | Authoritative media share named in ADR-005 | Managed media workflows | Authoritative | Required | Array-only; Prometheus may consume and media automation may write final libraries, but Prometheus does not own storage authority |
+| `/mnt/user/managed-media/movies` | Managed movie library | Radarr on [[systems/prometheus]] | Authoritative | Required | Exported to Prometheus as `/mnt/atlas/managed-media/movies`; container path `/movies` |
+| `/mnt/user/managed-media/tv` | Managed TV library | Sonarr on [[systems/prometheus]] | Authoritative | Required | Exported to Prometheus as `/mnt/atlas/managed-media/tv`; container path `/tv` |
+
+## Active Prometheus NFS Mounts
+
+| Atlas Export | Prometheus Mount | Status | Notes |
+|---|---|---|---|
+| `192.168.60.102:/mnt/user/managed-media` | `/mnt/atlas/managed-media` | Active | Used for managed media libraries. |
+| `192.168.60.102:/mnt/user/shared-media` | `/mnt/atlas/shared-media` | Active | Used for shared media workflows. |
+| `/mnt/atlas/downloads` | Not applicable | Not active | Not an active Atlas export; qBittorrent downloads remain local on Prometheus. |
 
 ## Atlas Cache / Prohibited Authority
 

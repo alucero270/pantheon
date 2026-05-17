@@ -66,6 +66,31 @@ Prometheus is stateless and rebuildable.
         │
 [ USER Devices ]
 
+## Media Automation Pipeline
+
+Validated current-state media automation runs on [[systems/prometheus]]:
+
+```text
+Prowlarr
+  -> Radarr / Sonarr
+  -> qBittorrent
+  -> Prometheus local staging
+  -> Atlas managed media libraries
+```
+
+Prometheus local staging:
+
+- Host path: `/opt/torrents/downloads`
+- Container path: `/downloads`
+- Classification: temporary local staging
+
+Atlas final libraries:
+
+- Movies: `/mnt/user/managed-media/movies`
+- TV: `/mnt/user/managed-media/tv`
+
+`/mnt/atlas/downloads` is not an active Atlas export.
+
 ---
 
 ## Key Rules

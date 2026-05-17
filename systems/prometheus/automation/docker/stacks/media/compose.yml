@@ -21,7 +21,7 @@ services:
     ports:
       - "127.0.0.1:${QBITTORRENT_WEBUI_PORT:-8080}:8080"
     volumes:
-      - ${MEDIA_CONFIG_ROOT:?set MEDIA_CONFIG_ROOT in .env}/gluetun:/gluetun
+      - ${GLUETUN_CONFIG_PATH:?set GLUETUN_CONFIG_PATH in .env}:/gluetun
     networks:
       - media
     restart: unless-stopped
@@ -38,7 +38,7 @@ services:
       - TZ=${TZ}
       - WEBUI_PORT=8080
     volumes:
-      - ${MEDIA_CONFIG_ROOT:?set MEDIA_CONFIG_ROOT in .env}/qbittorrent:/config
+      - ${QBITTORRENT_CONFIG_PATH:?set QBITTORRENT_CONFIG_PATH in .env}:/config
       - ${MEDIA_DOWNLOADS_PATH:?set MEDIA_DOWNLOADS_PATH in .env}:/downloads
     restart: unless-stopped
 
@@ -50,9 +50,9 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     ports:
-      - "127.0.0.1:${PROWLARR_PORT:-9696}:9696"
+      - "${PROWLARR_BIND:-0.0.0.0}:${PROWLARR_PORT:-9696}:9696"
     volumes:
-      - ${MEDIA_CONFIG_ROOT:?set MEDIA_CONFIG_ROOT in .env}/prowlarr:/config
+      - ${PROWLARR_CONFIG_PATH:?set PROWLARR_CONFIG_PATH in .env}:/config
     networks:
       - media
     restart: unless-stopped
@@ -64,13 +64,13 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
+      - SKIP_CHOWN=true
     ports:
-      - "127.0.0.1:${RADARR_PORT:-7878}:7878"
+      - "${RADARR_BIND:-0.0.0.0}:${RADARR_PORT:-7878}:7878"
     volumes:
-      - ${MEDIA_CONFIG_ROOT:?set MEDIA_CONFIG_ROOT in .env}/radarr:/config
+      - ${RADARR_CONFIG_PATH:?set RADARR_CONFIG_PATH in .env}:/config
       - ${MEDIA_DOWNLOADS_PATH:?set MEDIA_DOWNLOADS_PATH in .env}:/downloads
-      - ${MEDIA_STAGING_PATH:?set MEDIA_STAGING_PATH in .env}:/staging
-      - ${ATLAS_MEDIA_PATH:?set ATLAS_MEDIA_PATH in .env}:/media:ro
+      - ${ATLAS_MOVIES_PATH:?set ATLAS_MOVIES_PATH in .env}:/movies
     networks:
       - media
     restart: unless-stopped
@@ -82,13 +82,13 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
+      - SKIP_CHOWN=true
     ports:
-      - "127.0.0.1:${SONARR_PORT:-8989}:8989"
+      - "${SONARR_BIND:-0.0.0.0}:${SONARR_PORT:-8989}:8989"
     volumes:
-      - ${MEDIA_CONFIG_ROOT:?set MEDIA_CONFIG_ROOT in .env}/sonarr:/config
+      - ${SONARR_CONFIG_PATH:?set SONARR_CONFIG_PATH in .env}:/config
       - ${MEDIA_DOWNLOADS_PATH:?set MEDIA_DOWNLOADS_PATH in .env}:/downloads
-      - ${MEDIA_STAGING_PATH:?set MEDIA_STAGING_PATH in .env}:/staging
-      - ${ATLAS_MEDIA_PATH:?set ATLAS_MEDIA_PATH in .env}:/media:ro
+      - ${ATLAS_TV_PATH:?set ATLAS_TV_PATH in .env}:/tv
     networks:
       - media
     restart: unless-stopped

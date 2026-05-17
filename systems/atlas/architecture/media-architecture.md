@@ -70,6 +70,23 @@ Media data flows as follows:
 3. Media services index and process data
 4. User devices access media via services
 
+Validated media automation flow:
+
+```text
+Prowlarr
+  -> Radarr / Sonarr
+  -> qBittorrent
+  -> /opt/torrents/downloads on Prometheus
+  -> /mnt/atlas/managed-media on Atlas
+```
+
+Downloads are Prometheus-local staging only. `/mnt/atlas/downloads` is not an active Atlas export.
+
+Final managed media libraries live on Atlas:
+
+- Movies: `/mnt/user/managed-media/movies`
+- TV: `/mnt/user/managed-media/tv`
+
 ## Access Paths
 
 ### User Access
@@ -108,6 +125,8 @@ This architecture ensures:
 - Media services must not write authoritative data
 - Prometheus must not be treated as a storage system
 - All persistent media data must reside on Atlas
+- Radarr and Sonarr may write final managed media into Atlas-backed library paths, but Atlas remains the storage authority.
+- qBittorrent downloads remain local on Prometheus until imported.
 
 🛑 Stopping Point
 

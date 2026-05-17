@@ -37,6 +37,8 @@ Expected model (must be validated before change):
 
 - Prometheus consumes media read-only from Atlas (NFS preferred)
 - Jellyfin config/runtime data is persistent runtime (service-critical), but not authoritative user data
+- Target media mount: `/mnt/atlas/managed-media:/media:ro`
+- Do not mark Jellyfin as deployed on Prometheus until live state is validated.
 
 ## Ports / Exposure
 

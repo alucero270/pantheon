@@ -35,6 +35,12 @@ Prometheus owns runtime and disposable compute state only. Authoritative data li
 
 - [[systems/prometheus/inventory]]
 - [[systems/prometheus/services/ai-runtime]]
+- [[systems/prometheus/services/gluetun]]
+- [[systems/prometheus/services/qbittorrent]]
+- [[systems/prometheus/services/prowlarr]]
+- [[systems/prometheus/services/radarr]]
+- [[systems/prometheus/services/sonarr]]
+- [[systems/prometheus/services/jellyfin]]
 - [[systems/prometheus/services/ollama]]
 - [[systems/prometheus/services/openwebui]]
 - [[systems/prometheus/services/comfyui]]
@@ -44,6 +50,7 @@ Prometheus owns runtime and disposable compute state only. Authoritative data li
 ## Procedure Index
 
 - [[systems/prometheus/procedures/ai-stack-initialization]]
+- [[systems/prometheus/procedures/media-stack-validation]]
 - [[systems/prometheus/procedures/ollama-model-management]]
 - [[systems/prometheus/procedures/reverse-proxy]]
 - [[systems/prometheus/procedures/reverse-proxy-validation]]

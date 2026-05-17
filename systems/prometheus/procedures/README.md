@@ -19,6 +19,7 @@ Each procedure should include:
 ## Procedure Index
 
 - [[systems/prometheus/procedures/ai-stack-initialization]]
+- [[systems/prometheus/procedures/media-stack-validation]]
 - [[systems/prometheus/procedures/ollama-model-management]]
 - [[systems/prometheus/procedures/reverse-proxy]]
 - [[systems/prometheus/procedures/reverse-proxy-validation]]

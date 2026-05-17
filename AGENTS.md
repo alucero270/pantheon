@@ -19,6 +19,7 @@ The goal is not experimentation for its own sake. The goal is a documented, rebu
 - Prefer folder-local templates when present.
 - Do not convert future plans into implemented facts.
 - Use `TBD`, `Unknown`, or `Needs validation` instead of guessing.
+- When adding or discovering a new `Needs validation` item, create or update a GitHub issue that tracks the validation work, unless an existing issue already clearly covers it.
 - Do not delete content.
 - Do not weaken security constraints.
 - Do not modify locked decisions without approval.
