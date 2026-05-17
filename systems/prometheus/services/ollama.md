@@ -3,6 +3,7 @@ type: service
 service_name: ollama
 status: active
 last_updated: 2026-01-25
+last_validated: 2026-05-17
 ---
 
 # Ollama
@@ -18,6 +19,8 @@ It is consumed primarily by [[systems/prometheus/services/openwebui]] and may al
 - **System:** [[systems/prometheus]]
 - **Container / VM:** Docker container (`ollama`)
 - **Runtime:** Docker Engine + NVIDIA Container Toolkit
+- **Image:** `ollama/ollama:latest`
+- **Compose path:** `/home/alex/stacks/ai/docker-compose.yml`
 
 ---
 
@@ -35,6 +38,7 @@ Ollama data is stored on Prometheus local disks and may be rebuilt.
 | Path | Read/Write | Description |
 |-----|-----------|-------------|
 | `/mnt/local/nvme/ai/services/ollama` | RW | Ollama state + downloaded models (`/root/.ollama`) |
+| `/mnt/local/ssd/ai/modelfiles` | RO in container | Modelfile workspace mounted at `/modelfiles` |
 
 ---
 
@@ -49,6 +53,12 @@ Ollama data is stored on Prometheus local disks and may be rebuilt.
 ### Ports
 - `127.0.0.1:11434 -> 11434/tcp`
 
+### Traefik labels
+
+Live state observed on 2026-05-17 includes Traefik labels for `ollama.home.arpa`.
+
+This is drift from [[decisions/ADR-007-centralized-ingress-on-prometheus]], which says Ollama remains internal-only and is not routed. Treat the live route as `Needs decision`: either remove the route from the live compose file or update the accepted ingress decision with explicit approval.
+
 ---
 
 ## Access
@@ -59,12 +69,13 @@ Ollama data is stored on Prometheus local disks and may be rebuilt.
 ### UI Access
 - Primary UI is [[systems/prometheus/services/openwebui]] (which calls Ollama over the Docker network).
 
-Remote access to the API is performed via SSH tunnel when needed (see [[systems/prometheus/procedures/ai-stack-initialization]]).
+Remote access to the API should follow the approved access model. Current live state also exposes an `ollama.home.arpa` Traefik route, but that route conflicts with the accepted ADR and needs a decision.
 
 ---
 
 ## Security Notes
-- Bound to **localhost** by default to avoid LAN exposure.
+- Host port is bound to `127.0.0.1` to avoid direct LAN exposure.
+- Live Traefik labels route `ollama.home.arpa`; validate and resolve this drift before treating the route as approved.
 - No Docker remote API exposure.
 - Model directories are treated as disposable; do not store authoritative datasets here.
 
@@ -88,6 +99,12 @@ curl -I http://127.0.0.1:11434
 ### Container state
 ```bash
 docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" | grep -E "^ollama\b"
+```
+
+### Model inventory
+
+```bash
+docker exec ollama ollama list
 ```
 
 ---
@@ -115,15 +132,15 @@ docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" | grep -E "^ollam
 |---|---|
 | Owning domain | Prometheus |
 | Host/system/device owner | Prometheus |
-| Runtime type | Docker/API runtime; Needs validation |
-| Source of truth | [[systems/prometheus/procedures/ai-stack-initialization]] |
-| Config path | Needs validation |
-| Data path | Prometheus local disposable model/cache storage; exact paths need validation |
+| Runtime type | Docker/API runtime |
+| Source of truth | `/home/alex/stacks/ai/docker-compose.yml`; [[systems/prometheus/procedures/ai-stack-initialization]] |
+| Config path | `/mnt/local/ssd/ai/modelfiles` for Modelfiles |
+| Data path | `/mnt/local/nvme/ai/services/ollama` |
 | Secret requirements | Do not commit secrets |
-| Network ports | Needs validation |
+| Network ports | `127.0.0.1:11434 -> 11434/tcp`; live Traefik route `ollama.home.arpa` needs decision |
 | Dependencies | Docker, model storage, [[systems/prometheus/services/openwebui]] |
-| Backup requirement | Rebuildable; model/cache persistence needs validation |
-| Validation command | Needs validation |
+| Backup requirement | Rebuildable; model cache is disposable unless a model becomes expensive enough to document separately |
+| Validation command | `docker exec ollama ollama list`; `curl -I http://127.0.0.1:11434` |
 | Recovery procedure | [[systems/prometheus/procedures/ai-stack-initialization]] |
-| Automation classification | Needs validation |
+| Automation classification | Ansible candidate after access-model drift is resolved |
 | Preferred automation tool | Ansible candidate after compose inventory |
