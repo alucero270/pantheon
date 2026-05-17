@@ -87,6 +87,34 @@ Final managed media libraries live on Atlas:
 - Movies: `/mnt/user/managed-media/movies`
 - TV: `/mnt/user/managed-media/tv`
 
+## Exposure Boundaries (Needs Validation)
+
+The following exposure notes exist in repository documentation but are not yet validated against live service configuration:
+
+- qBittorrent WebUI is intended to be localhost-only through Gluetun: `127.0.0.1:8080`.
+- Prowlarr `0.0.0.0:9696`, Radarr `0.0.0.0:7878`, and Sonarr `0.0.0.0:8989` are documented as temporary broad binds.
+
+Do not expose media admin services to WAN/public networks without an approved security/architecture decision.
+
+## Jellyfin (Needs Validation)
+
+Jellyfin is not documented as deployed on Prometheus by default. Treat Jellyfin-on-Prometheus as a migration candidate only.
+
+Target media mount model before deployment:
+
+```text
+/mnt/atlas/managed-media:/media:ro
+```
+
+## Related Documents
+
+- [[systems/atlas/architecture/media-data-flow]]
+- [[systems/atlas/architecture/storage-authority-map]]
+- [[systems/prometheus/architecture/storage-authority-map]]
+- [[systems/prometheus/automation/docker/stacks/media/README]]
+- [[systems/prometheus/inventory]]
+- [[decisions/ADR-010-container-lifecycle-policy-prometheus]]
+
 ## Access Paths
 
 ### User Access

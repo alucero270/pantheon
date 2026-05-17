@@ -79,7 +79,7 @@ Automation policy starts at [[automation/README]].
 
 ## Second Brain Workflow
 
-Pantheon also acts as the starting Obsidian vault for a ChatGPT-connected second brain workflow.
+Pantheon also acts as the starting Obsidian vault for an AI-connected second brain workflow.
 
 - Architecture: Needs validation
 - Setup procedure: Needs validation

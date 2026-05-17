@@ -7,8 +7,9 @@
 - [[systems/prometheus/services/README]]
 - [[systems/prometheus/procedures/README]]
 - [[systems/atlas/architecture/data-strategy]]
-- [[architecture/storage-authority-map]]
-- [[architecture/media-architecture]]
+- [[systems/prometheus/architecture/storage-authority-map]]
+- [[systems/atlas/architecture/media-architecture]]
+- [[decisions/ADR-010-container-lifecycle-policy-prometheus]]
 - [[decisions/ADR-003-disposable-compute-prometheus]]
 
 ## Services

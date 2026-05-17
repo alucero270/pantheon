@@ -127,7 +127,7 @@ Prowlarr:
 
 These application settings were configured and validated through local APIs on 2026-05-16. Indexer definitions and end-to-end download/import behavior still need validation.
 
-See [[architecture/storage-authority-map]] and [[architecture/container-lifecycle-policy]].
+See [[systems/atlas/architecture/storage-authority-map]], [[systems/prometheus/architecture/storage-authority-map]], and [[decisions/ADR-010-container-lifecycle-policy-prometheus]].
 
 ## Validation Commands
 

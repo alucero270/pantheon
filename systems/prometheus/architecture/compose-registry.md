@@ -18,7 +18,7 @@ Direct SSH revalidation from this workstation succeeded on 2026-05-16. The media
 
 - [[systems/prometheus]]
 - [[systems/prometheus/inventory]]
-- [[architecture/container-lifecycle-policy]]
+- [[decisions/ADR-010-container-lifecycle-policy-prometheus]]
 - [[systems/prometheus/services/README]]
 - [[systems/prometheus/procedures/ai-stack-initialization]]
 - [[systems/prometheus/procedures/reverse-proxy]]

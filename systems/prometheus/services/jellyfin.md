@@ -57,7 +57,7 @@ Requirements:
 
 ## Lifecycle Classification
 
-See [[architecture/container-lifecycle-policy]].
+See [[decisions/ADR-010-container-lifecycle-policy-prometheus]].
 
 Initial classification (scaffold):
 

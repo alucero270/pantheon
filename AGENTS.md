@@ -33,7 +33,7 @@ The goal is not experimentation for its own sake. The goal is a documented, rebu
 
 | Task | Go to | Read First | Template Source | Notes |
 |---|---|---|---|---|
-| Change Pantheon-wide architecture, data strategy, or security model | `/architecture` | `[[systems/README]]`, `[[REFERENCES]]`, relevant architecture doc | folder-local template, then `/templates` fallback | Architecture changes may require an ADR. |
+| Change cross-domain architecture, data strategy, or security model | owning domain `systems/<domain>/architecture/` and/or `/decisions` | `[[systems/README]]`, `[[REFERENCES]]`, relevant domain architecture doc, relevant ADRs | folder-local template, then `/templates` fallback | Pantheon does not use a root `/architecture` folder. Cross-domain rules should be captured as ADRs when they lock constraints. |
 | Change network architecture, VLANs, ingress, DNS, DHCP, firewall model, switch model, or remote access | `/systems/network/architecture` | `[[systems/network]]`, `[[systems/network/REFERENCES]]`, relevant network architecture doc | folder-local template, then `/templates` fallback | Network changes may require an ADR and must not weaken management boundaries. |
 | Record or update a locked decision | `/decisions` | `[[decisions/README]]`, `[[decisions/REFERENCES]]`, existing ADRs | folder-local ADR template | Do not change ADR status without approval. |
 | Write a system SOP, runbook, validation checklist, or recovery guide | owning system procedure folder | `[[systems/README]]`, owning system README, owning system REFERENCES | folder-local procedure template | Procedures must be executable and testable. |

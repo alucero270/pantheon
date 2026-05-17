@@ -12,9 +12,10 @@
 ## Pantheon-Wide Architecture
 
 - [[README]]
-- [[architecture/media-architecture]]
-- [[architecture/storage-authority-map]]
-- [[architecture/container-lifecycle-policy]]
+- [[systems/atlas/architecture/media-architecture]]
+- [[systems/atlas/architecture/storage-authority-map]]
+- [[systems/prometheus/architecture/storage-authority-map]]
+- [[decisions/ADR-010-container-lifecycle-policy-prometheus]]
 - [[systems/network/architecture/security-model]]
 - [[systems/atlas/architecture/data-strategy]]
 

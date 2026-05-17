@@ -196,4 +196,4 @@ docker compose -f /opt/vpn/docker-compose.yml up -d gluetun qbittorrent prowlarr
   - [[systems/prometheus/services/radarr]]
   - [[systems/prometheus/services/sonarr]]
   - [[systems/prometheus/services/jellyfin]]
-- Architecture: [[architecture/media-architecture]]
+- Architecture: [[systems/atlas/architecture/media-architecture]]
