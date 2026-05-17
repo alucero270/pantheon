@@ -1,191 +1,199 @@
-# Reverse Proxy (Traefik) — Validation Checklist
+# Reverse Proxy (Traefik) - Validation Checklist
 
 This document is a repeatable validation checklist to confirm the reverse proxy is operating correctly.
 
 Use this:
+
 - after config changes
 - after upgrades
 - after restores
 - before adding a new service behind Traefik
 - before enabling VPN-based access
 
-It is not a rebuild guide. See the procedure/runbook for rebuild steps.
+It is not a rebuild guide. See [[systems/prometheus/procedures/reverse-proxy]] for rebuild steps.
 
----
+## A. DNS Validation
 
-## A. DNS Validation (Client-Side)
+Goal: all service hostnames resolve to Prometheus, the ingress point.
 
-Goal: all service hostnames resolve to Prometheus (the ingress point).
+Expected records:
 
-From a USER VLAN client (example DNS = 192.168.20.1):
-- nextcloud.home.arpa resolves to 192.168.60.103
-- proxy.home.arpa resolves to 192.168.60.103
-
-From a MGMT VLAN client (MGMT DNS resolver):
-- nextcloud.home.arpa resolves to 192.168.60.103
-- proxy.home.arpa resolves to 192.168.60.103
+| Hostname | Target |
+|---|---|
+| `proxy.home.arpa` | Prometheus |
+| `nextcloud.home.arpa` | Prometheus |
+| `openwebui.home.arpa` | Prometheus |
+| `comfy.home.arpa` | Prometheus |
+| `searxng.home.arpa` | Prometheus |
+| `ollama.home.arpa` | Prometheus in live state, but route needs decision |
 
 Pass criteria:
+
 - No client relies on local hosts file entries for these names.
-- Both names resolve consistently across VLANs.
+- Names resolve consistently across intended VLANs.
+- `ollama.home.arpa` is either explicitly approved by a decision or removed from live routing.
 
----
-
-## B. Port Exposure (Prometheus)
+## B. Port Exposure
 
 Goal: Prometheus is listening only on intended ingress ports.
 
 On Prometheus:
-- TCP 80 is listening (Traefik web)
-- TCP 443 is listening (Traefik websecure)
-- TCP 8443 is listening (Traefik websecure-mgmt)
 
-Optional:
-- TCP 18080 bound to 127.0.0.1 only (if enabled)
+- TCP 80 is listening for Traefik `web`.
+- TCP 443 is listening for Traefik `websecure`.
+- TCP 8443 is listening for Traefik `websecure-mgmt`.
+- TCP 18080 is bound to `127.0.0.1` only for the Traefik API/dashboard service port.
 
 Pass criteria:
+
 - No unexpected published ports for internal services.
-- 8443 will later be firewall-restricted to MGMT VLAN only.
+- 8443 is restricted to MGMT VLAN by firewall policy.
+- Backend containers prefer Docker-network-only exposure.
 
----
-
-## C. Traefik Health (Prometheus)
+## C. Traefik Health
 
 Goal: Traefik is running and providers are loaded.
 
 Checks:
-- Container is running
-- Logs show no repeating provider errors
-- File provider is reading dynamic configs
-- Docker provider is available (even if no labeled services yet)
+
+- Container `traefik` is running.
+- Image is documented.
+- Logs show no repeating provider errors.
+- File provider is reading dynamic configs.
+- Docker provider is available.
 
 Pass criteria:
+
 - No repeating error loops in logs.
-- Dashboard API returns JSON successfully.
+- Dashboard/API works through the documented MGMT-only path.
 
----
-
-## D. TLS Sanity (Prometheus)
+## D. TLS Sanity
 
 Goal: Traefik is serving TLS with the expected internal certificate.
 
 Checks:
-- Certificate is loaded (no “failed to load X509 key pair” errors)
-- HTTPS connections complete
+
+- Certificate is loaded.
+- HTTPS connections complete.
 
 Pass criteria:
-- TLS handshake succeeds for nextcloud.home.arpa and proxy.home.arpa.
-- Certificate CN/SAN covers:
-  - proxy.home.arpa
-  - nextcloud.home.arpa
-  - *.home.arpa
 
----
+- TLS handshake succeeds for service hostnames.
+- Certificate CN/SAN covers the required `.home.arpa` names or wildcard.
 
 ## E. Dashboard Access Pattern
 
 Goal: dashboard is accessible only via the MGMT entrypoint.
 
 Expected behavior:
-- https://proxy.home.arpa:8443/dashboard/ is reachable (MGMT VLAN)
-- proxy.home.arpa on 443 is not used for dashboard
+
+- `https://proxy.home.arpa:8443/dashboard/` is reachable from MGMT VLAN.
+- `proxy.home.arpa` on 443 is not used for the dashboard.
 
 Notes:
+
 - Some curl HEAD requests may return 405 for dashboard/API; use GET when validating.
 
-Pass criteria:
-- Dashboard works on :8443.
-- Dashboard is not exposed through :443.
+## F. Nextcloud Routing
 
----
-
-## F. Nextcloud Routing (End-to-End)
-
-Goal: nextcloud.home.arpa routes through Traefik to the Atlas container correctly.
+Goal: `nextcloud.home.arpa` routes through Traefik to the Atlas container correctly.
 
 Expected flow:
-Client → HTTPS 443 (Prometheus) → HTTP 8080 (Atlas Nextcloud container)
+
+Client -> HTTPS 443 on Prometheus -> Traefik -> HTTP 8080 on Atlas Nextcloud container
 
 Pass criteria:
-- nextcloud.home.arpa loads the Nextcloud login page
-- No redirect loops
-- No exposure of Unraid web UI
+
+- `nextcloud.home.arpa` loads the Nextcloud login page.
+- No redirect loops.
+- No exposure of the Unraid web UI.
 
 Failure signatures:
-- ERR_TOO_MANY_REDIRECTS
-  - Nextcloud overwrite* or trusted_proxies misconfigured
-- Seeing Unraid login page
-  - Traefik backend URL points to Atlas base web UI instead of Nextcloud container port
 
----
+- `ERR_TOO_MANY_REDIRECTS`: Nextcloud `overwrite*` or `trusted_proxies` is misconfigured.
+- Seeing Unraid login page: Traefik backend URL points to Atlas base web UI instead of Nextcloud container port.
 
-## G. Nextcloud Proxy Configuration (Atlas)
+## G. AI and Search Routes
+
+Goal: AI user-facing routes are reachable through Traefik and backend-only routes are not accidentally approved.
+
+Expected routes:
+
+- `openwebui.home.arpa` routes to OpenWebUI container port 8080.
+- `comfy.home.arpa` routes to ComfyUI container port 8188.
+- `searxng.home.arpa` routes to SearXNG container port 8080.
+
+Validation from Prometheus:
+
+```bash
+curl -k --resolve openwebui.home.arpa:443:127.0.0.1 https://openwebui.home.arpa/
+curl -k --resolve comfy.home.arpa:443:127.0.0.1 https://comfy.home.arpa/
+curl -k --resolve searxng.home.arpa:443:127.0.0.1 "https://searxng.home.arpa/search?q=test&format=json"
+```
+
+Pass criteria:
+
+- OpenWebUI returns an HTTP success or login page.
+- ComfyUI returns an HTTP success page.
+- SearXNG returns HTTP 200 with JSON when `format=json` is requested.
+
+Decision drift:
+
+- `ollama.home.arpa` exists in live labels as of 2026-05-17 but conflicts with [[decisions/ADR-007-centralized-ingress-on-prometheus]], which says Ollama remains internal-only.
+
+## H. Nextcloud Proxy Configuration
 
 Goal: Nextcloud is configured to behave correctly behind TLS termination.
 
-Check the following values:
+Check the following values on Atlas:
 
-trusted_domains includes:
-- localhost
-- nextcloud.home.arpa
+- `trusted_domains` includes `localhost` and `nextcloud.home.arpa`.
+- `trusted_proxies` includes `192.168.60.103`.
+- `overwriteprotocol` is `https`.
+- `overwritehost` is `nextcloud.home.arpa`.
+- `overwrite.cli.url` is `https://nextcloud.home.arpa`.
 
-trusted_proxies includes:
-- 192.168.60.103
-
-overwriteprotocol:
-- https
-
-overwritehost:
-- nextcloud.home.arpa
-
-overwrite.cli.url:
-- https://nextcloud.home.arpa
-
-Pass criteria:
-- All values are present and correct.
-
----
-
-## H. Backend Reachability (Prometheus → Atlas)
+## I. Backend Reachability
 
 Goal: Prometheus can reach Atlas Nextcloud backend on port 8080.
 
 Pass criteria:
-- Prometheus can connect to 192.168.60.102:8080
-- No timeouts or connection refused
 
----
+- Prometheus can connect to `192.168.60.102:8080`.
+- No timeouts or connection refused.
 
-## I. Security Intent Verification (High-Level)
+## J. Security Intent Verification
 
 Goal: validate that current state matches the intended security model.
 
 Intended policy:
-- USER VLAN can reach 443 on Prometheus
-- USER VLAN should not reach 8443 on Prometheus (enforced later via firewall)
-- MGMT VLAN can reach 8443
-- Only Prometheus should reach Atlas:8080 (enforced later via firewall)
+
+- USER VLAN can reach 443 on Prometheus.
+- USER VLAN should not reach 8443 on Prometheus.
+- MGMT VLAN can reach 8443.
+- Only Prometheus should reach Atlas:8080.
+- Backend-only services such as Ollama should not be routed unless explicitly approved.
 
 Pass criteria:
+
 - Documented intent matches reality once firewall rules are implemented.
+- Any drift is captured in [[systems/prometheus/inventory]] and tracked by an issue.
 
----
-
-## J. Change Control (Minimum)
+## K. Change Control
 
 After any change:
-- Update reverse-proxy.md if architecture changes
-- Update procedure doc if rebuild steps change
-- Update this validation checklist if expected outputs change
-- Commit changes with a message tied to the relevant issue
 
----
+- Update [[systems/prometheus/services/traefik]] if architecture or access changes.
+- Update [[systems/prometheus/procedures/reverse-proxy]] if rebuild steps change.
+- Update this validation checklist if expected outputs change.
+- Update [[systems/prometheus/inventory]] and [[systems/prometheus/architecture/compose-registry]] if live routes, ports, or compose paths change.
 
 ## Quick Outcome
 
-If A–H pass:
-- Ingress is healthy and safe to extend with the next service.
+If A through I pass:
+
+- Ingress is healthy enough to extend with the next service.
 
 If any section fails:
-- Stop and resolve before adding new routes/services.
 
+- Stop and resolve before adding new routes/services.

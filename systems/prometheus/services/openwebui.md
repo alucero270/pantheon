@@ -9,7 +9,7 @@ last_updated: 2026-05-17
 
 ## Purpose
 
-OpenWebUI provides the primary human-facing UI for interacting with local LLMs hosted by [[systems/prometheus/services/ollama]] on [[systems/prometheus]].
+OpenWebUI provides the primary human-facing UI for interacting with local LLMs hosted by [[systems/prometheus/services/ollama]] and [[systems/prometheus/services/llama-swap]] on [[systems/prometheus]].
 
 It is used for:
 
@@ -26,7 +26,7 @@ OpenWebUI is not authoritative storage.
 - Runtime: Docker container (`openwebui`)
 - Image: `ghcr.io/open-webui/open-webui:latest`
 - Compose path: `/home/alex/stacks/ai/docker-compose.yml`
-- Dependency: [[systems/prometheus/services/ollama]]
+- Dependency: [[systems/prometheus/services/ollama]], [[systems/prometheus/services/llama-swap]]
 
 ## Network & Access
 
@@ -63,10 +63,12 @@ Live environment highlights:
 - `ENABLE_OLLAMA_API=true`
 - `OLLAMA_BASE_URL=http://ollama:11434`
 - `ENABLE_OPENAI_API=true`
-- `OPENAI_API_BASE_URLS=http://host.docker.internal:8084/v1`
+- `OPENAI_API_BASE_URLS=http://host.docker.internal:8085/v1`
 - `OPENAI_API_KEYS=LOCAL`
 - `ENABLE_WEB_SEARCH=false`
 - `ENABLE_RETRIEVAL=false`
+
+The live OpenWebUI database config was reconciled on 2026-05-17 so Ollama is enabled through `http://ollama:11434` and the OpenAI-compatible local endpoint points at [[systems/prometheus/services/llama-swap]] on `http://host.docker.internal:8085/v1`.
 
 The current SearXNG service is documented at [[systems/prometheus/services/searxng]]. OpenWebUI web search is not enabled in live state as of 2026-05-17.
 
@@ -108,11 +110,12 @@ curl -k --resolve openwebui.home.arpa:443:127.0.0.1 https://openwebui.home.arpa/
 
 - OpenWebUI web search is disabled in live state.
 - SearXNG is reachable over Docker DNS, but OpenWebUI is not configured to use it yet.
+- OpenWebUI now uses [[systems/prometheus/services/llama-swap]] for OpenAI-compatible llama.cpp model tests and [[systems/prometheus/services/ollama]] for Ollama-hosted models. Direct `llamacpp-router.service` testing on `8084` may not match the tuned `llama-swap` model profiles.
 - OpenWebUI may surface errors that originate from Ollama model load failures, VRAM allocation failures, request shape, model switching, keepalive behavior, or concurrency.
 
 ## Related Docs
 
-- Services: [[systems/prometheus/services/ollama]], [[systems/prometheus/services/comfyui]], [[systems/prometheus/services/searxng]], [[systems/prometheus/services/traefik]]
+- Services: [[systems/prometheus/services/ollama]], [[systems/prometheus/services/llama-swap]], [[systems/prometheus/services/comfyui]], [[systems/prometheus/services/searxng]], [[systems/prometheus/services/traefik]]
 - Procedures: [[systems/prometheus/procedures/ai-stack-initialization]], [[systems/prometheus/procedures/searxng-openwebui-integration]]
 - Architecture: [[systems/prometheus/architecture/storage-authority-map]], [[systems/prometheus/architecture/compose-registry]]
 
@@ -128,7 +131,7 @@ curl -k --resolve openwebui.home.arpa:443:127.0.0.1 https://openwebui.home.arpa/
 | Data path | `/mnt/local/ssd/ai/projects/openwebui` |
 | Secret requirements | Do not commit secrets, API keys, exports, or user data |
 | Network ports | Container `8080/tcp`; Traefik route `openwebui.home.arpa`; no host port |
-| Dependencies | [[systems/prometheus/services/ollama]], Docker, [[systems/prometheus/services/traefik]] |
+| Dependencies | [[systems/prometheus/services/ollama]], [[systems/prometheus/services/llama-swap]], Docker, [[systems/prometheus/services/traefik]] |
 | Backup requirement | No current backup; revisit if service state becomes important |
 | Validation command | `curl -k --resolve openwebui.home.arpa:443:127.0.0.1 https://openwebui.home.arpa/` |
 | Recovery procedure | [[systems/prometheus/procedures/ai-stack-initialization]] |

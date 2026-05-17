@@ -25,7 +25,7 @@ This service document covers the local llama.cpp-derived runtime trees, the acti
 | Path | Role | Notes |
 |---|---|---|
 | `/mnt/local/nvme/ai/runtimes/llama-cpp-turboquant` | Active router runtime | Used by `llamacpp-router.service` on 2026-05-17 |
-| `/mnt/local/nvme/ai/runtimes/ik_llama.cpp` | Installed llama.cpp fork | Validated binary supports MTP and turbo cache types |
+| `/mnt/local/nvme/ai/runtimes/ik_llama.cpp` | Installed llama.cpp fork | Validated source and binary support MTP; turbo cache support is not confirmed in this installed tree |
 | `/mnt/local/nvme/ai/models/gguf` | Shared GGUF model store | Disposable / curated runtime cache by current docs |
 | `/mnt/local/nvme/ai/profiles/llama-router-models.ini` | Active router model preset file | Root-owned live config |
 
@@ -35,10 +35,10 @@ Live binary help output validated on 2026-05-17:
 
 | Runtime | MTP support | Turbo cache support | Evidence |
 |---|---:|---:|---|
-| `ik_llama.cpp` | Yes | Yes | Help advertises `--multi-token-prediction`, `--cache-type-k`, `--cache-type-v`, and turbo cache types |
+| `ik_llama.cpp` | Yes | Needs validation / not proven | Help and source advertise `--multi-token-prediction`, `--spec-stage mtp`, and MTP code paths; searched source did not show `turbo2`, `turbo3`, or `turbo4` cache implementations |
 | `llama-cpp-turboquant` | Needs validation for MTP | Yes | Help advertises turbo cache types; MTP-specific flag was not present in the checked help output |
 
-`ik_llama.cpp` is the preferred current candidate when the profile needs both MTP and turboquant behavior.
+Use `ik_llama.cpp` when MTP behavior is required. Use `llama-cpp-turboquant` when turbo KV cache types are required. A combined MTP plus turboquant runtime is not confirmed in the installed trees as of this validation.
 
 ## Active Router State
 

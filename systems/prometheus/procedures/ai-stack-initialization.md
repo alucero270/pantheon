@@ -95,19 +95,25 @@ See individual service docs under [[systems/prometheus/services/README|Prometheu
 
 ---
 
-## 5. Docker Compose – Final Pattern
+## 5. Docker Compose - Current Pattern
+
+Last live validation: 2026-05-17
 
 ### Key Rules
 
-- Services bind to **127.0.0.1 only**
-- No AI service is directly exposed to the LAN
-- Remote access is achieved via SSH tunneling (operational detail, not an ADR)
+- User-facing AI services use [[systems/prometheus/services/traefik]] and the external `proxy` Docker network.
+- OpenWebUI and ComfyUI do not publish host ports in live state.
+- Ollama publishes `127.0.0.1:11434 -> 11434/tcp` for local API access.
+- Ollama also has live Traefik labels for `ollama.home.arpa`; this conflicts with [[decisions/ADR-007-centralized-ingress-on-prometheus]] and needs a decision.
+- No AI service should be exposed directly to the LAN through arbitrary host ports.
 
-Example binding pattern:
+Historical localhost binding pattern:
 ```yaml
 ports:
   - "127.0.0.1:8188:8188"
 ```
+
+Current Traefik-label pattern is documented in [[systems/prometheus/services/traefik]] and [[systems/prometheus/procedures/reverse-proxy-validation]].
 
 ---
 
@@ -182,7 +188,7 @@ Expected:
 
 ### ComfyUI
 ```bash
-curl -I http://127.0.0.1:8188
+curl -k --resolve comfy.home.arpa:443:127.0.0.1 https://comfy.home.arpa/
 ```
 
 Expected:
@@ -206,7 +212,7 @@ Expected:
 
 **Fix:**
 ```text
-Use http://127.0.0.1:8188 (not https)
+Use the documented Traefik URL for routed services, or use `http://127.0.0.1:<port>` only for services that intentionally publish localhost ports.
 ```
 
 ---
@@ -221,11 +227,12 @@ Use http://127.0.0.1:8188 (not https)
 ---
 
 ### Issue: Browser access fails but curl works
-**Cause:** Service bound to localhost only
+**Cause:** Access model mismatch, DNS issue, Traefik route issue, or a service that is intentionally bound to localhost only.
 
 **Fix:**
-- Access from Prometheus directly, or
-- Use SSH tunnel from workstation
+- Confirm whether the service is supposed to be routed through Traefik or accessed through a local tunnel.
+- Validate the relevant route with [[systems/prometheus/procedures/reverse-proxy-validation]].
+- For Ollama, resolve the current `ollama.home.arpa` route drift before treating Traefik access as approved.
 
 ---
 
@@ -237,4 +244,3 @@ Use http://127.0.0.1:8188 (not https)
 - ✅ Non‑obvious constraints documented
 
 This document defines the **baseline** AI stack for Prometheus.
-

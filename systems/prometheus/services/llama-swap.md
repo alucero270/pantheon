@@ -31,7 +31,7 @@ Live install validated on 2026-05-17:
 - Binary installed under `/mnt/local/nvme/ai/runtimes/llama-swap`.
 - `llama-swap.service` is enabled and active.
 - Health endpoint returns `OK`.
-- `/v1/models` lists the configured model names and aliases.
+- `/v1/models` lists one exposed model ID per configured profile; aliases are not included in the model list.
 
 ## Model Configuration
 
@@ -40,18 +40,25 @@ The live config launches `llama-cpp-turboquant` with turbo KV cache settings:
 - `--cache-type-k turbo4`
 - `--cache-type-v turbo3`
 
-These cache types are turboquant-specific; they are not supported by upstream llama.cpp or ik_llama.cpp.
+These cache types are provided by the installed `llama-cpp-turboquant` runtime. They are not confirmed in the installed `ik_llama.cpp` tree.
 
 ### Active models (validated 2026-05-17)
 
 | Model ID | Status |
 |---|---|
-| `gemma-4-26b-a4b-it-128k` | Working — thinking model |
-| `qwen3.5-122b-a10b-128k` | Configured (not yet load-tested at full context) |
-| `glm-4.6v-128k` | Working |
-| `glm-4.7-flash-128k` | Working — thinking model |
-| `granite-4.1-30b-128k` | Configured |
-| `granite-4.1-8b-128k` | Working |
+| `gemma-4-26b-a4b-it` | Working - thinking model; 128K context configured |
+| `gemma-4-31b-it` | Working - full GPU weights, 128K context, turbo KV |
+| `qwen3.5-122b-a10b` | Working - MoE split; 11 expert layers GPU-resident, remaining experts CPU-resident; 128K context configured |
+| `glm-4.6v` | Working - MoE split; 8 expert layers GPU-resident, remaining experts CPU-resident; 128K context configured |
+| `glm-4.7-flash` | Working - thinking model; 128K context configured |
+| `granite-4.1-30b` | Working - full GPU weights with reduced 80K context |
+| `granite-4.1-8b` | Working; 128K context configured |
+
+Dense models that can fit all weights in GPU should prefer full GPU residency with reduced context over CPU/GPU layer splitting.
+
+The Granite 30B 128K split profile was replaced by an 80K full-GPU profile because the 128K full-GPU projection exceeded available VRAM. The 80K profile loads all 65 layers on GPU and keeps turbo KV on GPU.
+
+OpenWebUI duplicate model rows were removed from the live `llama-swap` listing on 2026-05-17 by disabling alias inclusion and exposing the short profile IDs above.
 
 ### Disabled models
 
@@ -70,6 +77,8 @@ Download non-MTP variants from HuggingFace (unsloth) to re-enable these slots.
 `llama-swap` is bound to Docker bridge host address `172.17.0.1:8085`.
 
 No Traefik route is documented for this service as of 2026-05-17.
+
+OpenWebUI was pointed to this endpoint on 2026-05-17 through `OPENAI_API_BASE_URLS=http://host.docker.internal:8085/v1`.
 
 ## Validation Commands
 

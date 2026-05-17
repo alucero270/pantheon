@@ -7,12 +7,15 @@ Centralize resolution in OPNsense.
 
 ## Planned Records
 
-proxy.home.arpa → Prometheus
-nextcloud.home.arpa → Prometheus
+proxy.home.arpa -> Prometheus
+nextcloud.home.arpa -> Prometheus
+openwebui.home.arpa -> Prometheus
+comfy.home.arpa -> Prometheus
+searxng.home.arpa -> Prometheus
+ollama.home.arpa -> Prometheus (live route observed; needs decision because [[decisions/ADR-007-centralized-ingress-on-prometheus]] says Ollama should remain internal-only)
 
 Future:
-openwebui.home.arpa → Prometheus
-jellyfin.home.arpa → Prometheus
+jellyfin.home.arpa -> Prometheus
 
 ## Authority
 

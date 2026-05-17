@@ -21,6 +21,7 @@ Each procedure should include:
 - [[systems/prometheus/procedures/ai-stack-initialization]]
 - [[systems/prometheus/procedures/media-stack-validation]]
 - [[systems/prometheus/procedures/ollama-model-management]]
+- [[systems/prometheus/procedures/searxng-openwebui-integration]]
 - [[systems/prometheus/procedures/reverse-proxy]]
 - [[systems/prometheus/procedures/reverse-proxy-validation]]
 
