@@ -2,7 +2,7 @@
 type: service
 service_name: reverse-proxy
 status: active
-last_updated: 2026-02-19
+last_updated: 2026-05-17
 ---
 # Reverse Proxy (Traefik)
 
@@ -26,6 +26,8 @@ This design aligns with:
 - System: Prometheus (Ubuntu)
 - Container / VM: Docker container (Traefik)
 - Runtime: Docker Compose
+- Image: `traefik:v3.6.1`
+- Compose path: `/opt/traefik/docker-compose.yml`
 - Deploy path: /opt/traefik
 
 ## Data Classification
@@ -57,6 +59,7 @@ Ports / EntryPoints:
 - web: :80 (redirect to HTTPS)
 - websecure: :443 (user-facing services)
 - websecure-mgmt: :8443 (admin dashboards)
+- traefik: :8080 (published as `127.0.0.1:18080 -> 8080`)
 
 Notes:
 
@@ -69,6 +72,13 @@ User-facing ingress:
 - [https://nextcloud.home.arpa](https://nextcloud.home.arpa) (443)
 - [https://openwebui.home.arpa](https://openwebui.home.arpa) (443)
 - [https://comfy.home.arpa](https://comfy.home.arpa) (443)
+- [https://searxng.home.arpa](https://searxng.home.arpa) (443)
+
+Live route needing decision:
+
+- [https://ollama.home.arpa](https://ollama.home.arpa) (443)
+
+`ollama.home.arpa` exists in live Traefik labels as of 2026-05-17, but [[decisions/ADR-007-centralized-ingress-on-prometheus]] says Ollama remains internal-only and is not routed.
 
 Admin surface:
 
@@ -83,6 +93,7 @@ Auth method:
 - Cerberus (OPNsense) enforces VLAN policy; Traefik provides ingress.
 - Dashboard and admin surfaces must not be available from USER VLAN.
 - Services behind Traefik should not publish ports to LAN (prefer internal Docker networks + Traefik routing).
+- Backend-only services should not be routed unless an ADR or service-specific decision allows it.
 - Internal TLS is currently self-signed; plan an internal trust strategy (import CA/cert into clients) before relying on it widely.
 
 ## Backup Strategy
@@ -129,10 +140,10 @@ Auth method:
 | Host/system/device owner | Prometheus |
 | Runtime type | Docker reverse proxy / ingress runtime |
 | Source of truth | [[decisions/ADR-007-centralized-ingress-on-prometheus]] and [[systems/prometheus/procedures/reverse-proxy]] |
-| Config path | Needs validation |
-| Data path | Configuration should be Git-backed; exact paths need validation |
+| Config path | `/opt/traefik/config/traefik.yml`, `/opt/traefik/dynamic` |
+| Data path | `/opt/traefik/config`, `/opt/traefik/dynamic`, `/opt/traefik/certs`, `/opt/traefik/logs`, `/opt/traefik/acme` |
 | Secret requirements | Do not commit TLS secrets or credentials |
-| Network ports | 80/443 documented as ingress; validate before automation |
+| Network ports | `0.0.0.0:80`, `0.0.0.0:443`, `0.0.0.0:8443`, `127.0.0.1:18080 -> 8080` |
 | Dependencies | Cerberus DNS/firewall policy, Docker network, backend services |
 | Backup requirement | Git-backed configuration and recovery procedure required |
 | Validation command | [[systems/prometheus/procedures/reverse-proxy-validation]] |

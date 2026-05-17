@@ -15,9 +15,12 @@
 ## Services
 
 - [[systems/prometheus/services/ai-runtime]]
+- [[systems/prometheus/services/llamacpp]]
+- [[systems/prometheus/services/llama-swap]]
 - [[systems/prometheus/services/ollama]]
 - [[systems/prometheus/services/openwebui]]
 - [[systems/prometheus/services/comfyui]]
+- [[systems/prometheus/services/searxng]]
 - [[systems/prometheus/services/traefik]]
 - [[systems/prometheus/services/3d-scanning]]
 
@@ -25,5 +28,6 @@
 
 - [[systems/prometheus/procedures/ai-stack-initialization]]
 - [[systems/prometheus/procedures/ollama-model-management]]
+- [[systems/prometheus/procedures/searxng-openwebui-integration]]
 - [[systems/prometheus/procedures/reverse-proxy]]
 - [[systems/prometheus/procedures/reverse-proxy-validation]]

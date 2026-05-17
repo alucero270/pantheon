@@ -17,6 +17,8 @@ ADRs capture locked or important design decisions, the context for those decisio
 - [[decisions/ADR-007-centralized-ingress-on-prometheus]]
 - `ADR-008 — AI Runtime Network Segmentation.md` - Needs validation before link normalization.
 - `ADR-009 — Docker DNS Resolution Strategy.md` - Needs validation before link normalization.
+- [[decisions/ADR-010-container-lifecycle-policy-prometheus]]
+- [[decisions/ADR-011-llama-swap-backend-turboquant]]
 
 ## Templates
 

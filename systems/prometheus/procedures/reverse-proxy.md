@@ -211,7 +211,22 @@ From USER VLAN:
 
 ---
 
-## Phase 12 — Operational Rules
+## Phase 12 - Current Prometheus-Hosted Routes
+
+Current live Docker-provider routes observed on 2026-05-17:
+
+| Hostname | Backend | Status |
+|---|---|---|
+| `openwebui.home.arpa` | OpenWebUI container port 8080 | Active |
+| `comfy.home.arpa` | ComfyUI container port 8188 | Active |
+| `searxng.home.arpa` | SearXNG container port 8080 | Active |
+| `ollama.home.arpa` | Ollama container port 11434 | Live drift; needs decision |
+
+`ollama.home.arpa` conflicts with [[decisions/ADR-007-centralized-ingress-on-prometheus]], which says Ollama remains internal-only and is not routed. Do not treat that route as approved until the ADR is explicitly revisited or the live route is removed.
+
+---
+
+## Phase 13 — Operational Rules
 
 All new services must:
 

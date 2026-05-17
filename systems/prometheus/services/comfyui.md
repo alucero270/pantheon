@@ -1,5 +1,7 @@
 # ComfyUI
 
+Last validated: 2026-05-17
+
 ## Purpose
 ComfyUI provides a node-based UI for **GPU-accelerated image and media generation** on [[systems/prometheus]].
 
@@ -11,16 +13,21 @@ This service is part of the Prometheus AI stack and is treated as **disposable c
 - **Host:** [[systems/prometheus]]
 - **Runtime:** Docker Engine + NVIDIA Container Toolkit
 - **GPU:** NVIDIA RTX 4000 Ada Generation
+- **Image:** `mmartial/comfyui-nvidia-docker:latest`
+- **Compose path:** `/home/alex/stacks/ai/docker-compose.yml`
 
 ---
 
 ## Access
 
-ComfyUI is bound to localhost on Prometheus.
+Live state exposes ComfyUI through [[systems/prometheus/services/traefik]].
 
-- **HTTP:** `http://127.0.0.1:8188`
+- Host port: none published
+- Container port: `8188/tcp`
+- Traefik route: `https://comfy.home.arpa`
+- Traefik service target: container port `8188`
 
-Remote access is performed via an SSH tunnel (see [[systems/prometheus/procedures/ai-stack-initialization]]).
+Older docs described SSH-tunnel-only access. Current live state uses the Traefik Docker-provider pattern.
 
 ---
 
@@ -87,7 +94,7 @@ docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" | grep -E "^comfy
 
 ### HTTP reachability (on Prometheus)
 ```bash
-curl -I http://127.0.0.1:8188
+curl -k --resolve comfy.home.arpa:443:127.0.0.1 https://comfy.home.arpa/
 ```
 
 ### GPU visible in container logs
@@ -109,15 +116,15 @@ docker logs --tail=50 comfy
 |---|---|
 | Owning domain | Prometheus |
 | Host/system/device owner | Prometheus |
-| Runtime type | GPU/Docker workload; Needs validation |
+| Runtime type | GPU/Docker workload |
 | Source of truth | [[decisions/ADR-006-comfyui-storage-constraints]] and [[systems/prometheus/procedures/ai-stack-initialization]] |
-| Config path | Needs validation |
-| Data path | Prometheus local disposable storage per ADR constraints; exact paths need validation |
+| Config path | `/home/alex/stacks/ai/docker-compose.yml` |
+| Data path | `/mnt/local/nvme/ai/services/comfy-mnt`, `/mnt/local/nvme/ai/models`, `/mnt/local/ssd/ai/outputs/comfy` |
 | Secret requirements | Do not commit secrets |
-| Network ports | Needs validation |
+| Network ports | Container `8188/tcp`; Traefik route `comfy.home.arpa`; no host port |
 | Dependencies | GPU runtime, Docker, local storage constraints |
-| Backup requirement | No authoritative data; generated output handling needs validation |
-| Validation command | Needs validation |
+| Backup requirement | No authoritative data; generated output handling needs validation before cleanup |
+| Validation command | `curl -k --resolve comfy.home.arpa:443:127.0.0.1 https://comfy.home.arpa/` |
 | Recovery procedure | [[systems/prometheus/procedures/ai-stack-initialization]] |
-| Automation classification | Needs validation |
+| Automation classification | Ansible candidate after GPU/runtime validation |
 | Preferred automation tool | Ansible candidate after GPU/runtime validation |

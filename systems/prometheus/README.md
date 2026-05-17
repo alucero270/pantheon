@@ -44,6 +44,7 @@ Prometheus owns runtime and disposable compute state only. Authoritative data li
 - [[systems/prometheus/services/ollama]]
 - [[systems/prometheus/services/openwebui]]
 - [[systems/prometheus/services/comfyui]]
+- [[systems/prometheus/services/searxng]]
 - [[systems/prometheus/services/traefik]]
 - [[systems/prometheus/services/3d-scanning]]
 

@@ -47,10 +47,10 @@ Do not move stacks until:
 
 | Stack Name | Compose Path | Services | Owner / System | Status | Startup Priority | Standard Layout Action | Notes |
 |---|---|---|---|---|---|---|---|
-| AI stack | `~/stacks/ai/docker-compose.yml` | ComfyUI, Ollama, OpenWebUI | [[systems/prometheus|Prometheus]] | Documented for ComfyUI; full stack needs validation | Medium | Candidate to move after standard layout decision | Repo documents this path in [[systems/prometheus/services/comfyui]]. Validate whether Ollama and OpenWebUI use the same compose file. |
-| Reverse proxy | `/opt/traefik/docker-compose.yml` | Traefik | [[systems/prometheus|Prometheus]] | Needs validation | High | Keep or standardize after ingress rollback is proven | Repo documents `/opt/traefik` as deploy path, but the exact compose file path needs validation. |
+| AI stack | `/home/alex/stacks/ai/docker-compose.yml` | ComfyUI, Ollama, OpenWebUI; `gemma-192k` is an exited llama.cpp-derived service from the same compose project | [[systems/prometheus|Prometheus]] | Active documented from live validation on 2026-05-17 | Medium | Candidate to move after standard layout decision | Live compose uses Traefik labels for ComfyUI, OpenWebUI, and Ollama. Ollama route needs decision because ADR-007 says it remains internal-only. |
+| Reverse proxy | `/opt/traefik/docker-compose.yml` | Traefik | [[systems/prometheus|Prometheus]] | Active documented from live validation on 2026-05-17 | High | Keep or standardize after ingress rollback is proven | Live image `traefik:v3.6.1`; ports `80`, `443`, `8443`, and localhost `18080 -> 8080`. |
 | Homelable | `/opt/homelable/docker-compose.yml` | Needs validation | [[systems/prometheus|Prometheus]] | Needs validation | Needs validation | Candidate to move after service ownership is documented | User-reported compose path; no current repo service doc found. |
-| SearXNG | `/mnt/local/ssd/ai/services/searxng/docker-compose.yml` | SearXNG, Redis | [[systems/prometheus|Prometheus]] | Needs validation | Medium | Candidate to move after AI/search stack layout is decided | User-reported compose path; tracked by issue #72. Confirm whether Redis is dedicated to SearXNG. |
+| SearXNG | `/mnt/local/ssd/ai/services/searxng/docker-compose.yml` | SearXNG, Redis | [[systems/prometheus|Prometheus]] | Active documented from live validation on 2026-05-17 | Medium | Candidate to move after AI/search stack layout is decided | Dedicated Redis container `searxng-redis`; Traefik route `searxng.home.arpa`; tracked by issue #72. |
 | VPN / media egress | `/opt/vpn/docker-compose.yml` | Gluetun, qBittorrent, Prowlarr, Radarr, Sonarr | [[systems/prometheus|Prometheus]] | Active documented from validated live state | Medium | Keep in place until standard layout decision and recovery procedure exist | Live media compose path. Secrets stay outside Git. qBittorrent is localhost-only through Gluetun; Prowlarr/Radarr/Sonarr broad binds are temporary current state. |
 | Jellyfin | Needs validation | Jellyfin | [[systems/prometheus|Prometheus]] | Needs validation | Medium | Candidate to move after media inventory is validated | Repo does not yet prove live compose path on Prometheus. Track service doc at [[systems/prometheus/services/jellyfin]]. |
 | Anemoi | `/home/alex/stacks/ai/anemoi/deploy/docker/docker-compose.yml` | `anemoi`; related containers need validation | [[systems/prometheus|Prometheus]] | Questionable / exited needs validation | Low | Cleanup candidate after ownership and data paths are validated | User-reported compose path; do not delete until live container and volume ownership are known. |
@@ -78,10 +78,10 @@ Compose files found inside Docker/containerd runtime storage are artifacts, not 
 
 | Stack | Should Move? | Reason | Required Before Move |
 |---|---|---|---|
-| AI stack | Needs decision | Current path is home-relative and may not be ideal for automation | Confirm compose contents, owner, data paths, and rollback |
-| Reverse proxy | Needs decision | `/opt/traefik` may be appropriate for ingress, but exact compose source needs validation | Confirm compose file path and backup/restore process |
+| AI stack | Needs decision | Current path is home-relative and may not be ideal for automation | Resolve Ollama route drift, standard layout, owner, data paths, and rollback |
+| Reverse proxy | Needs decision | `/opt/traefik` may be appropriate for ingress | Confirm backup/restore process |
 | Homelable | Needs validation | No repo evidence of service ownership yet | Create service doc and validate live stack |
-| SearXNG | Needs decision | Path is under local AI service data; may mix compose source with runtime data | Create service/procedure docs and validate Redis relationship |
+| SearXNG | Needs decision | Path is under local AI service data; may mix compose source with runtime data | Complete service/procedure docs, OpenWebUI integration validation, and rollback |
 | VPN / media egress | Needs decision | Live path is validated, but standard layout and recovery procedure are not finalized | Keep `/opt/vpn/docker-compose.yml` for now; document VPN boundary, media paths, secrets handling, and rollback before any move |
 | Anemoi | Cleanup candidate | Requested as questionable/exited | Validate owner, data paths, and whether it is still needed |
 
