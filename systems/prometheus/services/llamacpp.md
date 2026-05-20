@@ -1,6 +1,6 @@
 # llama.cpp Runtime
 
-Last validated: 2026-05-17
+Last validated: 2026-05-20
 
 ## Purpose
 
@@ -24,6 +24,7 @@ This service document covers the local llama.cpp-derived runtime trees, the acti
 
 | Path | Role | Notes |
 |---|---|---|
+| `/mnt/local/nvme/ai/runtimes/atomic-llama-cpp-turboquant` | Unified MTP + turbo runtime | Built 2026-05-19 from `feature/turboquant-kv-cache` branch; combines Gemma 4 MTP, Qwen 3.6 NextN, and turbo KV cache in one binary |
 | `/mnt/local/nvme/ai/runtimes/llama-cpp-turboquant` | Active router runtime | Used by `llamacpp-router.service` on 2026-05-17 |
 | `/mnt/local/nvme/ai/runtimes/ik_llama.cpp` | Installed llama.cpp fork | Validated source and binary support MTP; turbo cache support is not confirmed in this installed tree |
 | `/mnt/local/nvme/ai/models/gguf` | Shared GGUF model store | Disposable / curated runtime cache by current docs |
@@ -31,14 +32,15 @@ This service document covers the local llama.cpp-derived runtime trees, the acti
 
 ## Validated Capabilities
 
-Live binary help output validated on 2026-05-17:
+Live binary help output validated on 2026-05-20:
 
-| Runtime | MTP support | Turbo cache support | Evidence |
-|---|---:|---:|---|
-| `ik_llama.cpp` | Yes | Needs validation / not proven | Help and source advertise `--multi-token-prediction`, `--spec-stage mtp`, and MTP code paths; searched source did not show `turbo2`, `turbo3`, or `turbo4` cache implementations |
-| `llama-cpp-turboquant` | Needs validation for MTP | Yes | Help advertises turbo cache types; MTP-specific flag was not present in the checked help output |
+| Runtime | MTP / NextN support | Turbo cache support | Notes |
+|---|---|---|---:|---:|---|
+| `atomic-llama-cpp-turboquant` | Yes (Gemma 4 MTP `--spec-type mtp`; Qwen 3.6 NextN `--spec-type nextn`) | Yes (turbo3/turbo2) | Unified binary built from fork; validated on Qwen 3.6 27B (+28% gen throughput) |
+| `llama-cpp-turboquant` | No (`--spec-type` flags absent) | Yes | Original turboquant v9080; all non-MTP models use this binary |
+| `ik_llama.cpp` | Partial (`--spec-stage mtp` present, NextN absent) | No | Retained for future MTP support; currently no models require it |
 
-Use `ik_llama.cpp` when MTP behavior is required. Use `llama-cpp-turboquant` when turbo KV cache types are required. A combined MTP plus turboquant runtime is not confirmed in the installed trees as of this validation.
+The `atomic-llama-cpp-turboquant` binary replaces the need for two separate runtimes. Models requiring speculative decoding (Qwen 3.6 NextN, Gemma 4 MTP) use this binary. All other models continue to use `llama-cpp-turboquant`.
 
 ## Active Router State
 
@@ -48,23 +50,22 @@ Live state after restart on 2026-05-17:
 - Main process is `llama-server`.
 - Router mode listens on `http://172.17.0.1:8084`.
 - `/v1/models` advertises the configured router profiles.
-- New model profiles use `cache-type-k = turbo4` and `cache-type-v = turbo3`.
+- New model profiles use `cache-type-k = turbo3` and `cache-type-v = turbo2` (downgraded from turbo4/turbo3 on 2026-05-19 for lower VRAM overhead).
 
 ## Model Profiles
 
 Model inventory is tracked in [[systems/prometheus/inventory]].
 
-The router profile file currently includes newly installed GGUF profiles for:
+The router profile file currently includes GGUF profiles for:
 
-- `qwen3.6-35b-a3b-128k`
-- `qwen3.5-9b-128k`
-- `qwen3.6-27b-128k`
 - `gemma-4-26b-a4b-it-128k`
 - `qwen3.5-122b-a10b-128k`
 - `glm-4.6v-128k`
 - `glm-4.7-flash-128k`
 - `granite-4.1-30b-128k`
 - `granite-4.1-8b-128k`
+
+The Qwen MTP router profiles `qwen3.6-35b-a3b-128k`, `qwen3.5-9b-128k`, and `qwen3.6-27b-128k` were removed from the live router config on 2026-05-17 after load validation showed the installed runtimes do not support those unsloth MTP GGUF variants. Their replacement non-MTP GGUF profiles are tracked under [[systems/prometheus/services/llama-swap]].
 
 ## Validation Commands
 

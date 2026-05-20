@@ -1,0 +1,23 @@
+---
+name: prometheus-voice-agent
+
+networks:
+  voice-agent:
+    name: prometheus-voice-agent
+
+services:
+  speaches:
+    image: ${SPEACHES_IMAGE:?set SPEACHES_IMAGE in .env}
+    container_name: speaches
+    environment:
+      - TZ=${TZ}
+    ports:
+      - "${SPEACHES_BIND:-127.0.0.1}:${SPEACHES_PORT:-8000}:8000"
+    volumes:
+      - ${SPEACHES_CACHE_VOLUME:-speaches-hf-hub-cache}:/home/ubuntu/.cache/huggingface/hub
+    networks:
+      - voice-agent
+    restart: unless-stopped
+
+volumes:
+  speaches-hf-hub-cache:

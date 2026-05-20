@@ -1,0 +1,586 @@
+﻿{
+    "1":  {
+              "inputs":  {
+                             "vae_name":  "ltx-2.3-22b-distilled_audio_vae.safetensors",
+                             "device":  "main_device",
+                             "weight_dtype":  "bf16"
+                         },
+              "class_type":  "VAELoaderKJ",
+              "_meta":  {
+                            "title":  "VAELoader KJ"
+                        }
+          },
+    "2":  {
+              "inputs":  {
+                             "vae_name":  "ltx-2.3-22b-distilled_video_vae.safetensors",
+                             "device":  "main_device",
+                             "weight_dtype":  "bf16"
+                         },
+              "class_type":  "VAELoaderKJ",
+              "_meta":  {
+                            "title":  "VAELoader KJ"
+                        }
+          },
+    "3":  {
+              "inputs":  {
+                             "unet_name":  "ltx-2.3-22b-distilled-UD-Q4_K_S.gguf"
+                         },
+              "class_type":  "UnetLoaderGGUF",
+              "_meta":  {
+                            "title":  "Unet Loader (GGUF)"
+                        }
+          },
+    "5":  {
+              "inputs":  {
+                             "text":  [
+                                          "48",
+                                          0
+                                      ],
+                             "clip":  [
+                                          "47",
+                                          0
+                                      ]
+                         },
+              "class_type":  "CLIPTextEncode",
+              "_meta":  {
+                            "title":  "CLIP Text Encode (Prompt)"
+                        }
+          },
+    "6":  {
+              "inputs":  {
+                             "text":  "blurry, low quality, still frame, frames, watermark, overlay, titles, has blurbox, has subtitles",
+                             "clip":  [
+                                          "47",
+                                          0
+                                      ]
+                         },
+              "class_type":  "CLIPTextEncode",
+              "_meta":  {
+                            "title":  "CLIP Text Encode (Prompt)"
+                        }
+          },
+    "7":  {
+              "inputs":  {
+                             "width":  640,
+                             "height":  360,
+                             "batch_size":  1,
+                             "color":  0
+                         },
+              "class_type":  "EmptyImage",
+              "_meta":  {
+                            "title":  "EmptyImage"
+                        }
+          },
+    "8":  {
+              "inputs":  {
+                             "upscale_method":  "lanczos",
+                             "scale_by":  0.5,
+                             "image":  [
+                                           "7",
+                                           0
+                                       ]
+                         },
+              "class_type":  "ImageScaleBy",
+              "_meta":  {
+                            "title":  "Upscale Image By"
+                        }
+          },
+    "9":  {
+              "inputs":  {
+                             "image":  [
+                                           "8",
+                                           0
+                                       ]
+                         },
+              "class_type":  "GetImageSize",
+              "_meta":  {
+                            "title":  "Get Image Size"
+                        }
+          },
+    "10":  {
+               "inputs":  {
+                              "value":  17
+                          },
+               "class_type":  "PrimitiveInt",
+               "_meta":  {
+                             "title":  "Length"
+                         }
+           },
+    "11":  {
+               "inputs":  {
+                              "value":  8
+                          },
+               "class_type":  "PrimitiveInt",
+               "_meta":  {
+                             "title":  "Frame Rate(int)"
+                         }
+           },
+    "12":  {
+               "inputs":  {
+                              "value":  8
+                          },
+               "class_type":  "PrimitiveFloat",
+               "_meta":  {
+                             "title":  "Frame Rate(float)"
+                         }
+           },
+    "13":  {
+               "inputs":  {
+                              "frames_number":  [
+                                                    "10",
+                                                    0
+                                                ],
+                              "frame_rate":  [
+                                                 "11",
+                                                 0
+                                             ],
+                              "batch_size":  1,
+                              "audio_vae":  [
+                                                "1",
+                                                0
+                                            ]
+                          },
+               "class_type":  "LTXVEmptyLatentAudio",
+               "_meta":  {
+                             "title":  "LTXV Empty Latent Audio"
+                         }
+           },
+    "14":  {
+               "inputs":  {
+                              "width":  [
+                                            "9",
+                                            0
+                                        ],
+                              "height":  [
+                                             "9",
+                                             1
+                                         ],
+                              "length":  [
+                                             "10",
+                                             0
+                                         ],
+                              "batch_size":  1
+                          },
+               "class_type":  "EmptyLTXVLatentVideo",
+               "_meta":  {
+                             "title":  "EmptyLTXVLatentVideo"
+                         }
+           },
+    "15":  {
+               "inputs":  {
+                              "video_latent":  [
+                                                   "14",
+                                                   0
+                                               ],
+                              "audio_latent":  [
+                                                   "13",
+                                                   0
+                                               ]
+                          },
+               "class_type":  "LTXVConcatAVLatent",
+               "_meta":  {
+                             "title":  "LTXVConcatAVLatent"
+                         }
+           },
+    "16":  {
+               "inputs":  {
+                              "noise_seed":  845334242002042
+                          },
+               "class_type":  "RandomNoise",
+               "_meta":  {
+                             "title":  "RandomNoise"
+                         }
+           },
+    "17":  {
+               "inputs":  {
+                              "noise":  [
+                                            "16",
+                                            0
+                                        ],
+                              "guider":  [
+                                             "18",
+                                             0
+                                         ],
+                              "sampler":  [
+                                              "20",
+                                              0
+                                          ],
+                              "sigmas":  [
+                                             "22",
+                                             0
+                                         ],
+                              "latent_image":  [
+                                                   "15",
+                                                   0
+                                               ]
+                          },
+               "class_type":  "SamplerCustomAdvanced",
+               "_meta":  {
+                             "title":  "SamplerCustomAdvanced"
+                         }
+           },
+    "18":  {
+               "inputs":  {
+                              "cfg":  4.0,
+                              "model":  [
+                                            "3",
+                                            0
+                                        ],
+                              "positive":  [
+                                               "23",
+                                               0
+                                           ],
+                              "negative":  [
+                                               "23",
+                                               1
+                                           ]
+                          },
+               "class_type":  "CFGGuider",
+               "_meta":  {
+                             "title":  "CFGGuider"
+                         }
+           },
+    "19":  {
+               "inputs":  {
+                              "av_latent":  [
+                                                "17",
+                                                0
+                                            ]
+                          },
+               "class_type":  "LTXVSeparateAVLatent",
+               "_meta":  {
+                             "title":  "LTXVSeparateAVLatent"
+                         }
+           },
+    "20":  {
+               "inputs":  {
+                              "sampler_name":  "euler_ancestral"
+                          },
+               "class_type":  "KSamplerSelect",
+               "_meta":  {
+                             "title":  "KSamplerSelect"
+                         }
+           },
+    "21":  {
+               "inputs":  {
+                              "positive":  [
+                                               "23",
+                                               0
+                                           ],
+                              "negative":  [
+                                               "23",
+                                               1
+                                           ],
+                              "latent":  [
+                                             "19",
+                                             0
+                                         ]
+                          },
+               "class_type":  "LTXVCropGuides",
+               "_meta":  {
+                             "title":  "LTXVCropGuides"
+                         }
+           },
+    "22":  {
+               "inputs":  {
+                              "steps":  4,
+                              "max_shift":  2.05,
+                              "base_shift":  0.95,
+                              "stretch":  true,
+                              "terminal":  0.1,
+                              "latent":  [
+                                             "15",
+                                             0
+                                         ]
+                          },
+               "class_type":  "LTXVScheduler",
+               "_meta":  {
+                             "title":  "LTXVScheduler"
+                         }
+           },
+    "23":  {
+               "inputs":  {
+                              "frame_rate":  [
+                                                 "12",
+                                                 0
+                                             ],
+                              "positive":  [
+                                               "5",
+                                               0
+                                           ],
+                              "negative":  [
+                                               "6",
+                                               0
+                                           ]
+                          },
+               "class_type":  "LTXVConditioning",
+               "_meta":  {
+                             "title":  "LTXVConditioning"
+                         }
+           },
+    "25":  {
+               "inputs":  {
+                              "samples":  [
+                                              "21",
+                                              2
+                                          ],
+                              "upscale_model":  [
+                                                    "26",
+                                                    0
+                                                ],
+                              "vae":  [
+                                          "2",
+                                          0
+                                      ]
+                          },
+               "class_type":  "LTXVLatentUpsampler",
+               "_meta":  {
+                             "title":  "spatial"
+                         }
+           },
+    "26":  {
+               "inputs":  {
+                              "model_name":  "ltx-2.3-spatial-upscaler-x2-1.0.safetensors"
+                          },
+               "class_type":  "LatentUpscaleModelLoader",
+               "_meta":  {
+                             "title":  "Load Latent Upscale Model"
+                         }
+           },
+    "27":  {
+               "inputs":  {
+                              "lora_name":  "ltx-2.3-22b-distilled-lora-384.safetensors",
+                              "strength_model":  1.0,
+                              "model":  [
+                                            "3",
+                                            0
+                                        ]
+                          },
+               "class_type":  "LoraLoaderModelOnly",
+               "_meta":  {
+                             "title":  "Load LoRA"
+                         }
+           },
+    "28":  {
+               "inputs":  {
+                              "video_latent":  [
+                                                   "25",
+                                                   0
+                                               ],
+                              "audio_latent":  [
+                                                   "19",
+                                                   1
+                                               ]
+                          },
+               "class_type":  "LTXVConcatAVLatent",
+               "_meta":  {
+                             "title":  "LTXVConcatAVLatent"
+                         }
+           },
+    "29":  {
+               "inputs":  {
+                              "sampler_name":  "euler_ancestral"
+                          },
+               "class_type":  "KSamplerSelect",
+               "_meta":  {
+                             "title":  "KSamplerSelect"
+                         }
+           },
+    "30":  {
+               "inputs":  {
+                              "sigmas":  "0.909375, 0.725, 0.421875, 0.0"
+                          },
+               "class_type":  "ManualSigmas",
+               "_meta":  {
+                             "title":  "ManualSigmas"
+                         }
+           },
+    "31":  {
+               "inputs":  {
+                              "cfg":  1.0,
+                              "model":  [
+                                            "27",
+                                            0
+                                        ],
+                              "positive":  [
+                                               "21",
+                                               0
+                                           ],
+                              "negative":  [
+                                               "21",
+                                               1
+                                           ]
+                          },
+               "class_type":  "CFGGuider",
+               "_meta":  {
+                             "title":  "CFGGuider"
+                         }
+           },
+    "32":  {
+               "inputs":  {
+                              "noise_seed":  809542877813341
+                          },
+               "class_type":  "RandomNoise",
+               "_meta":  {
+                             "title":  "RandomNoise"
+                         }
+           },
+    "33":  {
+               "inputs":  {
+                              "noise":  [
+                                            "32",
+                                            0
+                                        ],
+                              "guider":  [
+                                             "31",
+                                             0
+                                         ],
+                              "sampler":  [
+                                              "29",
+                                              0
+                                          ],
+                              "sigmas":  [
+                                             "30",
+                                             0
+                                         ],
+                              "latent_image":  [
+                                                   "28",
+                                                   0
+                                               ]
+                          },
+               "class_type":  "SamplerCustomAdvanced",
+               "_meta":  {
+                             "title":  "SamplerCustomAdvanced"
+                         }
+           },
+    "34":  {
+               "inputs":  {
+                              "av_latent":  [
+                                                "33",
+                                                1
+                                            ]
+                          },
+               "class_type":  "LTXVSeparateAVLatent",
+               "_meta":  {
+                             "title":  "LTXVSeparateAVLatent"
+                         }
+           },
+    "35":  {
+               "inputs":  {
+                              "samples":  [
+                                              "34",
+                                              1
+                                          ],
+                              "audio_vae":  [
+                                                "1",
+                                                0
+                                            ]
+                          },
+               "class_type":  "LTXVAudioVAEDecode",
+               "_meta":  {
+                             "title":  "LTXV Audio VAE Decode"
+                         }
+           },
+    "36":  {
+               "inputs":  {
+                              "fps":  [
+                                          "12",
+                                          0
+                                      ],
+                              "images":  [
+                                             "37",
+                                             0
+                                         ],
+                              "audio":  [
+                                            "35",
+                                            0
+                                        ]
+                          },
+               "class_type":  "CreateVideo",
+               "_meta":  {
+                             "title":  "Create Video"
+                         }
+           },
+    "37":  {
+               "inputs":  {
+                              "tile_size":  512,
+                              "overlap":  64,
+                              "temporal_size":  4096,
+                              "temporal_overlap":  8,
+                              "samples":  [
+                                              "34",
+                                              0
+                                          ],
+                              "vae":  [
+                                          "2",
+                                          0
+                                      ]
+                          },
+               "class_type":  "VAEDecodeTiled",
+               "_meta":  {
+                             "title":  "VAE Decode (Tiled)"
+                         }
+           },
+    "38":  {
+               "inputs":  {
+                              "filename_prefix":  "codex_smoke/unsloth_ltx23_udq4ks_smoke",
+                              "format":  "mp4",
+                              "codec":  "auto",
+                              "video-preview":  "",
+                              "video":  [
+                                            "36",
+                                            0
+                                        ]
+                          },
+               "class_type":  "SaveVideo",
+               "_meta":  {
+                             "title":  "Save Video"
+                         }
+           },
+    "47":  {
+               "inputs":  {
+                              "clip_name1":  "gemma-3-12b-it-qat-UD-Q4_K_XL.gguf",
+                              "clip_name2":  "ltx-2.3-22b-distilled_embeddings_connectors.safetensors",
+                              "type":  "ltxv"
+                          },
+               "class_type":  "DualCLIPLoaderGGUF",
+               "_meta":  {
+                             "title":  "DualCLIPLoader (GGUF)"
+                         }
+           },
+    "48":  {
+               "inputs":  {
+                              "prompt":  "Cinematic handheld close-up of a florist trimming stems and unwrapping fresh flowers in a narrow shop at opening time, soft morning light through the front glass, intimate handheld movement weaving between bouquets and hands. Rich ambient audio: paper crinkling, scissors snipping stems, water filling a bucket, door chime in the background, faint street noise outside. The subject looks directly into camera and says, “Can\u0027t beat the smell of fresh cut flowers.” End on a row of flowers catching the light as the front door opens.",
+                              "max_length":  128,
+                              "sampling_mode":  "on",
+                              "sampling_mode.temperature":  0.7,
+                              "sampling_mode.top_k":  64,
+                              "sampling_mode.top_p":  0.95,
+                              "sampling_mode.min_p":  0.05,
+                              "sampling_mode.repetition_penalty":  1.05,
+                              "sampling_mode.seed":  0,
+                              "clip":  [
+                                           "47",
+                                           0
+                                       ]
+                          },
+               "class_type":  "TextGenerateLTX2Prompt",
+               "_meta":  {
+                             "title":  "TextGenerateLTX2Prompt"
+                         }
+           },
+    "49":  {
+               "inputs":  {
+                              "preview":  "Style: realistic with soft morning lighting. A close-up, handheld shot begins within a narrow florist shop at opening time. Soft morning light streams through the front glass, illuminating dust motes dancing in the air. The camera weaves intimately between colorful bouquets and the hands of a florist, a woman in her late 50s with kind eyes and graying hair pulled back into a bun. She wears a simple green apron over a floral blouse. The rich ambient audio includes the gentle crinkling of paper as she unwraps fresh flowers, the crisp snipping of scissors trimming stems, the sound of water filling a metal bucket, and a faint door chime in the background layered with distant street noise. The florist carefully trims a stem of a vibrant red rose, then gently unwraps a bundle of yellow tulips, their petals catching the light. She looks directly into the camera with a warm smile and says in a calm, gentle voice, “Can\u0027t beat the smell of fresh cut flowers.” The camera slowly pans to a row of flowers—a mix of lilies, carnations, and daisies—catching the soft morning light. As the shot lingers on the flowers, the front door opens with a gentle chime, revealing a glimpse of the outside world.",
+                              "previewMode":  null,
+                              "source":  [
+                                             "48",
+                                             0
+                                         ]
+                          },
+               "class_type":  "PreviewAny",
+               "_meta":  {
+                             "title":  "Preview as Text"
+                         }
+           }
+}

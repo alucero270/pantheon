@@ -1,6 +1,6 @@
 # AI Services - Compute & Inference
 
-Last validated: 2026-05-17
+Last validated: 2026-05-20
 
 This document defines the role of AI workloads within the homelab, their relationship to compute and storage systems, and the constraints under which they operate.
 
@@ -120,7 +120,7 @@ Live state observed on 2026-05-17:
 |---|---|---|---|---|
 | ComfyUI | `comfy` | `mmartial/comfyui-nvidia-docker:latest` | `/home/alex/stacks/ai/docker-compose.yml` | Traefik route `comfy.home.arpa`; no host port |
 | llama.cpp router | `llamacpp-router.service` | Native `llama-server` from `/mnt/local/nvme/ai/runtimes/llama-cpp-turboquant` | `/mnt/local/nvme/ai/profiles/start-scripts/llama-router.sh`; `/mnt/local/nvme/ai/profiles/llama-router-models.ini` | `172.17.0.1:8084`; local API key |
-| llama-swap | `llama-swap.service` | Native `llama-swap` v214 | `/mnt/local/nvme/ai/profiles/llama-swap/config.yaml` | `172.17.0.1:8085`; local API key |
+| llama-swap | `llama-swap.service` | Native `llama-swap` v214; MTP/NextN models use `/mnt/local/nvme/ai/runtimes/atomic-llama-cpp-turboquant/build/bin/llama-server` | `/mnt/local/nvme/ai/profiles/llama-swap/config.yaml` | `172.17.0.1:8085`; local API key |
 | Ollama | `ollama` | `ollama/ollama:latest` | `/home/alex/stacks/ai/docker-compose.yml` | Host port `127.0.0.1:11434`; live Traefik route `ollama.home.arpa` needs decision |
 | OpenWebUI | `openwebui` | `ghcr.io/open-webui/open-webui:latest` | `/home/alex/stacks/ai/docker-compose.yml` | Traefik route `openwebui.home.arpa`; no host port |
 | SearXNG | `searxng`, `searxng-redis` | `searxng/searxng:latest`, `redis:7-alpine` | `/mnt/local/ssd/ai/services/searxng/docker-compose.yml` | Traefik route `searxng.home.arpa`; no host port |
@@ -137,6 +137,10 @@ AI services may support:
 - automation and assistance tools
 
 These integrations must respect data authority rules.
+
+## Planned AI Service Candidates
+
+- [[systems/prometheus/services/voice-agent]] - planned Pipecat-based realtime voice interface beside [[systems/prometheus/services/openwebui]]
 
 ## Automation Readiness
 

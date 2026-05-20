@@ -25,6 +25,7 @@ Each service document should include:
 
 - [[systems/prometheus/services/ai-runtime]]
 - [[systems/prometheus/services/gluetun]]
+- [[systems/prometheus/services/homelable]]
 - [[systems/prometheus/services/jellyfin]]
 - [[systems/prometheus/services/llamacpp]]
 - [[systems/prometheus/services/llama-swap]]
@@ -32,6 +33,7 @@ Each service document should include:
 - [[systems/prometheus/services/openwebui]]
 - [[systems/prometheus/services/comfyui]]
 - [[systems/prometheus/services/searxng]]
+- [[systems/prometheus/services/voice-agent]]
 - [[systems/prometheus/services/prowlarr]]
 - [[systems/prometheus/services/qbittorrent]]
 - [[systems/prometheus/services/radarr]]

@@ -56,9 +56,9 @@ Prometheus documentation currently shows three deployment/data patterns:
 | Service / Stack | Container Name | Image | Compose Path | Host Data Paths | Container Paths | Ports / Exposure | Lifecycle Classification | Recommended Action |
 |---|---|---|---|---|---|---|---|---|
 | AI stack | `comfy`, `ollama`, `openwebui`; exited `gemma-192k` | Mixed; see service rows | `/home/alex/stacks/ai/docker-compose.yml` | `/mnt/local/nvme/ai/`, `/mnt/local/ssd/ai/` | See service rows | Traefik routes for ComfyUI, OpenWebUI, and Ollama; Ollama route needs decision | Active documented / Needs access-model decision | Keep; resolve Ollama route drift before automation |
-| ComfyUI | `comfy` | `mmartial/comfyui-nvidia-docker:latest` | `/home/alex/stacks/ai/docker-compose.yml` | `/mnt/local/nvme/ai/services/comfy-mnt`, `/mnt/local/nvme/ai/models`, `/mnt/local/ssd/ai/outputs/comfy` | `/comfy/mnt`, `/comfy/shared-models`, `/comfy/mnt/output` | Traefik route `comfy.home.arpa`; no host port | Active documented / Disposable runtime | Keep; preserve UID/GID 1024:1024 constraints |
+| ComfyUI | `comfy` | `mmartial/comfyui-nvidia-docker:latest` | `/home/alex/stacks/ai/docker-compose.yml` | `/mnt/local/nvme/ai/services/comfy-mnt`, `/mnt/local/nvme/ai/models`, `/mnt/local/ssd/ai/outputs/comfy` | `/comfy/mnt`, `/comfy/shared-models`, `/comfy/mnt/output` | Traefik route `comfy.home.arpa`; no host port | Active documented / Disposable runtime | Keep; preserve UID/GID 1024:1024 constraints; creative production baseline models installed 2026-05-19 |
 | llama.cpp router | `llamacpp-router.service` | Native `llama-server` from `/mnt/local/nvme/ai/runtimes/llama-cpp-turboquant` | `/etc/systemd/system/llamacpp-router.service`; `/mnt/local/nvme/ai/profiles/start-scripts/llama-router.sh`; `/mnt/local/nvme/ai/profiles/llama-router-models.ini` | `/mnt/local/nvme/ai/runtimes`, `/mnt/local/nvme/ai/models/gguf`, `/mnt/local/nvme/ai/profiles` | Not containerized | `172.17.0.1:8084`; local API key | Active documented / Disposable runtime | Keep; `ik_llama.cpp` is available for MTP validation, while `llama-cpp-turboquant` is used for turbo KV cache profiles |
-| llama-swap | `llama-swap.service` | Native `llama-swap` v214 | `/etc/systemd/system/llama-swap.service`; `/mnt/local/nvme/ai/profiles/llama-swap/config.yaml` | `/mnt/local/nvme/ai/runtimes/llama-swap`, `/mnt/local/nvme/ai/runtimes/ik_llama.cpp`, `/mnt/local/nvme/ai/models/gguf` | Not containerized | `172.17.0.1:8085`; local API key | Active documented / Disposable runtime | Keep; no Traefik route documented; exposes one OpenWebUI-visible ID per profile; tested profiles include full-GPU Granite 30B at 80K and MoE CPU/GPU expert splits for GLM 4.6V and Qwen 122B |
+| llama-swap | `llama-swap.service` | Native `llama-swap` v214 | `/etc/systemd/system/llama-swap.service`; `/mnt/local/nvme/ai/profiles/llama-swap/config.yaml` | `/mnt/local/nvme/ai/runtimes/llama-swap`, `/mnt/local/nvme/ai/runtimes/ik_llama.cpp`, `/mnt/local/nvme/ai/models/gguf` | Not containerized | `172.17.0.1:8085`; local API key `LOCAL`; Traefik route `llama-swap.home.arpa` | Active documented / Disposable runtime | Keep; exposes one OpenWebUI-visible ID per profile; tested profiles include full-GPU Granite 30B at 80K and MoE CPU/GPU expert splits for GLM 4.6V and Qwen 122B; MiniMax and Nemotron profiles copied from known-good router presets; Qwen non-MTP profiles replace unsupported MTP profiles |
 | Ollama | `ollama` | `ollama/ollama:latest` | `/home/alex/stacks/ai/docker-compose.yml` | `/mnt/local/nvme/ai/services/ollama`, `/mnt/local/ssd/ai/modelfiles` | `/root/.ollama`, `/modelfiles` | `127.0.0.1:11434 -> 11434/tcp`; live Traefik route `ollama.home.arpa` needs decision | Active documented / Disposable runtime | Keep; decide whether to remove route or update ingress decision |
 | OpenWebUI | `openwebui` | `ghcr.io/open-webui/open-webui:latest` | `/home/alex/stacks/ai/docker-compose.yml` | `/mnt/local/ssd/ai/projects/openwebui` | `/app/backend/data` | Traefik route `openwebui.home.arpa`; no host port | Active documented / Disposable runtime by current docs | Keep; Ollama and llama-swap are enabled; web search disabled in live environment |
 | SearXNG | `searxng`, `searxng-redis` | `searxng/searxng:latest`, `redis:7-alpine` | `/mnt/local/ssd/ai/services/searxng/docker-compose.yml` | `/mnt/local/ssd/ai/services/searxng/searxng`; anonymous Docker volumes for cache and Redis data | `/etc/searxng`, `/var/cache/searxng`, `/data` | Traefik route `searxng.home.arpa`; no host port; IP allowlist label present | Active documented / Persistent runtime config | Keep; complete OpenWebUI integration and limiter validation under issue #72 |
@@ -72,23 +72,23 @@ The following model inventory was collected from live Prometheus state on 2026-0
 
 Ollama model manifests and blobs live under `/mnt/local/nvme/ai/services/ollama/models`.
 
-| Model | Size |
-|---|---|
-| `devstral-small-2:latest` | 15 GB |
-| `qwen3.5:27b` | 17 GB |
-| `dev-assist/glm-agent-16k:latest` | 17 GB |
-| `huihui_ai/glm-4.7-flash-abliterated:q4_K_S` | 17 GB |
-| `dev-assist/r1-architect:latest` | 17 GB |
-| `dev-assist/qwen3-workhorse:latest` | 17 GB |
-| `hf.co/bartowski/DeepSeek-R1-Distill-Qwen-32B-GGUF:IQ4_XS` | 17 GB |
-| `hf.co/unsloth/Qwen3-32B-GGUF:IQ4_XS` | 17 GB |
-| `gpt-oss:20b` | 13 GB |
-| `dev-assist/mistral-general:latest` | 7.1 GB |
-| `dev-assist/qwen35-workhorse:latest` | 17 GB |
-| `dev-assist/qwen-thinking:latest` | 18 GB |
-| `dev-assist/devstral-inline:latest` | 15 GB |
-| `qwen3:30b-a3b-thinking-2507-q4_K_M` | 18 GB |
-| `mistral-nemo:latest` | 7.1 GB |
+| Model | Size | Status |
+|---|---:|---|
+| `devstral-small-2:latest` | 15 GB | Present |
+| `dev-assist/glm-agent-16k:latest` | 17 GB | Present |
+| `huihui_ai/glm-4.7-flash-abliterated:q4_K_S` | 17 GB | Present |
+| `dev-assist/r1-architect:latest` | 17 GB | Present |
+| `gpt-oss:20b` | 13 GB | Present |
+| `dev-assist/mistral-general:latest` | 7.1 GB | Present |
+| `dev-assist/devstral-inline:latest` | 15 GB | Present |
+| `mistral-nemo:latest` | 7.1 GB | Present |
+| `qwen3.5:27b` | 17 GB | Removed on 2026-05-17; replaced by llama.cpp GGUF profiles |
+| `dev-assist/qwen3-workhorse:latest` | 17 GB | Removed on 2026-05-17; replaced by llama.cpp GGUF profiles |
+| `hf.co/bartowski/DeepSeek-R1-Distill-Qwen-32B-GGUF:IQ4_XS` | 17 GB | Removed on 2026-05-17; replaced by llama.cpp GGUF profiles |
+| `hf.co/unsloth/Qwen3-32B-GGUF:IQ4_XS` | 17 GB | Removed on 2026-05-17; replaced by llama.cpp GGUF profiles |
+| `dev-assist/qwen35-workhorse:latest` | 17 GB | Removed on 2026-05-17; replaced by llama.cpp GGUF profiles |
+| `dev-assist/qwen-thinking:latest` | 18 GB | Removed on 2026-05-17; replaced by llama.cpp GGUF profiles |
+| `qwen3:30b-a3b-thinking-2507-q4_K_M` | 18 GB | Removed on 2026-05-17; replaced by llama.cpp GGUF profiles |
 
 ### Shared GGUF Models
 
@@ -97,9 +97,12 @@ Shared GGUF models live under `/mnt/local/nvme/ai/models/gguf`.
 | Model Path | Notes |
 |---|---|
 | `/mnt/local/nvme/ai/models/gguf/gemma-4-31b-it-iq4_xs/gemma-4-31B-it-IQ4_XS.gguf` | Used by exited `gemma-192k` llama.cpp-derived container; added to `llama-swap` as `gemma-4-31b-it` on 2026-05-17 |
-| `/mnt/local/nvme/ai/models/gguf/qwen3.6-35b-a3b-mtp-unsloth-ud-iq4-xs/UD-IQ4_XS/Qwen3.6-35B-A3B-UD-IQ4_XS.gguf` | Installed for llama.cpp on 2026-05-17 |
-| `/mnt/local/nvme/ai/models/gguf/qwen3.5-9b-mtp-unsloth-ud-q4-k-xl/UD-Q4_K_XL/Qwen3.5-9B-UD-Q4_K_XL.gguf` | Installed for llama.cpp on 2026-05-17; duplicate Ollama tag `qwen3.5:9b` removed |
-| `/mnt/local/nvme/ai/models/gguf/qwen3.6-27b-mtp-unsloth-ud-q3-k-xl/UD-Q3_K_XL/Qwen3.6-27B-UD-Q3_K_XL.gguf` | Installed for llama.cpp on 2026-05-17 |
+| `/mnt/local/nvme/ai/models/gguf/qwen3.6-35b-a3b-unsloth-ud-iq4-xs/UD-IQ4_XS/Qwen3.6-35B-A3B-UD-IQ4_XS.gguf` | Non-MTP Qwen replacement configured in `llama-swap` as `qwen3.6-35b-a3b`; 64K context, turbo3/turbo2 KV |
+| `/mnt/local/nvme/ai/models/gguf/qwen3.5-9b-unsloth-ud-q4-k-xl/UD-Q4_K_XL/Qwen3.5-9B-UD-Q4_K_XL.gguf` | Non-MTP Qwen replacement configured in `llama-swap` as `qwen3.5-9b`; 128K context, turbo4/turbo3 KV |
+| `/mnt/local/nvme/ai/models/gguf/qwen3.6-27b-unsloth-ud-q3-k-xl/UD-Q3_K_XL/Qwen3.6-27B-UD-Q3_K_XL.gguf` | Non-MTP Qwen replacement configured in `llama-swap` as `qwen3.6-27b`; 64K context, turbo3/turbo2 KV |
+| `/mnt/local/nvme/ai/models/gguf/qwen3.6-35b-a3b-mtp-unsloth-ud-iq4-xs/UD-IQ4_XS/Qwen3.6-35B-A3B-UD-IQ4_XS.gguf` | Removed on 2026-05-17; MTP variant load validation failed against installed llama.cpp runtimes |
+| `/mnt/local/nvme/ai/models/gguf/qwen3.5-9b-mtp-unsloth-ud-q4-k-xl/UD-Q4_K_XL/Qwen3.5-9B-UD-Q4_K_XL.gguf` | Removed on 2026-05-17; MTP variant load validation failed against installed llama.cpp runtimes |
+| `/mnt/local/nvme/ai/models/gguf/qwen3.6-27b-mtp-unsloth-ud-q3-k-xl/UD-Q3_K_XL/Qwen3.6-27B-UD-Q3_K_XL.gguf` | Removed on 2026-05-17; MTP variant load validation failed against installed llama.cpp runtimes |
 | `/mnt/local/nvme/ai/models/gguf/gemma-4-26b-a4b-it-unsloth-ud-iq4-xs/UD-IQ4_XS/gemma-4-26B-A4B-it-UD-IQ4_XS.gguf` | Installed for llama.cpp on 2026-05-17 |
 | `/mnt/local/nvme/ai/models/gguf/qwen3.5-122b-a10b-unsloth-ud-iq4-xs/UD-IQ4_XS/` | Three-part GGUF set installed for llama.cpp on 2026-05-17 |
 | `/mnt/local/nvme/ai/models/gguf/glm-4.6v-unsloth-ud-q3-k-xl/UD-Q3_K_XL/` | Two-part GGUF set installed for llama.cpp on 2026-05-17 |
@@ -109,6 +112,33 @@ Shared GGUF models live under `/mnt/local/nvme/ai/models/gguf`.
 | `/mnt/local/nvme/ai/models/gguf/minimax-m2-7-unsloth-ud-iq4-xs/UD-IQ4_XS/` | Four-part GGUF set |
 | `/mnt/local/nvme/ai/models/gguf/nemotron-3-super-120b-a12b-unsloth-ud-q2-k-xl/UD-Q2_K_XL/` | Three-part GGUF set |
 | `/mnt/local/nvme/ai/models/gguf/nemotron-3-super-120b-a12b-unsloth-ud-q3-k-xl/UD-Q3_K_XL/` | Three-part GGUF set |
+| `/mnt/local/nvme/ai/models/checkpoints/v1-5-pruned-emaonly-fp16.safetensors` | ComfyUI SD1.5 checkpoint compatibility model installed 2026-05-19; `CheckpointLoaderSimple` smoke test passed |
+| `/mnt/local/nvme/ai/models/diffusion_models/qwen_image_fp8_e4m3fn.safetensors` | ComfyUI image generation baseline installed 2026-05-19 |
+| `/mnt/local/nvme/ai/models/diffusion_models/qwen_image_edit_2509_fp8_e4m3fn.safetensors` | ComfyUI image editing baseline installed 2026-05-19 |
+| `/mnt/local/nvme/ai/models/diffusion_models/wan2.2_ti2v_5B_fp16.safetensors` | ComfyUI video baseline installed 2026-05-19 |
+| `/mnt/local/nvme/ai/models/diffusion_models/Wan2.2-I2V-A14B-HighNoise-Q4_K_M.gguf` | ComfyUI Wan 2.2 I2V quantized high-noise GGUF installed 2026-05-19 for `ComfyUI-GGUF` loaders |
+| `/mnt/local/nvme/ai/models/diffusion_models/Wan2.2-I2V-A14B-LowNoise-Q4_K_M.gguf` | ComfyUI Wan 2.2 I2V quantized low-noise GGUF installed 2026-05-19 for `ComfyUI-GGUF` loaders |
+| `/mnt/local/nvme/ai/models/unet/Wan2.2-I2V-A14B-HighNoise-Q4_K_M.gguf` | ComfyUI-GGUF loader path; symlink to the high-noise GGUF file under `diffusion_models` |
+| `/mnt/local/nvme/ai/models/unet/Wan2.2-I2V-A14B-LowNoise-Q4_K_M.gguf` | ComfyUI-GGUF loader path; symlink to the low-noise GGUF file under `diffusion_models` |
+| `/mnt/local/nvme/ai/models/unet/ltx-2.3-22b-distilled-UD-Q4_K_S.gguf` | ComfyUI LTX 2.3 distilled Dynamic 2.0 GGUF installed 2026-05-19 from `unsloth/LTX-2.3-GGUF`; visible in `UnetLoaderGGUF` |
+| `/mnt/local/nvme/ai/models/text_encoders/qwen_2.5_vl_7b_fp8_scaled.safetensors` | ComfyUI Qwen Image text encoder installed 2026-05-19 |
+| `/mnt/local/nvme/ai/models/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors` | ComfyUI Wan text encoder installed 2026-05-19 |
+| `/mnt/local/nvme/ai/models/text_encoders/gemma-3-12b-it-qat-UD-Q4_K_XL.gguf` | ComfyUI LTX 2.3 Gemma GGUF installed 2026-05-19 from `unsloth/gemma-3-12b-it-qat-GGUF`; validated with `DualCLIPLoaderGGUF` |
+| `/mnt/local/nvme/ai/models/text_encoders/mmproj-BF16.gguf` | ComfyUI LTX 2.3 Gemma projector installed 2026-05-19 from `unsloth/gemma-3-12b-it-qat-GGUF`; stored beside the Gemma GGUF |
+| `/mnt/local/nvme/ai/models/text_encoders/ltx-2.3-22b-distilled_embeddings_connectors.safetensors` | ComfyUI LTX 2.3 distilled text connector installed 2026-05-19; validated with `DualCLIPLoaderGGUF` |
+| `/mnt/local/nvme/ai/models/vae/qwen_image_vae.safetensors` | ComfyUI Qwen Image VAE installed 2026-05-19 |
+| `/mnt/local/nvme/ai/models/vae/wan2.2_vae.safetensors` | ComfyUI Wan VAE installed 2026-05-19 |
+| `/mnt/local/nvme/ai/models/vae/wan_2.1_vae.safetensors` | ComfyUI Wan template compatibility VAE installed 2026-05-19 |
+| `/mnt/local/nvme/ai/models/vae/ltx-2.3-22b-distilled_video_vae.safetensors` | ComfyUI LTX 2.3 distilled video VAE installed 2026-05-19; validated with `VAELoaderKJ` |
+| `/mnt/local/nvme/ai/models/vae/ltx-2.3-22b-distilled_audio_vae.safetensors` | ComfyUI LTX 2.3 distilled audio VAE installed 2026-05-19; validated with `VAELoaderKJ` |
+| `/mnt/local/nvme/ai/models/loras/ltx-2.3-22b-distilled-lora-384.safetensors` | ComfyUI LTX 2.3 distilled LoRA installed 2026-05-19 from `Lightricks/LTX-2.3`; validated with `LoraLoaderModelOnly` |
+| `/mnt/local/nvme/ai/models/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors` | ComfyUI Wan 2.2 I2V LightX2V high-noise LoRA installed 2026-05-19 |
+| `/mnt/local/nvme/ai/models/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors` | ComfyUI Wan 2.2 I2V LightX2V low-noise LoRA installed 2026-05-19 |
+| `/mnt/local/nvme/ai/models/upscale_models/RealESRGAN_x4plus.pth` | ComfyUI upscaler installed 2026-05-19 |
+| `/mnt/local/nvme/ai/models/upscale_models/4x-UltraSharp.pth` | ComfyUI upscaler installed for trial use 2026-05-19; verify license before commercial output |
+| `/mnt/local/nvme/ai/models/latent_upscale_models/ltx-2.3-spatial-upscaler-x2-1.0.safetensors` | ComfyUI LTX 2.3 spatial latent upscaler installed 2026-05-19 from `Lightricks/LTX-2.3`; validated with `LatentUpscaleModelLoader` |
+| `/mnt/local/nvme/ai/models/TTS/Qwen3-TTS/` | Qwen3-TTS 0.6B Base, 1.7B CustomVoice, and 1.7B VoiceDesign installed 2026-05-19 |
+| `/mnt/local/nvme/ai/models/stt/whisper/large-v3-turbo/` | Whisper large-v3-turbo STT model installed 2026-05-19 |
 
 ### Modelfiles
 
@@ -154,7 +184,7 @@ The following items are explicitly requested for this inventory, but current rep
 
 | Service / Stack | Container Name | Image | Compose Path | Host Data Paths | Container Paths | Ports / Exposure | Lifecycle Classification | Recommended Action |
 |---|---|---|---|---|---|---|---|---|
-| Homelable | Needs validation | Needs validation | Needs validation | Needs validation | Needs validation | Needs validation | Active needs validation | Inspect live Docker and add service documentation before cleanup |
+| Homelable | `/opt/homelable/docker-compose.yml` | `homelable-backend-1`, `homelable-frontend-1`, `homelable-mcp-1` built from source | `/opt/homelable/docker-compose.yml` | `homelable_backend_data` Docker volume (SQLite) | `/app/data` (backend) | `0.0.0.0:3000 -> 80/tcp`, `0.0.0.0:8001 -> 8001/tcp`; no Traefik route | Active documented / needs route remediation | Route through Traefik and rotate default secrets; tracked by service doc |
 | SearXNG | See active documented inventory | `searxng/searxng:latest` | `/mnt/local/ssd/ai/services/searxng/docker-compose.yml` | `/mnt/local/ssd/ai/services/searxng/searxng`; anonymous cache volume | `/etc/searxng`, `/var/cache/searxng` | Traefik route `searxng.home.arpa` | Active documented | Tracked under issue #72; OpenWebUI web search still disabled |
 | SearXNG Redis | See active documented inventory | `redis:7-alpine` | `/mnt/local/ssd/ai/services/searxng/docker-compose.yml` | Anonymous Docker volume | `/data` | Docker networks only | Active documented | Dedicated to SearXNG |
 | Gluetun | See validated media stack inventory | `qmcgaw/gluetun:latest` | `/opt/vpn/docker-compose.yml` | `/opt/vpn/gluetun` | `/gluetun` | `127.0.0.1:8080:8080` for qBittorrent WebUI through Gluetun | Active documented | Original requested row reconciled above |

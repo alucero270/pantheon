@@ -19,6 +19,7 @@
 - [[systems/prometheus/services/openwebui]]
 - [[systems/prometheus/services/comfyui]]
 - [[systems/prometheus/services/searxng]]
+- [[systems/prometheus/services/voice-agent]]
 - [[systems/prometheus/services/prowlarr]]
 - [[systems/prometheus/services/qbittorrent]]
 - [[systems/prometheus/services/radarr]]

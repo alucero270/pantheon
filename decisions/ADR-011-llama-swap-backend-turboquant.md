@@ -6,14 +6,15 @@ Accepted
 
 ## Context
 
-Prometheus runs two native llama.cpp-compatible server binaries:
+Prometheus runs three native llama.cpp-compatible server binaries:
 
 | Binary | Fork | Version |
 |---|---|---|
 | `ik_llama.cpp` | ikawrakow/ik_llama.cpp | v4505 (1f8c603d) |
 | `llama-cpp-turboquant` | TheTom/llama-cpp-turboquant | v9080 (e69af784a) |
+| `atomic-llama-cpp-turboquant` | atomicbot-ai/atomic-llama-cpp-turboquant (fork of TheTom) | Built 2026-05-19 from `feature/turboquant-kv-cache` |
 
-These are independent forks of upstream llama.cpp with different feature sets. They are not interchangeable.
+`atomic-llama-cpp-turboquant` is a combined fork that inherits turboquant's KV cache compression and adds support for **Gemma 4 MTP** (`--spec-type mtp --mtp-head`) and **Qwen 3.6 NextN** (`--spec-type nextn --model-draft`). It is the only binary that supports both speculative decoding and turbo KV cache simultaneously.
 
 `llama-swap` is a model-switching proxy that launches a llama.cpp-compatible server process on demand for each model. Its config specifies which binary to use.
 
@@ -80,6 +81,10 @@ Disable the three MTP Qwen model slots in llama-swap config until non-MTP GGUFs 
 - ik_llama.cpp fixes the Granite 4.1 architecture bug → non-MTP granite models could optionally use ik_llama.cpp if turbo cache types are also added there
 - TheTom's turboquant adds MTP GGUF support → MTP models can stay on turboquant, no binary split needed
 
+## Implementation Progress
+
+As of 2026-05-20, the `atomic-llama-cpp-turboquant` binary partially satisfies the "conditions for revisiting" — it provides a single binary with both MTP/NextN and turbo KV cache support, using the AtomicChat combined `*_MTP.gguf` format rather than unsloth SSM-based GGUFs. Qwen 3.6 27B MTP is validated and active (`qwen3.6-27b-mtp`). Qwen 3.6 35B-A3B MTP download is in progress. Gemma 4 MTP support is validated upstream but not yet deployed.
+
 ---
 
 ## Implementation Notes
@@ -87,5 +92,6 @@ Disable the three MTP Qwen model slots in llama-swap config until non-MTP GGUFs 
 - Config: `/mnt/local/nvme/ai/profiles/llama-swap/config.yaml`
 - Backend macro: `tq_server: /mnt/local/nvme/ai/runtimes/llama-cpp-turboquant/build/bin/llama-server`
 - Port range: `startPort: 19080` (avoids `127.0.0.1:18080` held by Traefik container)
-- KV cache: `--cache-type-k turbo4 --cache-type-v turbo3` in `common_args`
+- KV cache: `--cache-type-k turbo3 --cache-type-v turbo2` in `common_args` (downgraded from turbo4/turbo3 on 2026-05-19 after benchmarking showed no quality regression and lower VRAM overhead)
 - llama-swap listens on `172.17.0.1:8085`
+- Matrix DSL solver enables GPU-primary + CPU-agent co-location (2026-05-19)
