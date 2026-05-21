@@ -1,34 +1,23 @@
-# Prometheus Procedures
+# Prometheus Procedures Index
 
 ## Folder Purpose
 
-This folder contains procedures specific to operating, validating, rebuilding, or recovering Prometheus.
-
-## Procedure Documentation Requirements
-
-Each procedure should include:
-
-- purpose
-- prerequisites
-- commands
-- expected results
-- validation steps
-- rollback or recovery notes
-- related docs
+This folder is a compatibility index. Canonical Prometheus procedure documentation now lives under the filesystem-mirrored service or stack folder that owns the procedure.
 
 ## Procedure Index
 
-- [[systems/prometheus/procedures/ai-stack-initialization]]
-- [[systems/prometheus/procedures/comfyui-creative-production-workflow]]
-- [[systems/prometheus/procedures/media-stack-validation]]
-- [[systems/prometheus/procedures/ollama-model-management]]
-- [[systems/prometheus/procedures/searxng-openwebui-integration]]
-- [[systems/prometheus/procedures/voice-agent-bootstrap]]
-- [[systems/prometheus/procedures/reverse-proxy]]
-- [[systems/prometheus/procedures/reverse-proxy-validation]]
+- [[systems/prometheus/opt/stacks/procedures/config-versioning-and-restore]]
+- [[systems/prometheus/opt/stacks/ai/core/procedures/ai-stack-initialization]]
+- [[systems/prometheus/opt/stacks/ai/core/comfyui/procedures/comfyui-creative-production-workflow]]
+- [[systems/prometheus/opt/stacks/ai/core/comfyui/procedures/workflows/comfyui/README]]
+- [[systems/prometheus/opt/stacks/ai/core/ollama/procedures/ollama-model-management]]
+- [[systems/prometheus/opt/stacks/ai/searxng/procedures/searxng-openwebui-integration]]
+- [[systems/prometheus/opt/stacks/ai/voice-agent/procedures/voice-agent-bootstrap]]
+- [[systems/prometheus/opt/stacks/ai/voice-agent/procedures/voice-agent-latency-troubleshooting]]
+- [[systems/prometheus/opt/stacks/ingress/traefik/procedures/reverse-proxy]]
+- [[systems/prometheus/opt/stacks/ingress/traefik/procedures/reverse-proxy-validation]]
+- [[systems/prometheus/opt/stacks/media/vpn/procedures/media-stack-validation]]
 
-## What To Avoid
+## Documentation Requirements
 
-- Do not include destructive commands without warnings.
-- Do not assume live state without evidence.
-- Do not mix architecture decisions into procedural steps.
+Procedures must remain executable and testable, and must not assume live state without evidence.

@@ -34,30 +34,34 @@ Prometheus owns runtime and disposable compute state only. Authoritative data li
 ## Service Ownership
 
 - [[systems/prometheus/inventory]]
-- [[systems/prometheus/services/ai-runtime]]
-- [[systems/prometheus/services/gluetun]]
-- [[systems/prometheus/services/homelable]]
-- [[systems/prometheus/services/qbittorrent]]
-- [[systems/prometheus/services/prowlarr]]
-- [[systems/prometheus/services/radarr]]
-- [[systems/prometheus/services/sonarr]]
-- [[systems/prometheus/services/jellyfin]]
-- [[systems/prometheus/services/ollama]]
-- [[systems/prometheus/services/openwebui]]
-- [[systems/prometheus/services/comfyui]]
-- [[systems/prometheus/services/searxng]]
-- [[systems/prometheus/services/voice-agent]]
-- [[systems/prometheus/services/traefik]]
-- [[systems/prometheus/services/3d-scanning]]
+- [[systems/prometheus/architecture/filesystem-layout]]
+- [[systems/prometheus/opt/README]]
+- [[systems/prometheus/mnt/README]]
+- [[systems/prometheus/opt/stacks/ai/core/ai-runtime/ai-runtime]]
+- [[systems/prometheus/opt/stacks/media/vpn/gluetun/gluetun]]
+- [[systems/prometheus/opt/stacks/homelable/homelable]]
+- [[systems/prometheus/opt/stacks/media/vpn/qbittorrent/qbittorrent]]
+- [[systems/prometheus/opt/stacks/media/vpn/prowlarr/prowlarr]]
+- [[systems/prometheus/opt/stacks/media/vpn/radarr/radarr]]
+- [[systems/prometheus/opt/stacks/media/vpn/sonarr/sonarr]]
+- [[systems/prometheus/opt/stacks/media/jellyfin/jellyfin]]
+- [[systems/prometheus/opt/stacks/ai/core/ollama/ollama]]
+- [[systems/prometheus/opt/stacks/ai/core/openwebui/openwebui]]
+- [[systems/prometheus/opt/stacks/ai/core/comfyui/comfyui]]
+- [[systems/prometheus/opt/stacks/ai/searxng/searxng]]
+- [[systems/prometheus/opt/stacks/ai/voice-agent/voice-agent]]
+- [[systems/prometheus/opt/stacks/ingress/traefik/traefik]]
+- [[systems/prometheus/opt/stacks/ai/core/3d-scanning/3d-scanning]]
 
 ## Procedure Index
 
-- [[systems/prometheus/procedures/ai-stack-initialization]]
-- [[systems/prometheus/procedures/media-stack-validation]]
-- [[systems/prometheus/procedures/ollama-model-management]]
-- [[systems/prometheus/procedures/voice-agent-bootstrap]]
-- [[systems/prometheus/procedures/reverse-proxy]]
-- [[systems/prometheus/procedures/reverse-proxy-validation]]
+- [[systems/prometheus/opt/stacks/procedures/config-versioning-and-restore]]
+- [[systems/prometheus/opt/stacks/ai/core/procedures/ai-stack-initialization]]
+- [[systems/prometheus/opt/stacks/media/vpn/procedures/media-stack-validation]]
+- [[systems/prometheus/opt/stacks/ai/core/ollama/procedures/ollama-model-management]]
+- [[systems/prometheus/opt/stacks/ai/voice-agent/procedures/voice-agent-bootstrap]]
+- [[systems/prometheus/opt/stacks/ingress/traefik/procedures/reverse-proxy]]
+- [[systems/prometheus/opt/stacks/ingress/traefik/procedures/reverse-proxy-validation]]
 
 ## Automation Classification
 
@@ -124,7 +128,7 @@ It is rebuildable at any time.
 - Prometheus must not expose admin interfaces to USER or GUEST VLANs
 - Prometheus must be manageable only from MGMT VLAN
 
-🔒 **Decision (Locked)**  
+🔒 **Decision (Locked)**
 Prometheus is disposable compute. Data persistence lives on Atlas.
 
 ---

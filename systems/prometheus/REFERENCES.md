@@ -14,20 +14,21 @@
 
 ## Services
 
-- [[systems/prometheus/services/ai-runtime]]
-- [[systems/prometheus/services/llamacpp]]
-- [[systems/prometheus/services/llama-swap]]
-- [[systems/prometheus/services/ollama]]
-- [[systems/prometheus/services/openwebui]]
-- [[systems/prometheus/services/comfyui]]
-- [[systems/prometheus/services/searxng]]
-- [[systems/prometheus/services/traefik]]
-- [[systems/prometheus/services/3d-scanning]]
+- [[systems/prometheus/opt/stacks/ai/core/ai-runtime/ai-runtime]]
+- [[systems/prometheus/opt/stacks/ai/core/llamacpp/llamacpp]]
+- [[systems/prometheus/opt/stacks/ai/core/llama-swap/llama-swap]]
+- [[systems/prometheus/opt/stacks/ai/core/ollama/ollama]]
+- [[systems/prometheus/opt/stacks/ai/core/openwebui/openwebui]]
+- [[systems/prometheus/opt/stacks/ai/core/comfyui/comfyui]]
+- [[systems/prometheus/opt/stacks/ai/searxng/searxng]]
+- [[systems/prometheus/opt/stacks/ingress/traefik/traefik]]
+- [[systems/prometheus/opt/stacks/ai/core/3d-scanning/3d-scanning]]
 
 ## Procedures
 
-- [[systems/prometheus/procedures/ai-stack-initialization]]
-- [[systems/prometheus/procedures/ollama-model-management]]
-- [[systems/prometheus/procedures/searxng-openwebui-integration]]
-- [[systems/prometheus/procedures/reverse-proxy]]
-- [[systems/prometheus/procedures/reverse-proxy-validation]]
+- [[systems/prometheus/opt/stacks/procedures/config-versioning-and-restore]]
+- [[systems/prometheus/opt/stacks/ai/core/procedures/ai-stack-initialization]]
+- [[systems/prometheus/opt/stacks/ai/core/ollama/procedures/ollama-model-management]]
+- [[systems/prometheus/opt/stacks/ai/searxng/procedures/searxng-openwebui-integration]]
+- [[systems/prometheus/opt/stacks/ingress/traefik/procedures/reverse-proxy]]
+- [[systems/prometheus/opt/stacks/ingress/traefik/procedures/reverse-proxy-validation]]

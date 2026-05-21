@@ -1,0 +1,24 @@
+http:
+  services:
+    voice-agent:
+      loadBalancer:
+        servers:
+          - url: "http://172.17.0.1:7860"
+
+  routers:
+    voice-agent-http:
+      rule: "Host(`voice-agent.home.arpa`)"
+      entryPoints:
+        - web
+      middlewares:
+        - redirect-to-https@file
+      service: voice-agent
+
+    voice-agent-https:
+      rule: "Host(`voice-agent.home.arpa`)"
+      entryPoints:
+        - websecure
+      tls: {}
+      middlewares:
+        - security-headers@file
+      service: voice-agent

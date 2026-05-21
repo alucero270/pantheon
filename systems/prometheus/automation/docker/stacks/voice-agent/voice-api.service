@@ -1,0 +1,26 @@
+[Unit]
+Description=Local Voice API - Whisper STT + Qwen3-TTS
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/home/alex/stacks/voice-agent/venv/bin/python3 /home/alex/stacks/voice-agent/voice_api_server.py
+WorkingDirectory=/home/alex/stacks/voice-agent
+Restart=on-failure
+RestartSec=5
+User=alex
+Environment=PYTHONUNBUFFERED=1
+Environment=VOICE_API_HOST=127.0.0.1
+Environment=VOICE_API_PORT=8002
+Environment=VOICE_API_DEVICE=cuda:0
+Environment=VOICE_API_DTYPE=bfloat16
+Environment=QWEN3_TTS_PATH=/mnt/local/nvme/ai/models/TTS/Qwen3-TTS/Qwen3-TTS-12Hz-1.7B-CustomVoice
+Environment=WHISPER_PATH=/mnt/local/nvme/ai/models/stt/whisper/large-v3-turbo
+Environment=QWEN_SPEAKER=Ryan
+Environment=QWEN_LANGUAGE=English
+Environment=QWEN_TTS_BACKEND=hybrid
+Environment=QWEN_PREWARM_TEXT=OK.
+Environment=QWEN_ATTN_IMPLEMENTATION=flash_attention_2
+
+[Install]
+WantedBy=multi-user.target

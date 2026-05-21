@@ -29,6 +29,58 @@ The goal is not experimentation for its own sake. The goal is a documented, rebu
 
 ---
 
+# Live Infrastructure Exception Protocol
+
+Pantheon is documentation-first, but some troubleshooting and configuration work may require touching live infrastructure. Live changes are allowed only when the user explicitly asks for live work in the current task.
+
+When live infrastructure work is explicitly approved:
+
+- Confirm the owning system, service, live host path, tracking issue, and expected success criteria before changing anything.
+- Read the relevant service doc, `config/README.md`, procedure folder, architecture docs, and tracking issue before the first live command.
+- Capture read-only current state first: service status, active config path, relevant logs, exposed ports, mounted paths, and current Git status.
+- Create a timestamped rollback snapshot beside any live config before editing it.
+- Never move secrets, private keys, tokens, transcripts, recordings, private voice samples, generated user data, or host-only sensitive values into Git.
+- Make one live change at a time. Validate it before making the next change.
+- Update the owning service doc, `config/README.md`, procedure, or tracking issue at each meaningful step with:
+  - command or file changed
+  - host path
+  - reason for the change
+  - validation result
+  - rollback path
+  - remaining `Needs validation` items
+- Do not stack multiple patches, service restarts, config rewrites, or dependency changes without a documentation checkpoint.
+- Stop immediately if the observed state diverges from the documented plan in a way that could weaken security, break rollback, or risk authoritative data.
+- At a stopping point, leave a clean handoff: Git status, live service status, validation result, rollback snapshot name, updated docs/issues, and next safe action.
+
+## Git Checkpoints for Live Work
+
+Git should be used as the safety rail for documented state, not as a dumping ground for live secrets or machine-local residue.
+
+- Commit or open a PR only when the user asks, or when the task explicitly includes publishing the live-work checkpoint.
+- Before any commit or PR, ensure the repo contains only sanitized docs, sanitized config examples, procedures, and validation notes.
+- Keep live rollback snapshots on the host unless a sanitized version is intentionally promoted to Git.
+- Prefer small commits at completed experiments or safe stopping points: one coherent config/procedure change plus its validation notes.
+- Do not commit partially validated live changes as final state. Use `Needs validation` and link the tracking issue.
+
+---
+
+# Investigation Hygiene and Cleanup
+
+Pantheon troubleshooting should leave a usable trail, not an archaeological dig.
+
+- Do not create loose temporary scripts, benchmark files, logs, patches, or generated artifacts at the repository root.
+- Put exploratory artifacts under a clearly named folder near the owning system, such as `systems/<system>/procedures/<topic>-artifacts/`, or under an existing test/validation folder when one exists.
+- Name investigation files for the question being tested, not for the tool that created them. Prefer names like `tts-latency-profile.py` over `tmp_patch3.py`.
+- Before starting a new troubleshooting direction, write down the current hypothesis, command or script, observed result, and next decision in the relevant procedure, runbook, or issue.
+- Keep one reusable validation script when possible. Remove or consolidate superseded scratch scripts before handing work back.
+- If root-level scratch files are discovered, stop and classify them before continuing: preserve useful evidence in the owning system folder, summarize findings in docs or the tracking issue, and remove only files that are clearly disposable and not user-authored.
+- Do not mark a service as deployed or validated because a component test passed. Use `Needs validation` until the documented end-to-end success criteria are met.
+- For latency or performance work, record baseline numbers, changed variables, and before/after measurements. Do not stack multiple patches without a checkpoint.
+- If live-host changes were made during troubleshooting, document the exact host path, process or service name, command used, rollback path, and validation status.
+- End each investigation with a cleanup pass: `git status --short`, root artifact check, doc consistency check, and a short summary of what is known, unknown, and next.
+
+---
+
 # Routing Table
 
 | Task | Go to | Read First | Template Source | Notes |

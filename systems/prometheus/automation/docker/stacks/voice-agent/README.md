@@ -1,26 +1,41 @@
-# Prometheus Voice Agent Stack Scaffold
+# Prometheus Voice Agent Stack
 
 ## Status
 
-status: scaffold for issue #110
+status: installed validation baseline for issue #110
 
 ## Purpose
 
-This folder starts the install path for the planned [[systems/prometheus/services/voice-agent]].
+This folder contains the repository baseline for the installed [[systems/prometheus/opt/stacks/ai/voice-agent/voice-agent]] validation path on [[systems/prometheus]].
 
-The first deployable component is Speaches, an OpenAI-compatible speech API service for validating local STT/TTS before wiring a full Pipecat voice loop.
+The current baseline is a Python runtime, not a Docker production deployment:
 
-This scaffold does not modify the live AI stack at `/home/alex/stacks/ai/docker-compose.yml`.
+```text
+Pipecat browser/WebRTC runner
+-> Local Voice API on 127.0.0.1:8002
+-> [[systems/prometheus/opt/stacks/ai/core/llama-swap/llama-swap]]
+-> Local Voice API on 127.0.0.1:8002
+```
 
-## Target Components
+The Local Voice API wraps:
 
-| Component | Status | Notes |
-|---|---|---|
-| Speaches | Scaffolded | First STT/TTS API validation service |
-| Pipecat | Manual quickstart pending | Use `uv` and Pipecat CLI on Prometheus |
-| llama-swap | Existing live dependency | Preferred OpenAI-compatible LLM endpoint |
-| Ollama | Existing live fallback | Fallback LLM runtime |
-| Traefik route | Not scaffolded yet | Add only after local validation succeeds |
+- Whisper large-v3-turbo for STT
+- Qwen3-TTS 1.7B-CustomVoice for TTS, preferably with `QWEN_TTS_BACKEND=hybrid`
+
+The old Speaches compose scaffold remains in this folder as an optional fallback experiment. It is not the current installed path.
+
+## Files
+
+| File | Purpose |
+|---|---|
+| `voice_api_server.py` | Clean OpenAI-compatible STT/TTS wrapper with timing headers and `/health` |
+| `bot.py` | Pipecat bot using the development runner with SmallWebRTC or Daily arguments |
+| `validate_pipeline.py` | Component latency measurement for Voice API and llama-swap |
+| `voice-api.service` | Candidate systemd unit for the Local Voice API |
+| `start-voice-api.sh` | Minimal launcher for `/home/alex/stacks/voice-agent` |
+| `traefik-voice-agent.yml` | Candidate dynamic Traefik route; not approved until access/auth are validated |
+| `compose.yml` | Legacy Speaches scaffold; not current runtime |
+| `compose.cuda.yml` | Legacy Speaches GPU override |
 
 ## Secret Handling
 
@@ -29,143 +44,132 @@ This scaffold does not modify the live AI stack at `/home/alex/stacks/ai/docker-
 - Do not commit voice samples, transcripts, recordings, or generated user data.
 - Keep `.env.example` sanitized.
 
-## Required Local File
+## Local Runtime Paths
 
-Create this file locally on Prometheus:
-
-```text
-systems/prometheus/automation/docker/stacks/voice-agent/.env
-```
-
-Start from:
-
-```bash
-cp .env.example .env
-```
-
-Validate image choice before first live run:
-
-- CUDA: `ghcr.io/speaches-ai/speaches:latest-cuda`
-- CPU: `ghcr.io/speaches-ai/speaches:latest-cpu`
-
-The base scaffold defaults to CPU so it can be smoke-tested without GPU passthrough. Use `compose.cuda.yml` with `SPEACHES_IMAGE=ghcr.io/speaches-ai/speaches:latest-cuda` after Docker GPU access is validated on Prometheus.
-
-## Network Model
-
-The scaffold binds Speaches to localhost:
+Installed validation path on Prometheus:
 
 ```text
-127.0.0.1:8000 -> speaches:8000
+/home/alex/stacks/voice-agent
+/home/alex/stacks/voice-agent/venv
+/home/alex/stacks/voice-agent/voice_api_server.py
+/home/alex/stacks/voice-agent/pipecat-quickstart/pipecat-quickstart/server/bot.py
 ```
 
-This is intentional for the first install pass. Do not expose Speaches through Traefik until the voice-agent access model is validated.
-
-Pipecat should call Speaches over the Docker network when containerized:
+Model paths:
 
 ```text
-http://speaches:8000/v1
+/mnt/local/nvme/ai/models/stt/whisper/large-v3-turbo
+/mnt/local/nvme/ai/models/TTS/Qwen3-TTS/Qwen3-TTS-12Hz-1.7B-CustomVoice
 ```
 
-OpenWebUI can use the same endpoint only if it shares a Docker network with Speaches or a separate approved route is created.
+## Voice API Baseline
 
-## Speaches Validation
-
-Run only when explicitly approved on Prometheus:
+Start manually on Prometheus:
 
 ```bash
-docker compose --env-file .env -f compose.yml config
-docker compose --env-file .env -f compose.yml up -d speaches
-docker compose --env-file .env -f compose.yml ps
-curl http://127.0.0.1:${SPEACHES_PORT:-8000}/v1/models
+cd /home/alex/stacks/voice-agent
+venv/bin/python3 voice_api_server.py
 ```
 
-CUDA validation form:
+Candidate systemd install, only when approved:
 
 ```bash
-SPEACHES_IMAGE=ghcr.io/speaches-ai/speaches:latest-cuda docker compose --env-file .env -f compose.yml -f compose.cuda.yml config
-SPEACHES_IMAGE=ghcr.io/speaches-ai/speaches:latest-cuda docker compose --env-file .env -f compose.yml -f compose.cuda.yml up -d speaches
+sudo cp voice-api.service /etc/systemd/system/voice-api.service
+sudo systemctl daemon-reload
+sudo systemctl enable --now voice-api.service
+```
+
+Health check:
+
+```bash
+curl http://127.0.0.1:8002/health
+```
+
+## Pipecat Baseline
+
+Run the Pipecat development runner on Prometheus:
+
+```bash
+cd /home/alex/stacks/voice-agent/pipecat-quickstart/pipecat-quickstart/server
+uv run bot.py -t webrtc --host 0.0.0.0 --port 7860
+```
+
+Expected local runner URL:
+
+```text
+http://localhost:7860/client/
+```
+
+Use an SSH tunnel for current manual validation:
+
+```bash
+ssh -N -L 7860:127.0.0.1:7860 alex@prometheus
+```
+
+Browsers allow microphone/WebRTC APIs on localhost. LAN HTTP URLs such as `http://prometheus:7860/client/` may fail or show fatal client errors until HTTPS access is configured.
+
+Use the Pipecat documentation before changing runner, transport, or service configuration.
+
+## Latency Validation
+
+Run component timing before patching anything:
+
+```bash
+cd /home/alex/stacks/voice-agent
+venv/bin/python3 validate_pipeline.py
+```
+
+Optional STT timing with a sanitized local WAV file:
+
+```bash
+venv/bin/python3 validate_pipeline.py --stt-audio /tmp/voice-agent-test.wav
 ```
 
 Expected result:
 
-- The `speaches` container starts.
-- `/v1/models` responds.
-- Model downloads may occur on first STT/TTS use.
+- Voice API health responds.
+- TTS full generation time is measured.
+- LLM response time is measured.
+- STT response time is measured only when a test audio file is provided.
 
-## Pipecat Bootstrap
+Continue with [[systems/prometheus/opt/stacks/ai/voice-agent/procedures/voice-agent-latency-troubleshooting]].
 
-Pipecat is not shipped as a stable container in this scaffold. Bootstrap it on Prometheus with `uv` so the generated quickstart can be inspected before containerization.
+Clean baseline from 2026-05-21:
 
-Install prerequisites:
+- Voice API startup: about 9.8 seconds.
+- Warm TTS: about 8.3 seconds for a short sentence.
+- STT: about 1.8 seconds on generated test speech.
+- Warm CPU `granite-4.1-8b` LLM response: about 4.0 seconds.
+- Pipecat client page: HTTP 200 on `/client/`.
+- Pipecat voice-loop logs showed TTS TTFB around 10.4 seconds and user-to-bot latency around 16.2 seconds.
 
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-uv tool install pipecat-ai-cli
-```
+Follow-up diagnosis:
 
-Create a local quickstart project outside authoritative data paths:
-
-```bash
-mkdir -p /mnt/local/ssd/ai/services/voice-agent
-cd /mnt/local/ssd/ai/services/voice-agent
-pipecat init quickstart
-```
-
-Use SmallWebRTC for the home-lab path. Pipecat documentation describes SmallWebRTC as the self-hosted/local-development transport.
-
-Before running the bot, adapt the generated `.env` and bot service configuration to use:
-
-```text
-STT base URL: http://127.0.0.1:8000/v1 or http://speaches:8000/v1
-LLM base URL: http://127.0.0.1:8085/v1
-TTS base URL: http://127.0.0.1:8000/v1 or http://speaches:8000/v1
-```
-
-Then run:
-
-```bash
-uv sync
-uv run bot.py
-```
-
-Expected Pipecat local URL:
-
-```text
-http://localhost:7860/client
-```
-
-## OpenWebUI STT Bridge
-
-This is optional and separate from the realtime voice-agent path.
-
-If OpenWebUI should use Speaches for STT during validation, the documented OpenWebUI settings are:
-
-```text
-Speech-to-Text Engine: OpenAI
-API Base URL: http://speaches:8000/v1
-API Key: non-empty placeholder
-Model: Systran/faster-distil-whisper-large-v3
-```
-
-This requires Docker network reachability from OpenWebUI to Speaches and must be validated before changing live OpenWebUI settings.
+- `flash_attn` is installed and `QWEN_ATTN_IMPLEMENTATION=flash_attention_2` loads successfully.
+- FlashAttention reduced tiny utterances to about 3 seconds but normal short replies still measured about 8 seconds.
+- `non_streaming_mode=False` did not improve normal short replies in this local setup.
+- GPU utilization during long Qwen3-TTS generation stayed low, suggesting the bottleneck is the local Qwen/HF generation path rather than raw GPU capacity.
+- `granite-4.1-8b-gpu` fits beside Qwen3-TTS and is the preferred current voice-agent LLM candidate.
+- `qwen3-tts-triton` / `faster-qwen3-tts` hybrid backend reduced warmed TTS to about 0.38 seconds for `OK.`, about 1.07 seconds for a short sentence, and about 2.67 seconds for a 105-character Pipecat reply.
+- End-to-end Pipecat through a localhost SSH tunnel validated STT, Granite GPU LLM, and Qwen hybrid TTS in one voice turn.
 
 ## Known Limitations
 
-- This compose file is not proof that the service is deployed.
-- Image tags are floating placeholders and must be pinned after validation.
-- Pipecat quickstart generation still needs to run on Prometheus.
-- Qwen3-TTS is not wired yet; start with Kokoro/Piper via Speaches.
-- Traefik labels are intentionally omitted until the local voice loop works.
-- WebRTC access may require additional network validation.
+- Production HTTPS access for the WebRTC client is not validated.
+- Realtime testing originally reported 10-30 second response delays on the stock Qwen3-TTS path.
+- Qwen3-TTS stock latency must not be addressed by patching model internals unless a documented profiling pass justifies it.
+- The Local Voice API is host-local only by default.
+- The Traefik route is a candidate only; access, authentication, DNS, and HTTPS microphone behavior need validation.
+- Speaches compose files are legacy scaffold artifacts and are not evidence of a deployed service.
 
 ## References
 
-- [[systems/prometheus/services/voice-agent]]
-- [[systems/prometheus/procedures/voice-agent-bootstrap]]
-- [[systems/prometheus/services/openwebui]]
-- [[systems/prometheus/services/llama-swap]]
-- [[systems/prometheus/services/ollama]]
-- [Pipecat quickstart](https://docs.pipecat.ai/pipecat/get-started/quickstart)
-- [Pipecat transport selection](https://docs.pipecat.ai/client/concepts/choosing-a-transport)
-- [Speaches installation](https://speaches.ai/installation/)
-- [Speaches OpenWebUI integration](https://speaches.ai/usage/open-webui-integration/)
+- [[systems/prometheus/opt/stacks/ai/voice-agent/voice-agent]]
+- [[systems/prometheus/opt/stacks/ai/voice-agent/procedures/voice-agent-bootstrap]]
+- [[systems/prometheus/opt/stacks/ai/voice-agent/procedures/voice-agent-latency-troubleshooting]]
+- [[systems/prometheus/opt/stacks/ai/core/openwebui/openwebui]]
+- [[systems/prometheus/opt/stacks/ai/core/llama-swap/llama-swap]]
+- [[systems/prometheus/opt/stacks/ai/core/ollama/ollama]]
+- [Pipecat development runner](https://docs.pipecat.ai/server/utilities/runner/guide)
+- [Pipecat SmallWebRTCTransport](https://docs.pipecat.ai/server/services/transport/small-webrtc)
+- [Qwen3-TTS README](https://github.com/QwenLM/Qwen3-TTS)

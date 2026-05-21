@@ -23,9 +23,9 @@ Direct SSH revalidation for the AI, Traefik, and SearXNG state succeeded on 2026
 - [[systems/prometheus/architecture/storage-authority-map]]
 - [[decisions/ADR-010-container-lifecycle-policy-prometheus]]
 - [[systems/prometheus/services/README]]
-- [[systems/prometheus/procedures/ai-stack-initialization]]
-- [[systems/prometheus/procedures/reverse-proxy]]
-- [[systems/prometheus/procedures/reverse-proxy-validation]]
+- [[systems/prometheus/opt/stacks/ai/core/procedures/ai-stack-initialization]]
+- [[systems/prometheus/opt/stacks/ingress/traefik/procedures/reverse-proxy]]
+- [[systems/prometheus/opt/stacks/ingress/traefik/procedures/reverse-proxy-validation]]
 - [[automation/policies/automation-classification]]
 
 ## Current Path Drift
@@ -34,12 +34,12 @@ Prometheus documentation currently shows three deployment/data patterns:
 
 | Path Pattern | Evidence | Current Meaning | Drift / Risk | Recommended Action |
 |---|---|---|---|---|
-| `/opt/traefik` | [[systems/prometheus/services/traefik]], [[systems/prometheus/procedures/reverse-proxy]] | Reverse proxy deployment and config root | Separate from `~/stacks` and `/mnt/local`; may be intentional for infra ingress | Keep until compose/config source of truth is validated |
+| `/opt/traefik` | [[systems/prometheus/opt/stacks/ingress/traefik/traefik]], [[systems/prometheus/opt/stacks/ingress/traefik/procedures/reverse-proxy]] | Reverse proxy deployment and config root | Separate from `~/stacks` and `/mnt/local`; may be intentional for infra ingress | Keep until compose/config source of truth is validated |
 | `/opt/vpn/docker-compose.yml` | Validated live state for Milestone 9, [[systems/prometheus/automation/docker/stacks/media/README]] | Live media stack compose file | Git scaffold may differ from live compose until approved reconciliation | Keep; reconcile through media scaffold and validation procedure |
-| `/home/alex/stacks/ai/docker-compose.yml` | Validated live state on 2026-05-17, [[systems/prometheus/services/comfyui]] | AI Docker Compose stack location | Home-relative path; owner and backup posture need decision | Normalize only after standard layout and rollback are decided |
-| `/mnt/local/nvme/ai/...` | [[systems/prometheus/procedures/ai-stack-initialization]], [[systems/prometheus/services/ollama]], [[systems/prometheus/services/comfyui]], [[systems/prometheus/services/llamacpp]], [[systems/prometheus/services/llama-swap]] | Fast local runtime/model/service data | Disposable local data, but still operationally important | Keep as local runtime path; validate ownership and mount state |
-| `/mnt/local/ssd/ai/...` | [[systems/prometheus/procedures/ai-stack-initialization]], [[systems/prometheus/services/openwebui]], [[systems/prometheus/services/comfyui]] | Write-heavy local project/output data | Disposable local data; output handling needs validation | Keep as local runtime/output path; validate backup expectation |
-| `/mnt/local/ssd/ai/services/searxng/docker-compose.yml` | Validated live state on 2026-05-17, [[systems/prometheus/services/searxng]] | SearXNG compose and config root | Compose source lives under local AI service data | Keep until standard layout and rollback are decided |
+| `/home/alex/stacks/ai/docker-compose.yml` | Validated live state on 2026-05-17, [[systems/prometheus/opt/stacks/ai/core/comfyui/comfyui]] | AI Docker Compose stack location | Home-relative path; owner and backup posture need decision | Normalize only after standard layout and rollback are decided |
+| `/mnt/local/nvme/ai/...` | [[systems/prometheus/opt/stacks/ai/core/procedures/ai-stack-initialization]], [[systems/prometheus/opt/stacks/ai/core/ollama/ollama]], [[systems/prometheus/opt/stacks/ai/core/comfyui/comfyui]], [[systems/prometheus/opt/stacks/ai/core/llamacpp/llamacpp]], [[systems/prometheus/opt/stacks/ai/core/llama-swap/llama-swap]] | Fast local runtime/model/service data | Disposable local data, but still operationally important | Keep as local runtime path; validate ownership and mount state |
+| `/mnt/local/ssd/ai/...` | [[systems/prometheus/opt/stacks/ai/core/procedures/ai-stack-initialization]], [[systems/prometheus/opt/stacks/ai/core/openwebui/openwebui]], [[systems/prometheus/opt/stacks/ai/core/comfyui/comfyui]] | Write-heavy local project/output data | Disposable local data; output handling needs validation | Keep as local runtime/output path; validate backup expectation |
+| `/mnt/local/ssd/ai/services/searxng/docker-compose.yml` | Validated live state on 2026-05-17, [[systems/prometheus/opt/stacks/ai/searxng/searxng]] | SearXNG compose and config root | Compose source lives under local AI service data | Keep until standard layout and rollback are decided |
 
 ## Lifecycle Classifications
 

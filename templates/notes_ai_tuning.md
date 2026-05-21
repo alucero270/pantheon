@@ -11,14 +11,14 @@ last_updated: 2026-02-02
 Capture tuning decisions and troubleshooting outcomes for the local AI stack on [[systems/prometheus]].
 
 This file is **notes**, not an authoritative procedure.
-For the rebuild steps, see [[systems/prometheus/procedures/ai-stack-initialization]].
+For the rebuild steps, see [[systems/prometheus/opt/stacks/ai/core/procedures/ai-stack-initialization]].
 
 ---
 
 ## Current stack (high level)
-- Runtime: [[systems/prometheus/services/ollama]]
-- UI: [[systems/prometheus/services/openwebui]]
-- Image gen: [[systems/prometheus/services/comfyui]]
+- Runtime: [[systems/prometheus/opt/stacks/ai/core/ollama/ollama]]
+- UI: [[systems/prometheus/opt/stacks/ai/core/openwebui/openwebui]]
+- Image gen: [[systems/prometheus/opt/stacks/ai/core/comfyui/comfyui]]
 - Access pattern: localhost-only + SSH tunnels
 
 ---
@@ -133,4 +133,3 @@ Status: candidates for removal from the stack if they remain unstable / redundan
 - Confirm the best long-term model set (likely: Qwen + Deepseek + Mistral-Nemo).
 - Decide whether we need an explicit “router” service later or keep routing as policy/config first.
 - Document RAG/CAG plan + where it plugs into the stack.
-
