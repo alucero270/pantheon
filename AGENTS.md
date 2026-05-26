@@ -65,6 +65,32 @@ Git should be used as the safety rail for documented state, not as a dumping gro
 - Commit every completed iterative documentation checkpoint before starting the next live configuration change, unless the user explicitly pauses the experiment before validation is possible.
 - Keep raw logs, scratch files, rollback snapshots, local config residue, and generated artifacts out of commits unless they have been sanitized and intentionally promoted into the owning system folder.
 
+### Iteration Log Format
+
+Use this structure for each live-work experiment or tuning attempt:
+
+```md
+### Iteration N: Short descriptive name
+
+Hypothesis:
+- What should improve, fail, or become clearer.
+
+Change:
+- Exact setting, file, command, or host path changed.
+
+Validation:
+- Command, probe, workload, or observation used to test the change.
+
+Result:
+- Measured outcome, error, pass/fail state, rollback path, and relevant numbers.
+
+Decision:
+- Keep, revert, adjust, or defer. Include the next safe action.
+
+Content note:
+- Optional: what this teaches for future writeups, runbooks, or public-facing content.
+```
+
 ---
 
 # Investigation Hygiene and Cleanup
