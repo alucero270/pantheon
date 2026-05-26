@@ -61,6 +61,9 @@ Git should be used as the safety rail for documented state, not as a dumping gro
 - Keep live rollback snapshots on the host unless a sanitized version is intentionally promoted to Git.
 - Prefer small commits at completed experiments or safe stopping points: one coherent config/procedure change plus its validation notes.
 - Do not commit partially validated live changes as final state. Use `Needs validation` and link the tracking issue.
+- For iterative live-work experiments, use this loop: propose the next change, document the hypothesis and planned validation, test the change, save sanitized results, commit the documentation checkpoint, then repeat.
+- Commit every completed iterative documentation checkpoint before starting the next live configuration change, unless the user explicitly pauses the experiment before validation is possible.
+- Keep raw logs, scratch files, rollback snapshots, local config residue, and generated artifacts out of commits unless they have been sanitized and intentionally promoted into the owning system folder.
 
 ---
 
