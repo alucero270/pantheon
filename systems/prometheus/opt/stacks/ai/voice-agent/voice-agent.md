@@ -37,7 +37,8 @@ OpenWebUI remains the primary human-facing chat, model-testing, and admin UI unl
 - Pipecat bot path: `/home/alex/stacks/voice-agent/pipecat-quickstart/pipecat-quickstart/server/bot.py`
 - Voice API server path: `/home/alex/stacks/voice-agent/voice_api_server.py`
 - Init system: `nohup` (systemd service unit provided but needs `sudo` to install)
-- Compose scaffold: `systems/prometheus/automation/docker/stacks/voice-agent/compose.yml` (not used; Python-based deployment instead)
+- Sanitized config: [[systems/prometheus/opt/stacks/ai/voice-agent/config/README]]
+- Legacy compose scaffold: [[systems/prometheus/opt/stacks/ai/voice-agent/config/compose]] (not used; Python-based deployment instead)
 - Dependency: [[systems/prometheus/opt/stacks/ai/core/llama-swap/llama-swap]], [[systems/prometheus/opt/stacks/ingress/traefik/traefik]]
 
 ## Data Classification
@@ -53,7 +54,9 @@ The Voice Agent must not become the sole holder of prompts, transcripts, recordi
 | Path | Read/Write | Description |
 |---|---|---|
 | `/home/alex/stacks/voice-agent` | RW | Voice agent runtime: API server, bot.py, venv, logs |
-| `/home/alex/stacks/voice-agent/voice_api_server.log` | RW | Local Voice API runtime log |
+| `/home/alex/stacks/voice-agent/logs/voice_api_server.log` | RW | Local Voice API runtime log |
+| `/home/alex/stacks/voice-agent/logs/pipecat_bot.log` | RW | Pipecat runner runtime log |
+| `/home/alex/stacks/voice-agent/artifacts/root-cleanup-20260521-215604` | R | Preserved cleanup archive for old root logs, generated WAVs, rogue scratch files, and ad-hoc tests |
 | `/mnt/local/nvme/ai/models/stt/whisper/large-v3-turbo` | RO | Installed Whisper large-v3-turbo model (HuggingFace transformers format) |
 | `/mnt/local/nvme/ai/models/TTS/Qwen3-TTS` | RO | Installed Qwen3-TTS models (CustomVoice, VoiceDesign, Base) |
 
@@ -132,6 +135,8 @@ print('LLM:', 'OK' if json.loads(resp.read())['choices'][0]['message']['content'
 ## Known Issues
 
 - Validation tracked under GitHub issue #110.
+- Follow-up optimization, feature exploration, and access hardening are tracked under GitHub issue #115.
+- On-demand deployment and teardown automation is tracked under GitHub issue #116.
 - Realtime testing initially reported large pauses and 10-30 second response delays; clean baseline on 2026-05-21 measured the stock Qwen3-TTS path as the primary bottleneck with about 8-10 seconds TTS latency for short responses.
 - `QWEN_TTS_BACKEND=hybrid` with qwen3-tts-triton / faster-qwen3-tts reduced validated TTS latency to about 0.38 seconds for `OK.`, about 1.07 seconds for a short sentence, and about 2.67 seconds for a 105-character Pipecat reply.
 - LAN HTTP access to the SmallWebRTC client can fail because browsers require HTTPS or localhost for microphone/WebRTC APIs. Use an SSH tunnel to `localhost:7860` for manual validation until Traefik HTTPS access is documented and approved.
@@ -147,7 +152,8 @@ print('LLM:', 'OK' if json.loads(resp.read())['choices'][0]['message']['content'
 - Services: [[systems/prometheus/opt/stacks/ai/core/ai-runtime/ai-runtime]], [[systems/prometheus/opt/stacks/ai/core/openwebui/openwebui]], [[systems/prometheus/opt/stacks/ai/core/llama-swap/llama-swap]], [[systems/prometheus/opt/stacks/ai/core/ollama/ollama]], [[systems/prometheus/opt/stacks/ai/core/comfyui/comfyui]], [[systems/prometheus/opt/stacks/ingress/traefik/traefik]]
 - Procedures: [[systems/prometheus/opt/stacks/ai/voice-agent/procedures/voice-agent-bootstrap]], [[systems/prometheus/opt/stacks/ai/voice-agent/procedures/voice-agent-latency-troubleshooting]], [[systems/prometheus/opt/stacks/ai/core/comfyui/procedures/comfyui-creative-production-workflow]]
 - Architecture: [[systems/prometheus/architecture/compose-registry]], [[systems/network/architecture/ingress-flow]]
-- Automation: [[systems/prometheus/automation/docker/stacks/voice-agent/README]]
+- Config: [[systems/prometheus/opt/stacks/ai/voice-agent/config/README]], [[systems/prometheus/opt/stacks/ai/voice-agent/config/runtime-baseline]]
+- Docker automation placeholder: [[systems/prometheus/automation/docker/stacks/voice-agent/README]]
 
 ## External References
 

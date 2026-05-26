@@ -10,7 +10,7 @@ The files are retained as investigation evidence only. They are not an approved 
 
 - Several scripts directly patch files under `/home/alex/stacks/voice-agent/venv/lib/python3.12/site-packages`.
 - Do not run patch scripts from this folder unless the exact change has been reviewed and documented in [[systems/prometheus/opt/stacks/ai/voice-agent/procedures/voice-agent-latency-troubleshooting]].
-- Prefer the clean validation script at `systems/prometheus/automation/docker/stacks/voice-agent/validate_pipeline.py` for new timing work.
+- Prefer the clean validation script at `systems/prometheus/opt/stacks/ai/voice-agent/config/validate_pipeline.py` for new timing work.
 - Preserve useful findings by summarizing them in [[systems/prometheus/opt/stacks/ai/voice-agent/procedures/voice-agent-latency-troubleshooting]] or issue #110.
 
 ## Cleanup Status

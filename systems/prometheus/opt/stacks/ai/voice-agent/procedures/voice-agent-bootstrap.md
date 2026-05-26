@@ -41,7 +41,7 @@ Current validation stack:
 | LLM | [[systems/prometheus/opt/stacks/ai/core/llama-swap/llama-swap]] | Existing OpenAI-compatible model switching endpoint |
 | Fallback LLM | [[systems/prometheus/opt/stacks/ai/core/ollama/ollama]] | Existing local LLM runtime |
 | TTS | Local Voice API with Qwen3-TTS 1.7B-CustomVoice | Installed higher-quality local TTS candidate |
-| Fallback TTS | Kokoro, Piper, XTTS, or Speaches | Candidate if Qwen3-TTS latency remains too high |
+| Fallback TTS | Supertonic 3, Kokoro, Piper, XTTS, or Speaches | Candidate if Qwen3-TTS latency remains too high or GPU-free TTS is preferred |
 
 ## Constraints
 
@@ -82,7 +82,7 @@ Status: Needs validation.
 Repository baseline:
 
 ```text
-systems/prometheus/automation/docker/stacks/voice-agent
+systems/prometheus/opt/stacks/ai/voice-agent/config
 ```
 
 Prometheus staged copy:

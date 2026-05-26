@@ -26,7 +26,7 @@ Current hypothesis:
 - The qwen3-tts-triton / faster-qwen3-tts hybrid backend may be fast enough for realtime validation without patching installed `site-packages`.
 - Browser fatal errors during SmallWebRTC testing can come from LAN HTTP access because microphone/WebRTC APIs require HTTPS or localhost.
 
-Status: Partially validated on 2026-05-21; end-to-end service still needs a documented HTTPS/access decision before production use.
+Status: Partially validated on 2026-05-21; end-to-end service still needs a documented HTTPS/access decision before production use. Follow-up optimization, feature exploration, and access hardening are tracked under GitHub issue #115. On-demand deployment and teardown automation is tracked under GitHub issue #116.
 
 ## 2026-05-21 Clean Baseline
 
@@ -51,6 +51,7 @@ Live validation on Prometheus after restoring `qwen-tts==0.1.1` and removing the
 | Installed faster TTS fallback | No `piper`, `kokoro`, Coqui `TTS`, or `faster_qwen3_tts` package found in the voice-agent environment |
 | Granite 8B GPU | `granite-4.1-8b-gpu` fits beside Qwen3-TTS; warm test about 0.19-0.36s |
 | Qwen 9B GPU | `qwen3.5-9b-gpu` fits beside Qwen3-TTS; warm test about 0.95s and returned empty content in the quick voice prompt test |
+| Supertonic 3 | `supertonic==1.3.1` installed in `/home/alex/stacks/voice-agent/venv` on 2026-05-24; model load and synthesis not tested because GPU was in active use |
 
 Conclusion:
 
@@ -69,7 +70,7 @@ Live validation on Prometheus after installing `qwen3-tts-triton==0.2.0` and `fa
 |---|---|
 | Voice API backend | `QWEN_TTS_BACKEND=hybrid` using `TritonFasterRunner` |
 | Startup | About 14.1 seconds total; Qwen hybrid load about 6.8 seconds; prewarm/CUDA graph capture about 4.9 seconds; Whisper load about 2.4 seconds |
-| TTS `OK.` | About 0.38 seconds through `validate_pipeline.py` |
+| TTS `OK.` | About 0.38 seconds through `systems/prometheus/opt/stacks/ai/voice-agent/config/validate_pipeline.py` |
 | TTS short sentence | About 1.07 seconds for `This is a short voice latency test.` |
 | TTS normal sentence | About 1.9 seconds for `I am here and ready to help.` |
 | Pipecat startup reply | About 2.65 seconds TTS generation for a 100-character reply |
@@ -297,7 +298,7 @@ Qwen3TTSModel.from_pretrained(
 )
 ```
 
-The repository Voice API already uses the same basic `device_map` and `dtype` shape in `voice_api_server.py`.
+The repository Voice API at `systems/prometheus/opt/stacks/ai/voice-agent/config/voice_api_server.py` already uses the same basic `device_map` and `dtype` shape.
 
 2. Check whether FlashAttention 2 is available before using it.
 
@@ -381,11 +382,12 @@ After baseline measurement:
 | STT is slow | Consider faster-whisper or a separate STT service |
 | LLM is slow | Switch to a faster llama-swap model for voice turns |
 | Pipecat adds large overhead after components are fast | Debug transport, VAD, aggregators, and runner configuration |
-| Qwen3-TTS remains too slow for short turns | Evaluate Piper, Kokoro, XTTS, or another local TTS fallback |
+| Qwen3-TTS remains too slow for short turns or consumes too much GPU memory | Evaluate Supertonic 3, Piper, Kokoro, XTTS, or another local TTS fallback |
 
 Current decision pressure:
 
 - Qwen3-TTS remains the preferred current custom-voice path if the hybrid backend stays stable.
+- Supertonic 3 is now an installed but unvalidated fallback candidate. It may offer CPU-friendly local TTS, but custom voice/style creation needs validation before it can replace Qwen3-TTS CustomVoice.
 - Piper or Kokoro can remain fallback candidates, but custom voice/cloning requirements make them less direct replacements than fixing the Qwen runtime path.
 - Keep FlashAttention enabled for the Qwen validation service, but do not expect it to solve realtime latency by itself.
 
