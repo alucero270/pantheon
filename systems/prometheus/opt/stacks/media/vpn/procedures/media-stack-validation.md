@@ -14,7 +14,8 @@ Validate the Prometheus media stack without deleting data, pruning Docker object
 
 - Access required: SSH to `alex@prometheus`
 - Systems impacted: [[systems/prometheus]], [[systems/atlas]]
-- Live compose path: `/opt/vpn/docker-compose.yml`
+- Live compose path: `/opt/stacks/media/vpn/compose.yml`
+- Legacy compose path: `/opt/vpn/docker-compose.yml` symlink
 - Approved restart scope, if needed: Gluetun, qBittorrent, Prowlarr, Radarr, Sonarr only
 - Test downloads must be legal/public test content only
 
@@ -35,7 +36,7 @@ prometheus
 2. Confirm the live media compose file exists.
 
 ```bash
-test -f /opt/vpn/docker-compose.yml && echo "media compose present"
+test -f /opt/stacks/media/vpn/compose.yml && echo "media compose present"
 ```
 
 3. Validate the active containers and exposure.
@@ -161,11 +162,11 @@ Expected result:
 
 If an approved media-stack config edit fails:
 
-1. Revert only the media-stack change in `/opt/vpn/docker-compose.yml`.
+1. Revert only the media-stack change in `/opt/stacks/media/vpn/compose.yml`.
 2. Restart only the approved affected service:
 
 ```bash
-docker compose -f /opt/vpn/docker-compose.yml up -d gluetun qbittorrent prowlarr radarr sonarr
+docker compose -f /opt/stacks/media/vpn/compose.yml up -d gluetun qbittorrent prowlarr radarr sonarr
 ```
 
 3. Re-run the validation steps above.

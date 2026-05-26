@@ -17,7 +17,8 @@ It is not authoritative storage.
 
 - System: [[systems/prometheus]]
 - Runtime: Docker Compose
-- Compose path: `/mnt/local/ssd/ai/services/searxng/docker-compose.yml`
+- Compose path: `/opt/stacks/ai/searxng/compose.yml`
+- Legacy compose path: `/mnt/local/ssd/ai/services/searxng/docker-compose.yml` symlink
 - Containers:
   - `searxng`
   - `searxng-redis`
@@ -36,7 +37,7 @@ It is not authoritative storage.
 
 | Path | Read/Write | Description |
 |---|---|---|
-| `/mnt/local/ssd/ai/services/searxng/docker-compose.yml` | R | Live compose file |
+| `/opt/stacks/ai/searxng/compose.yml` | R | Live compose file |
 | `/mnt/local/ssd/ai/services/searxng/.env` | R | Local environment file; contains secrets; do not commit |
 | `/mnt/local/ssd/ai/services/searxng/searxng/settings.yml` | RW | SearXNG settings mounted at `/etc/searxng` |
 | Docker anonymous volume for `/var/cache/searxng` | RW | SearXNG cache |
@@ -163,7 +164,7 @@ docker logs --tail=100 searxng
 | Owning domain | Prometheus |
 | Host/system/device owner | Prometheus |
 | Runtime type | Docker metasearch service plus Redis |
-| Source of truth | `/mnt/local/ssd/ai/services/searxng/docker-compose.yml`; issue #72 |
+| Source of truth | `/opt/stacks/ai/searxng/compose.yml`; issue #72 |
 | Config path | `/mnt/local/ssd/ai/services/searxng/searxng/settings.yml`; `/mnt/local/ssd/ai/services/searxng/.env` |
 | Data path | Anonymous Docker volumes for cache and Redis data |
 | Secret requirements | Do not commit `.env` or `server.secret_key` |

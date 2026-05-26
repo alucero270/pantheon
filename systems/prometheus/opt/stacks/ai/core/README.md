@@ -2,7 +2,14 @@
 
 ## Purpose
 
-This folder documents the core Prometheus AI stack currently deployed from `/home/alex/stacks/ai/docker-compose.yml`.
+This folder documents the core Prometheus AI stack.
+
+| Field | Value |
+|---|---|
+| Current compose file | `/opt/stacks/ai/core/compose.yml` |
+| Legacy compatibility path | `/home/alex/stacks/ai/docker-compose.yml` symlink |
+| Runtime/data paths | `/mnt/local/nvme/ai`, `/mnt/local/ssd/ai` |
+| Status | Active live stack; normalized on 2026-05-21 |
 
 ## Services
 
@@ -17,3 +24,4 @@ This folder documents the core Prometheus AI stack currently deployed from `/hom
 ## Stack Procedures
 
 - [[systems/prometheus/opt/stacks/ai/core/procedures/ai-stack-initialization]]
+- [[systems/prometheus/opt/stacks/procedures/stack-source-normalization-2026-05-21]]

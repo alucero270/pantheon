@@ -16,7 +16,8 @@ Radarr manages movie automation for the Prometheus media stack and writes final 
 - System: [[systems/prometheus]]
 - Container / VM: `radarr`
 - Runtime: Docker Compose
-- Live compose path: `/opt/vpn/docker-compose.yml`
+- Live compose path: `/opt/stacks/media/vpn/compose.yml`
+- Legacy compose path: `/opt/vpn/docker-compose.yml` symlink
 
 ## Data Classification
 
@@ -94,7 +95,7 @@ Radarr manages movie automation for the Prometheus media stack and writes final 
 | Owning domain | Prometheus |
 | Host/system/device owner | Prometheus |
 | Runtime type | Docker Compose service |
-| Source of truth | Live `/opt/vpn/docker-compose.yml`; sanitized scaffold documented at [[systems/prometheus/automation/docker/stacks/media/README]] |
+| Source of truth | Live `/opt/stacks/media/vpn/compose.yml`; sanitized scaffold documented at [[systems/prometheus/automation/docker/stacks/media/README]] |
 | Config path | `/opt/arr/radarr` |
 | Data path | `/mnt/atlas/managed-media/movies` authoritative on Atlas; `/opt/torrents/downloads` local staging |
 | Secret requirements | API keys and download-client credentials stay outside Git |

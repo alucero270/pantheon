@@ -14,7 +14,8 @@ This service is part of the Prometheus AI stack and is treated as **disposable c
 - **Runtime:** Docker Engine + NVIDIA Container Toolkit
 - **GPU:** NVIDIA RTX 4000 Ada Generation
 - **Image:** `mmartial/comfyui-nvidia-docker:latest`
-- **Compose path:** `/home/alex/stacks/ai/docker-compose.yml`
+- **Compose path:** `/opt/stacks/ai/core/compose.yml`
+- **Legacy compose path:** `/home/alex/stacks/ai/docker-compose.yml` symlink
 
 ---
 
@@ -168,7 +169,7 @@ docker logs --tail=50 comfy
 | Host/system/device owner | Prometheus |
 | Runtime type | GPU/Docker workload |
 | Source of truth | [[decisions/ADR-006-comfyui-storage-constraints]] and [[systems/prometheus/opt/stacks/ai/core/procedures/ai-stack-initialization]] |
-| Config path | `/home/alex/stacks/ai/docker-compose.yml` |
+| Config path | `/opt/stacks/ai/core/compose.yml` |
 | Data path | `/mnt/local/nvme/ai/services/comfy-mnt`, `/mnt/local/nvme/ai/models`, `/mnt/local/ssd/ai/outputs/comfy` |
 | Secret requirements | Do not commit secrets |
 | Network ports | Container `8188/tcp`; Traefik route `comfy.home.arpa`; no host port |

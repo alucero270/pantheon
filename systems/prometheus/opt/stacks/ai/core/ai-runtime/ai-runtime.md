@@ -114,16 +114,16 @@ The following AI services are currently deployed on Prometheus:
 
 ## Current Compose and Ingress State
 
-Live state observed on 2026-05-17:
+Live state observed on 2026-05-17 and Compose source paths normalized on 2026-05-21:
 
 | Service | Container | Image | Compose Path | Access |
 |---|---|---|---|---|
-| ComfyUI | `comfy` | `mmartial/comfyui-nvidia-docker:latest` | `/home/alex/stacks/ai/docker-compose.yml` | Traefik route `comfy.home.arpa`; no host port |
+| ComfyUI | `comfy` | `mmartial/comfyui-nvidia-docker:latest` | `/opt/stacks/ai/core/compose.yml` | Traefik route `comfy.home.arpa`; no host port |
 | llama.cpp router | `llamacpp-router.service` | Native `llama-server` from `/mnt/local/nvme/ai/runtimes/llama-cpp-turboquant` | `/mnt/local/nvme/ai/profiles/start-scripts/llama-router.sh`; `/mnt/local/nvme/ai/profiles/llama-router-models.ini` | `172.17.0.1:8084`; local API key |
 | llama-swap | `llama-swap.service` | Native `llama-swap` v214; MTP/NextN models use `/mnt/local/nvme/ai/runtimes/atomic-llama-cpp-turboquant/build/bin/llama-server` | `/mnt/local/nvme/ai/profiles/llama-swap/config.yaml` | `172.17.0.1:8085`; local API key |
-| Ollama | `ollama` | `ollama/ollama:latest` | `/home/alex/stacks/ai/docker-compose.yml` | Host port `127.0.0.1:11434`; live Traefik route `ollama.home.arpa` needs decision |
-| OpenWebUI | `openwebui` | `ghcr.io/open-webui/open-webui:latest` | `/home/alex/stacks/ai/docker-compose.yml` | Traefik route `openwebui.home.arpa`; no host port |
-| SearXNG | `searxng`, `searxng-redis` | `searxng/searxng:latest`, `redis:7-alpine` | `/mnt/local/ssd/ai/services/searxng/docker-compose.yml` | Traefik route `searxng.home.arpa`; no host port |
+| Ollama | `ollama` | `ollama/ollama:latest` | `/opt/stacks/ai/core/compose.yml` | Host port `127.0.0.1:11434`; live Traefik route `ollama.home.arpa` needs decision |
+| OpenWebUI | `openwebui` | `ghcr.io/open-webui/open-webui:latest` | `/opt/stacks/ai/core/compose.yml` | Traefik route `openwebui.home.arpa`; no host port |
+| SearXNG | `searxng`, `searxng-redis` | `searxng/searxng:latest`, `redis:7-alpine` | `/opt/stacks/ai/searxng/compose.yml` | Traefik route `searxng.home.arpa`; no host port |
 
 Ollama's live Traefik route is drift from [[decisions/ADR-007-centralized-ingress-on-prometheus]], which says Ollama remains internal-only and is not routed.
 
@@ -150,7 +150,7 @@ These integrations must respect data authority rules.
 | Host/system/device owner | Prometheus |
 | Runtime type | AI runtime service group |
 | Source of truth | [[systems/prometheus/opt/stacks/ai/core/procedures/ai-stack-initialization]], service docs, and validated compose paths |
-| Config path | `/home/alex/stacks/ai/docker-compose.yml`; `/mnt/local/ssd/ai/services/searxng/docker-compose.yml`; service-specific config paths |
+| Config path | `/opt/stacks/ai/core/compose.yml`; `/opt/stacks/ai/searxng/compose.yml`; service-specific config paths |
 | Data path | Prometheus local disposable/persistent-runtime storage by service |
 | Secret requirements | Do not commit secrets or model-provider tokens |
 | Network ports | See individual service docs; current user-facing access is primarily through Traefik |

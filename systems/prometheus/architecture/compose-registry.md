@@ -26,32 +26,26 @@ Direct SSH revalidation from this workstation succeeded on 2026-05-16. The media
 
 ## Standard Layout Status
 
-The final standard layout for Prometheus compose files is `Needs decision`.
+The standard Compose source layout is `/opt/stacks`.
 
-Current documentation shows compose and service state split across:
+The first live normalization pass completed on 2026-05-21. Legacy compose paths remain as symlinks to the normalized files so existing operator commands keep working while docs and automation converge.
 
-- `/opt/...`
-- `~/stacks/...`
-- `/home/alex/stacks/...`
-- `/mnt/local/...`
+Do not remove legacy symlinks until:
 
-Do not move stacks until:
-
-- each compose file is confirmed
-- each container and volume is mapped
-- host and container data paths are documented
-- rollback steps exist
-- ownership of the standard layout is decided
+- operator workflows are updated
+- automation references `/opt/stacks`
+- rollback is no longer needed for the transition
+- service owners confirm no external tooling depends on the legacy paths
 
 ## Compose Registry
 
 | Stack Name | Compose Path | Services | Owner / System | Status | Startup Priority | Standard Layout Action | Notes |
 |---|---|---|---|---|---|---|---|
-| AI stack | `/home/alex/stacks/ai/docker-compose.yml` | ComfyUI, Ollama, OpenWebUI; `gemma-192k` is an exited llama.cpp-derived service from the same compose project | [[systems/prometheus|Prometheus]] | Active documented from live validation on 2026-05-17 | Medium | Candidate to move after standard layout decision | Live compose uses Traefik labels for ComfyUI, OpenWebUI, and Ollama. Ollama route needs decision because ADR-007 says it remains internal-only. |
-| Reverse proxy | `/opt/traefik/docker-compose.yml` | Traefik | [[systems/prometheus|Prometheus]] | Active documented from live validation on 2026-05-17 | High | Keep or standardize after ingress rollback is proven | Live image `traefik:v3.6.1`; ports `80`, `443`, `8443`, and localhost `18080 -> 8080`. |
-| Homelable | `/opt/homelable/docker-compose.yml` | Backend, frontend, MCP | [[systems/prometheus|Prometheus]] | Active documented from live validation on 2026-05-18 | Low | Keep in place; service doc exists | Live build v1.13.0 from source; see [[systems/prometheus/opt/stacks/homelable/homelable]] |
-| SearXNG | `/mnt/local/ssd/ai/services/searxng/docker-compose.yml` | SearXNG, Redis | [[systems/prometheus|Prometheus]] | Active documented from live validation on 2026-05-17 | Medium | Candidate to move after AI/search stack layout is decided | Dedicated Redis container `searxng-redis`; Traefik route `searxng.home.arpa`; tracked by issue #72. |
-| VPN / media egress | `/opt/vpn/docker-compose.yml` | Gluetun, qBittorrent, Prowlarr, Radarr, Sonarr | [[systems/prometheus|Prometheus]] | Active documented from validated live state | Medium | Keep in place until standard layout decision and recovery procedure exist | Live media compose path. Secrets stay outside Git. qBittorrent is localhost-only through Gluetun; Prowlarr/Radarr/Sonarr broad binds are temporary current state. |
+| AI stack | `/opt/stacks/ai/core/compose.yml` | ComfyUI, Ollama, OpenWebUI; `gemma-192k` is an exited llama.cpp-derived service from the same compose project | [[systems/prometheus|Prometheus]] | Active documented / normalized 2026-05-21 | Medium | Normalized; keep legacy symlink | Legacy path `/home/alex/stacks/ai/docker-compose.yml` points to normalized source. Live compose uses Traefik labels for ComfyUI, OpenWebUI, and Ollama. Ollama route needs decision because ADR-007 says it remains internal-only. |
+| Reverse proxy | `/opt/stacks/ingress/traefik/compose.yml` | Traefik | [[systems/prometheus|Prometheus]] | Active documented / normalized 2026-05-21 | High | Normalized; keep legacy symlink | Legacy path `/opt/traefik/docker-compose.yml` points to normalized source. Live image `traefik:v3.6.1`; ports `80`, `443`, `8443`, and localhost `18080 -> 8080`. Dashboard localhost validation still needs follow-up. |
+| Homelable | `/opt/stacks/homelable/compose.yml` | Backend, frontend, MCP | [[systems/prometheus|Prometheus]] | Active documented / normalized 2026-05-21 | Low | Normalized; keep legacy symlink | Legacy path `/opt/homelable/docker-compose.yml` points to normalized source. Build contexts still use `/opt/homelable`; see [[systems/prometheus/opt/stacks/homelable/homelable]]. |
+| SearXNG | `/opt/stacks/ai/searxng/compose.yml` | SearXNG, Redis | [[systems/prometheus|Prometheus]] | Active documented / normalized 2026-05-21 | Medium | Normalized; keep legacy symlink | Legacy path `/mnt/local/ssd/ai/services/searxng/docker-compose.yml` points to normalized source. Runtime config remains under `/mnt/local/ssd/ai/services/searxng`; tracked by issue #72. |
+| VPN / media egress | `/opt/stacks/media/vpn/compose.yml` | Gluetun, qBittorrent, Prowlarr, Radarr, Sonarr | [[systems/prometheus|Prometheus]] | Active documented / normalized 2026-05-21 | Medium | Normalized; keep legacy symlink | Legacy path `/opt/vpn/docker-compose.yml` points to normalized source. Secrets stay outside Git. qBittorrent is localhost-only through Gluetun; Prowlarr/Radarr/Sonarr broad binds are temporary current state. |
 | Jellyfin | Needs validation | Jellyfin | [[systems/prometheus|Prometheus]] | Needs validation | Medium | Candidate to move after media inventory is validated | Repo does not yet prove live compose path on Prometheus. Track service doc at [[systems/prometheus/opt/stacks/media/jellyfin/jellyfin]]. |
 | Anemoi | `/home/alex/stacks/ai/anemoi/deploy/docker/docker-compose.yml` | `anemoi`; related containers need validation | [[systems/prometheus|Prometheus]] | Questionable / exited needs validation | Low | Cleanup candidate after ownership and data paths are validated | User-reported compose path; do not delete until live container and volume ownership are known. |
 
@@ -78,11 +72,11 @@ Compose files found inside Docker/containerd runtime storage are artifacts, not 
 
 | Stack | Should Move? | Reason | Required Before Move |
 |---|---|---|---|
-| AI stack | Needs decision | Current path is home-relative and may not be ideal for automation | Resolve Ollama route drift, standard layout, owner, data paths, and rollback |
-| Reverse proxy | Needs decision | `/opt/traefik` may be appropriate for ingress | Confirm backup/restore process |
-| Homelable | Active documented | Service doc created on 2026-05-18 from live validation ([systems/prometheus/opt/stacks/homelable/homelable]] | Resolve Traefik route and rotate default secrets |
-| SearXNG | Needs decision | Path is under local AI service data; may mix compose source with runtime data | Complete service/procedure docs, OpenWebUI integration validation, and rollback |
-| VPN / media egress | Needs decision | Live path is validated, but standard layout and recovery procedure are not finalized | Keep `/opt/vpn/docker-compose.yml` for now; document VPN boundary, media paths, secrets handling, and rollback before any move |
+| AI stack | Normalized | Current source path is `/opt/stacks/ai/core/compose.yml` | Resolve Ollama route drift before security closeout |
+| Reverse proxy | Normalized | Current source path is `/opt/stacks/ingress/traefik/compose.yml` | Validate dashboard localhost access and backup/restore process |
+| Homelable | Normalized | Current source path is `/opt/stacks/homelable/compose.yml`; app source remains `/opt/homelable` | Resolve Traefik route and rotate default secrets |
+| SearXNG | Normalized | Current source path is `/opt/stacks/ai/searxng/compose.yml`; runtime config remains `/mnt/local/ssd/ai/services/searxng` | Complete OpenWebUI integration validation |
+| VPN / media egress | Normalized | Current source path is `/opt/stacks/media/vpn/compose.yml`; secret `.env` remains under `/opt/vpn` | Reduce broad binds and complete end-to-end import validation |
 | Anemoi | Cleanup candidate | Requested as questionable/exited | Validate owner, data paths, and whether it is still needed |
 
 ## Read-Only Validation Commands
@@ -103,5 +97,5 @@ find /mnt/local -maxdepth 8 -name 'docker-compose.yml' -o -name 'compose.yml'
 - Do not move compose files from this registry alone.
 - Do not edit compose files found in overlay or snapshot paths.
 - Do not prune anonymous volumes until ownership is known.
-- Do not standardize stack layout until the standard layout is decided.
+- Do not remove legacy symlinks until operator workflows and automation are updated.
 - Do not convert user-reported paths into confirmed facts without validation.

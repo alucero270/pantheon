@@ -2,13 +2,15 @@
 
 ## Purpose
 
-This folder mirrors the desired normalized AI stack area for [[systems/prometheus]].
+This folder mirrors the normalized AI stack area for [[systems/prometheus]].
 
-## Current Live Roots
+## Current Live Compose Sources
 
-- `/home/alex/stacks/ai/docker-compose.yml`
-- `/mnt/local/ssd/ai/services/searxng/docker-compose.yml`
-- `/home/alex/stacks/voice-agent/compose.yml`
+- `/opt/stacks/ai/core/compose.yml`
+- `/opt/stacks/ai/searxng/compose.yml`
+- `/opt/stacks/ai/voice-agent/compose.yml`
+
+Legacy source paths remain as symlinks for compatibility.
 
 ## Service Areas
 

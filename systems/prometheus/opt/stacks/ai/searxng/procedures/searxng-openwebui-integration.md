@@ -30,7 +30,7 @@ This procedure is partly validated:
 | Purpose | Path |
 |---|---|
 | Compose root | `/mnt/local/ssd/ai/services/searxng` |
-| Compose file | `/mnt/local/ssd/ai/services/searxng/docker-compose.yml` |
+| Compose file | `/opt/stacks/ai/searxng/compose.yml` |
 | Local env file | `/mnt/local/ssd/ai/services/searxng/.env` |
 | SearXNG config mount | `/mnt/local/ssd/ai/services/searxng/searxng` |
 | Settings file | `/mnt/local/ssd/ai/services/searxng/searxng/settings.yml` |
@@ -175,7 +175,7 @@ Live logs warn that `redis.url` is deprecated in favor of `valkey.url`. This is 
 
 If OpenWebUI search configuration is changed and breaks the UI:
 
-1. Revert the OpenWebUI environment changes in `/home/alex/stacks/ai/docker-compose.yml`.
+1. Revert the OpenWebUI environment changes in `/opt/stacks/ai/core/compose.yml`.
 2. Redeploy only the AI stack with explicit approval.
 3. Confirm OpenWebUI loads at `https://openwebui.home.arpa`.
 4. Leave SearXNG running if its independent validation still passes.

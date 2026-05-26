@@ -8,6 +8,7 @@ Container runtime storage on the local SSD.
 
 - `/mnt/local/ssd/container-runtime/containerd`
 - `/var/lib/containerd` mounted from `/mnt/local/ssd/container-runtime/containerd`
+- Docker data-root remains `/mnt/local/nvme/docker` as of 2026-05-21.
 
 ## Related Paths
 
@@ -16,4 +17,4 @@ Container runtime storage on the local SSD.
 
 ## Status
 
-Current live runtime path. Any consolidation with `/mnt/local/nvme/docker` requires a separate approved migration plan.
+Current live containerd runtime path. Any Docker consolidation from `/mnt/local/nvme/docker` to `/mnt/local/ssd/container-runtime/docker` requires a separate approved migration plan.

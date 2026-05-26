@@ -20,7 +20,8 @@ It is consumed primarily by [[systems/prometheus/opt/stacks/ai/core/openwebui/op
 - **Container / VM:** Docker container (`ollama`)
 - **Runtime:** Docker Engine + NVIDIA Container Toolkit
 - **Image:** `ollama/ollama:latest`
-- **Compose path:** `/home/alex/stacks/ai/docker-compose.yml`
+- **Compose path:** `/opt/stacks/ai/core/compose.yml`
+- **Legacy compose path:** `/home/alex/stacks/ai/docker-compose.yml` symlink
 
 ---
 
@@ -133,7 +134,7 @@ docker exec ollama ollama list
 | Owning domain | Prometheus |
 | Host/system/device owner | Prometheus |
 | Runtime type | Docker/API runtime |
-| Source of truth | `/home/alex/stacks/ai/docker-compose.yml`; [[systems/prometheus/opt/stacks/ai/core/procedures/ai-stack-initialization]] |
+| Source of truth | `/opt/stacks/ai/core/compose.yml`; [[systems/prometheus/opt/stacks/ai/core/procedures/ai-stack-initialization]] |
 | Config path | `/mnt/local/ssd/ai/modelfiles` for Modelfiles |
 | Data path | `/mnt/local/nvme/ai/services/ollama` |
 | Secret requirements | Do not commit secrets |

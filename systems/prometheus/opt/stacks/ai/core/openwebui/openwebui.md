@@ -25,7 +25,8 @@ OpenWebUI is not authoritative storage.
 - System: [[systems/prometheus]]
 - Runtime: Docker container (`openwebui`)
 - Image: `ghcr.io/open-webui/open-webui:latest`
-- Compose path: `/home/alex/stacks/ai/docker-compose.yml`
+- Compose path: `/opt/stacks/ai/core/compose.yml`
+- Legacy compose path: `/home/alex/stacks/ai/docker-compose.yml` symlink
 - Dependency: [[systems/prometheus/opt/stacks/ai/core/ollama/ollama]], [[systems/prometheus/opt/stacks/ai/core/llama-swap/llama-swap]]
 
 ## Network & Access
@@ -126,7 +127,7 @@ curl -k --resolve openwebui.home.arpa:443:127.0.0.1 https://openwebui.home.arpa/
 | Owning domain | Prometheus |
 | Host/system/device owner | Prometheus |
 | Runtime type | Docker web UI |
-| Source of truth | `/home/alex/stacks/ai/docker-compose.yml`; documentation reconciliation tracked by issue #84 |
+| Source of truth | `/opt/stacks/ai/core/compose.yml`; documentation reconciliation tracked by issue #84 |
 | Config path | `/mnt/local/ssd/ai/projects/openwebui` |
 | Data path | `/mnt/local/ssd/ai/projects/openwebui` |
 | Secret requirements | Do not commit secrets, API keys, exports, or user data |

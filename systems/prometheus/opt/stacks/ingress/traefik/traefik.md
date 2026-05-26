@@ -27,7 +27,8 @@ This design aligns with:
 - Container / VM: Docker container (Traefik)
 - Runtime: Docker Compose
 - Image: `traefik:v3.6.1`
-- Compose path: `/opt/traefik/docker-compose.yml`
+- Compose path: `/opt/stacks/ingress/traefik/compose.yml`
+- Legacy compose path: `/opt/traefik/docker-compose.yml` symlink
 - Deploy path: /opt/traefik
 
 ## Data Classification

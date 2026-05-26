@@ -6,10 +6,11 @@ This folder documents the Homelable stack on Prometheus.
 
 | Field | Value |
 |---|---|
-| Current live path | `/opt/homelable` |
-| Current compose file | `/opt/homelable/docker-compose.yml` |
-| Desired normalized path | `/opt/stacks/homelable` |
-| Status | Active live stack; desired path is not yet implemented |
+| Current live path | `/opt/stacks/homelable` |
+| Current compose file | `/opt/stacks/homelable/compose.yml` |
+| Legacy compatibility path | `/opt/homelable/docker-compose.yml` symlink |
+| Source/runtime path | `/opt/homelable` |
+| Status | Active live stack; normalized on 2026-05-21 |
 
 ## Docs
 

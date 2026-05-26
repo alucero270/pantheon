@@ -6,7 +6,9 @@ This folder documents the desired normalized Compose stack root for [[systems/pr
 
 ## Status
 
-Desired normalized path. Current live compose files are still split across `/opt`, `/home/alex/stacks`, and `/mnt/local`.
+Implemented as the normalized Compose source path on 2026-05-21.
+
+Legacy compose paths remain as symlinks to `/opt/stacks` until operator workflows and automation are updated.
 
 ## Stack Areas
 
@@ -19,3 +21,4 @@ Desired normalized path. Current live compose files are still split across `/opt
 ## Stack Procedures
 
 - [[systems/prometheus/opt/stacks/procedures/config-versioning-and-restore]]
+- [[systems/prometheus/opt/stacks/procedures/stack-source-normalization-2026-05-21]]

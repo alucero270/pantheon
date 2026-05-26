@@ -11,12 +11,14 @@ This folder contains a sanitized, Git-tracked Docker Compose scaffold for the Pr
 The current live media stack is documented as deployed from:
 
 ```text
-/opt/vpn/docker-compose.yml
+/opt/stacks/media/vpn/compose.yml
 ```
 
 This scaffold does not move or modify the live stack.
 
-Validated live state for Milestone 9 records the media stack running on [[systems/prometheus]] from `/opt/vpn/docker-compose.yml`.
+Validated live state for Milestone 9 recorded the media stack running on [[systems/prometheus]] from `/opt/vpn/docker-compose.yml`.
+
+The live Compose source was normalized on 2026-05-21 to `/opt/stacks/media/vpn/compose.yml`; `/opt/vpn/docker-compose.yml` remains a legacy symlink.
 
 ## Services
 
@@ -143,7 +145,7 @@ curl -I http://127.0.0.1:${QBITTORRENT_WEBUI_PORT:-8080}
 ## Known Limitations
 
 - Image tags are placeholders; live repositories were validated on 2026-05-16.
-- Live `/opt/vpn/docker-compose.yml` may differ from this scaffold until reconciled by an approved live edit.
+- Live `/opt/stacks/media/vpn/compose.yml` may differ from this scaffold until reconciled by an approved live edit.
 - Secrets model is not finalized.
 - Jellyfin is intentionally excluded until documented in this milestone.
 - This compose file is not proof that the services are deployed.

@@ -16,7 +16,8 @@ qBittorrent provides download staging for the Prometheus media automation stack.
 - System: [[systems/prometheus]]
 - Container / VM: `qbittorrent`
 - Runtime: Docker Compose
-- Live compose path: `/opt/vpn/docker-compose.yml`
+- Live compose path: `/opt/stacks/media/vpn/compose.yml`
+- Legacy compose path: `/opt/vpn/docker-compose.yml` symlink
 
 ## Data Classification
 
@@ -97,7 +98,7 @@ qBittorrent provides download staging for the Prometheus media automation stack.
 | Owning domain | Prometheus |
 | Host/system/device owner | Prometheus |
 | Runtime type | Docker Compose service |
-| Source of truth | Live `/opt/vpn/docker-compose.yml`; sanitized scaffold documented at [[systems/prometheus/automation/docker/stacks/media/README]] |
+| Source of truth | Live `/opt/stacks/media/vpn/compose.yml`; sanitized scaffold documented at [[systems/prometheus/automation/docker/stacks/media/README]] |
 | Config path | `/opt/torrents/config` |
 | Data path | `/opt/torrents/downloads` local staging |
 | Secret requirements | WebUI credentials must not be committed |
