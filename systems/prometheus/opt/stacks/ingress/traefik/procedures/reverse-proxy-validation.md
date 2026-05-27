@@ -179,7 +179,27 @@ Pass criteria:
 - Documented intent matches reality once firewall rules are implemented.
 - Any drift is captured in [[systems/prometheus/inventory]] and tracked by an issue.
 
-## K. Change Control
+## K. Cloudflare Tunnel Public Routes
+
+Goal: public routes via Cloudflare Tunnel are loading through Traefik correctly.
+
+This section is only relevant if [[systems/prometheus/opt/stacks/ingress/cloudflare-tunnel/cloudflare-tunnel]] is installed.
+
+Validation from Prometheus:
+
+```bash
+curl -sk -H "Host: chat.loosearrowlabs.com" https://localhost:443/ -o /dev/null -w "chat -> %{http_code}\n"
+curl -sk -H "Host: search.loosearrowlabs.com" https://localhost:443/ -o /dev/null -w "search -> %{http_code}\n"
+```
+
+Pass criteria:
+
+- Both return HTTP 200
+- No YAML errors for `loosearrow-public.yml` in `docker logs traefik`
+
+See [[systems/prometheus/opt/stacks/ingress/cloudflare-tunnel/procedures/cloudflare-tunnel-validation]] for the full tunnel validation checklist.
+
+## L. Change Control
 
 After any change:
 

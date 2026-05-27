@@ -67,12 +67,20 @@ Notes:
 
 ## Access
 
-User-facing ingress:
+Internal user-facing ingress (`.home.arpa` — LAN only):
 
 - [https://nextcloud.home.arpa](https://nextcloud.home.arpa) (443)
 - [https://openwebui.home.arpa](https://openwebui.home.arpa) (443)
 - [https://comfy.home.arpa](https://comfy.home.arpa) (443)
 - [https://searxng.home.arpa](https://searxng.home.arpa) (443)
+
+Public ingress via Cloudflare Tunnel (`loosearrowlabs.com` — Cloudflare Access gated):
+
+- [https://chat.loosearrowlabs.com](https://chat.loosearrowlabs.com) → openwebui:8080
+- [https://comfy.loosearrowlabs.com](https://comfy.loosearrowlabs.com) → comfyui:8188
+- [https://search.loosearrowlabs.com](https://search.loosearrowlabs.com) → searxng:8080
+
+Public routes are defined in `/opt/traefik/dynamic/loosearrow-public.yml` and are only reachable via the Cloudflare Tunnel. See [[systems/prometheus/opt/stacks/ingress/cloudflare-tunnel/cloudflare-tunnel]].
 
 Live route needing decision:
 
