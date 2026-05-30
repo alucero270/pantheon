@@ -96,7 +96,8 @@ Shared GGUF models live under `/mnt/local/nvme/ai/models/gguf`.
 
 | Model Path | Notes |
 |---|---|
-| `/mnt/local/nvme/ai/models/gguf/gemma-4-31b-it-iq4_xs/gemma-4-31B-it-IQ4_XS.gguf` | Used by exited `gemma-192k` llama.cpp-derived container; added to `llama-swap` as `gemma-4-31b-it` on 2026-05-17 |
+| `/mnt/local/nvme/ai/models/gguf/gemma-4-31B-it-UD-IQ3_XXS.gguf` | Used by exited `gemma-192k` llama.cpp-derived container; added to `llama-swap` as `gemma-4-31b-it` on 2026-05-17; requantized to IQ3_XXS, ~12 GiB |
+| `/mnt/local/nvme/ai/models/gguf/gemma-4-31B-it-UD-IQ3_XXS.gguf` | Non-MTP (MTP head removed); added to `llama-swap` as `gemma-4-31b-it-mtp`; VRAM ~14 GiB |
 | `/mnt/local/nvme/ai/models/gguf/qwen3.6-35b-a3b-unsloth-ud-iq4-xs/UD-IQ4_XS/Qwen3.6-35B-A3B-UD-IQ4_XS.gguf` | Non-MTP Qwen replacement configured in `llama-swap` as `qwen3.6-35b-a3b`; 64K context, turbo3/turbo2 KV |
 | `/mnt/local/nvme/ai/models/gguf/qwen3.5-9b-unsloth-ud-q4-k-xl/UD-Q4_K_XL/Qwen3.5-9B-UD-Q4_K_XL.gguf` | Non-MTP Qwen replacement configured in `llama-swap` as `qwen3.5-9b`; 128K context, turbo4/turbo3 KV |
 | `/mnt/local/nvme/ai/models/gguf/qwen3.6-27b-unsloth-ud-q3-k-xl/UD-Q3_K_XL/Qwen3.6-27B-UD-Q3_K_XL.gguf` | Non-MTP Qwen replacement configured in `llama-swap` as `qwen3.6-27b`; 64K context, turbo3/turbo2 KV |
@@ -109,7 +110,8 @@ Shared GGUF models live under `/mnt/local/nvme/ai/models/gguf`.
 | `/mnt/local/nvme/ai/models/gguf/glm-4.7-flash-unsloth-ud-q3-k-xl/UD-Q3_K_XL/GLM-4.7-Flash-UD-Q3_K_XL.gguf` | Installed for llama.cpp on 2026-05-17 |
 | `/mnt/local/nvme/ai/models/gguf/granite-4.1-30b-unsloth-ud-q3-k-xl/UD-Q3_K_XL/granite-4.1-30b-UD-Q3_K_XL.gguf` | Installed for llama.cpp on 2026-05-17 |
 | `/mnt/local/nvme/ai/models/gguf/granite-4.1-8b-unsloth-ud-q3-k-xl/UD-Q3_K_XL/granite-4.1-8b-UD-Q3_K_XL.gguf` | Installed for llama.cpp on 2026-05-17 |
-| `/mnt/local/nvme/ai/models/gguf/minimax-m2-7-unsloth-ud-iq4-xs/UD-IQ4_XS/` | Four-part GGUF set |
+| `/mnt/local/nvme/ai/models/gguf/minimax-m2-7-unsloth-ud-iq3-xxs/UD-IQ3_XXS/` | Three-part GGUF set downloaded 2026-05-25; ~75 GiB |
+| `/mnt/local/nvme/ai/models/gguf/minimax-m2-7-unsloth-ud-iq3-s/UD-IQ3_S/` | Three-part GGUF set downloaded 2026-05-29; ~79 GiB |
 | `/mnt/local/nvme/ai/models/gguf/nemotron-3-super-120b-a12b-unsloth-ud-q2-k-xl/UD-Q2_K_XL/` | Three-part GGUF set |
 | `/mnt/local/nvme/ai/models/gguf/nemotron-3-super-120b-a12b-unsloth-ud-q3-k-xl/UD-Q3_K_XL/` | Three-part GGUF set |
 | `/mnt/local/nvme/ai/models/checkpoints/v1-5-pruned-emaonly-fp16.safetensors` | ComfyUI SD1.5 checkpoint compatibility model installed 2026-05-19; `CheckpointLoaderSimple` smoke test passed |
@@ -201,7 +203,7 @@ These items are named in the issue scope but are not documented elsewhere in the
 
 | Service / Stack | Container Name | Image | Compose Path | Host Data Paths | Container Paths | Ports / Exposure | Lifecycle Classification | Recommended Action |
 |---|---|---|---|---|---|---|---|---|
-| Unknown | `anemoi` | Needs validation | Needs validation | Needs validation | Needs validation | Needs validation | Questionable / exited needs validation | Inspect live Docker state; do not delete until owner and data paths are identified |
+| Unknown | `anemoi` | Misclassification per 2026-05-28 SSH probe — `anemoi` is **not** an exited Docker container; it is a running foreground `cargo run` debug build owned by `alex`. See [[systems/prometheus/opt/stacks/ai/core/anemoi/anemoi]] for current state. Recommended action moves to: formalize deployment and decide bind address. | n/a (foreground process) | `/home/alex/anemoi` checkout; binary `/home/alex/anemoi/target/debug/anemoi-daemon` | n/a | `0.0.0.0:7070` (unauthenticated); Traefik route `anemoi.home.arpa` to `172.17.0.1:7070` | Active needs validation | See [[systems/prometheus/opt/stacks/ai/core/anemoi/anemoi]] §"Needs Validation" |
 | Unknown | `gemma-192k` | Needs validation | Needs validation | Needs validation | Needs validation | Needs validation | Questionable / exited needs validation | Inspect live Docker state; confirm whether this is model/runtime residue |
 | Docker volumes | Anonymous Docker volumes | Needs validation | Not applicable | Needs validation | Needs validation | Not applicable | Cleanup candidate / Needs validation | Run read-only Docker volume inventory before pruning; do not delete from docs alone |
 

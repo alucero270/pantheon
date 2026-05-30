@@ -5,7 +5,7 @@ with open("/mnt/local/nvme/ai/profiles/llama-swap/config.yaml", "r") as f:
 
 # Rebuild matrix vars deduplicated
 data["matrix"]["vars"]["g26m"] = "gemma-4-26b-a4b-it-mtp"
-data["matrix"]["vars"]["g31m"] = "gemma-4-31b-it-mtp"
+data["matrix"]["vars"]["g31m"] = "gemma-4-31b-it-mtp"  # IQ3_XXS, non-MTP, ~14 GiB VRAM
 data["matrix"]["vars"]["q35m"] = "qwen3.6-35b-a3b-mtp"
 
 # Rebuild evict_costs deduplicated

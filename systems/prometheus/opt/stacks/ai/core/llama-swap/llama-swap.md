@@ -23,7 +23,7 @@ On Prometheus it is installed as a native systemd service and configured to laun
 | Backend runtime | `/mnt/local/nvme/ai/runtimes/llama-cpp-turboquant/build/bin/llama-server` (v9080) — non-MTP models |
 | NextN / MTP runtime | `/mnt/local/nvme/ai/runtimes/atomic-llama-cpp-turboquant/build/bin/llama-server` (built 2026-05-19) — `qwen3.6-*-mtp` and Gemma 4 MTP models |
 | Backend port range | `19080+` (19080 avoids Traefik dashboard on `127.0.0.1:18080`) |
-| API key | `LOCAL`; use `Authorization: Bearer LOCAL` |
+| API key | `LOCAL`; use `Authorization: Bearer LOCAL`. As of 2026-05-28 this works on both `http://172.17.0.1:8085` and `http://llama-swap.home.arpa` (Traefik LAN front). Before the 2026-05-28 Traefik fix in [[systems/prometheus/opt/stacks/ingress/traefik/config/README]], HTTP clients hitting `llama-swap.home.arpa` got `401` because the HTTP→HTTPS redirect stripped `Authorization`; `X-API-Key: LOCAL` was the working workaround on that path. |
 
 ## Installation State
 
@@ -87,7 +87,7 @@ OpenWebUI duplicate model rows were removed from the live `llama-swap` listing o
 
 ### NextN Speculative Decoding
 
-The `atomic-llama-cpp-turboquant` binary (built 2026-05-19) supports Qwen 3.6 NextN speculative decoding and Gemma 4 MTP. NextN uses the combined `*_MTP.gguf` with `--spec-type nextn --model-draft <same-file>`; Gemma 4 MTP uses `--spec-type mtp --mtp-head <assistant.gguf>`.
+The `atomic-llama-cpp-turboquant` binary (built 2026-05-19) supports Qwen 3.6 NextN speculative decoding. NextN uses the combined `*_MTP.gguf` with `--spec-type nextn --model-draft <same-file>`. Gemma 4 MTP head support was removed — the `gemma-4-31b-it-mtp` entry no longer uses an MTP head and runs as a non-MTP IQ3_XXS model.
 
 Qwen 3.6 27B MTP benchmark (2026-05-20):
 

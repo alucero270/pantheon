@@ -6,7 +6,7 @@ with open("/mnt/local/nvme/ai/profiles/llama-swap/config.yaml", "r") as f:
 vars_line = "    q27m: qwen3.6-27b-mtp"
 vars_extra = (
     "\n    g26m: gemma-4-26b-a4b-it-mtp"
-    "\n    g31m: gemma-4-31b-it-mtp"
+    "\n    g31m: gemma-4-31b-it-mtp"  # IQ3_XXS, non-MTP, ~14 GiB VRAM
     "\n    q35m: qwen3.6-35b-a3b-mtp"
 )
 content = content.replace(vars_line, vars_line + vars_extra)

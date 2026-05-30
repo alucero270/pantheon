@@ -2,6 +2,6 @@
 
 This folder contains service-specific procedures for [[systems/prometheus/opt/stacks/ai/core/llama-swap/llama-swap]].
 
-## Status
+## Procedures
 
-No service-specific procedure documented yet.
+- [[systems/prometheus/opt/stacks/ai/core/llama-swap/procedures/gguf-model-download]] — Download GGUF models from Hugging Face for llama-swap backends.

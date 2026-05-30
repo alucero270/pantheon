@@ -14,6 +14,7 @@ This folder is a compatibility index. Canonical Prometheus procedure documentati
 - [[systems/prometheus/opt/stacks/ai/searxng/procedures/searxng-openwebui-integration]]
 - [[systems/prometheus/opt/stacks/ai/voice-agent/procedures/voice-agent-bootstrap]]
 - [[systems/prometheus/opt/stacks/ai/voice-agent/procedures/voice-agent-latency-troubleshooting]]
+- [[systems/prometheus/opt/stacks/ai/core/llama-swap/procedures/gguf-model-download]]
 - [[systems/prometheus/opt/stacks/ingress/traefik/procedures/reverse-proxy]]
 - [[systems/prometheus/opt/stacks/ingress/traefik/procedures/reverse-proxy-validation]]
 - [[systems/prometheus/opt/stacks/media/vpn/procedures/media-stack-validation]]
