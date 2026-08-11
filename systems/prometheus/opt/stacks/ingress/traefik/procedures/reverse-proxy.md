@@ -190,6 +190,76 @@ nslookup nextcloud.home.arpa 192.168.20.1
 
 ---
 
+## Phase 10.5 - Trust the Internal TLS Certificate on Windows Clients
+
+Pantheon currently uses a self-signed `home.arpa` certificate for internal
+Traefik routes. Each Windows client must trust the public certificate before
+the Nextcloud desktop client can connect without TLS errors.
+
+### Export and verify on Prometheus
+
+The public certificate is:
+
+`/opt/traefik/certs/homelab-tls.crt`
+
+Never copy `/opt/traefik/certs/homelab-tls.key` to a client. Verify the public
+certificate before transferring it:
+
+```bash
+openssl x509 -in /opt/traefik/certs/homelab-tls.crt \
+  -noout -subject -issuer -dates -fingerprint -sha256 -ext subjectAltName
+```
+
+Confirm that:
+
+- The certificate is currently valid.
+- The SAN list contains `nextcloud.home.arpa` (or `*.home.arpa`).
+- The SHA-256 fingerprint matches the transferred certificate.
+- The transferred file contains `BEGIN CERTIFICATE`, never `PRIVATE KEY`.
+
+### Import for the current Windows user
+
+1. Open `certmgr.msc` as the user who runs Nextcloud.
+2. Open **Trusted Root Certification Authorities > Certificates**.
+3. Select **All Tasks > Import**.
+4. Select the transferred public certificate. Use the **All files** filter if
+   the file does not have a `.cer` or `.crt` extension.
+5. Place it in **Trusted Root Certification Authorities** and complete the
+   import.
+
+The current `home.arpa` certificate is self-signed (its subject and issuer are
+the same) and has the CA basic constraint, so it belongs in the Trusted Root
+store. Do not place it in Intermediate Certification Authorities merely to
+mirror an older client configuration.
+
+### Configure and validate Nextcloud
+
+1. Fully exit and restart the Nextcloud desktop client.
+2. Connect to `https://nextcloud.home.arpa`.
+3. Use normal Nextcloud account authentication.
+
+Do not choose **Connect without TLS** or **Use client certificate**. The latter
+expects a PKCS#12 client identity and is unrelated to trusting Traefik's server
+certificate.
+
+Validate from the client:
+
+```powershell
+Resolve-DnsName nextcloud.home.arpa
+Test-NetConnection nextcloud.home.arpa -Port 443
+curl.exe -I https://nextcloud.home.arpa
+```
+
+If TCP 443 is unreachable, fix the Cerberus client-VLAN-to-Traefik access path
+before troubleshooting certificates. A trusted certificate cannot bypass a
+firewall block.
+
+When the internal certificate is rotated, redistribute and trust the new
+public certificate, validate all clients, and then remove the expired
+certificate from their trust stores.
+
+---
+
 ## Phase 11 — Validation Checklist
 
 From USER VLAN:
